@@ -101,4 +101,4 @@ log('starting job ...');
 
 job.start();
 
-log({ msg: 'job started', nextRun: job.nextDate().toDate() });
+log({ msg: 'job started', nextRun: job.nextDate().toJSDate() });
