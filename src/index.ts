@@ -38,11 +38,16 @@ async function fetchTemperature(): Promise<undefined | number> {
 
   const [serializedValue] = $('#main > form > p:nth-child(3) > span').text().split(' ');
 
+  log({
+    msg: 'founded serialized temperature value',
+    serialized: serializedValue,
+  });
+
+  if (!serializedValue) return undefined;
   const temperature = parseFloat(serializedValue);
 
   log({
-    msg: 'founded temperature value',
-    serialized: serializedValue,
+    msg: 'parsed temperature value',
     parsed: temperature,
   });
 
