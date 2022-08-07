@@ -1,9 +1,11 @@
 import 'dotenv/config';
-import axios from 'axios';
 import debug from 'debug';
 import { CronJob } from 'cron';
 import config from 'config';
+import axios from 'axios';
 import { parseTemperature } from './parseTemp.js';
+import { EnmonApiClient, EnmonEnv } from './services/enmon.js';
+import { WATTrouterMxApiClient } from './services/wattrouter.js';
 
 const log = debug('app');
 
@@ -74,12 +76,90 @@ async function uploadTemperature(temperature: number): Promise<void> {
   log({ msg: 'upload temperature result', status, statusText, data });
 }
 
-async function handleJobTick() {
-  log({ msg: 'job execution started', at: new Date() });
-
+async function handleTemperature() {
   const temperature = await fetchTemperature();
 
   if (temperature) await uploadTemperature(temperature);
+}
+
+async function getAllTimeStats() {
+  const wattrouterApiClient = new WATTrouterMxApiClient(config.get<string>('wattrouter.baseURL'));
+  try {
+    return await wattrouterApiClient.getAllTimeStats();
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      const { statusText, status } = e.response ?? {};
+      log({
+        msg: 'failed to fetch wattrouter alltime stats',
+        status,
+        statusText,
+        data: e.response?.data,
+      });
+    } else {
+      log({ msg: 'failed to fetch wattrouter alltime stats', error: e });
+    }
+    return undefined;
+  }
+}
+
+async function handleWattrouter() {
+  const allTimeStats = await getAllTimeStats();
+  if (!allTimeStats) return undefined;
+  const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
+  log({
+    msg: 'fetched wattrouter alltime stats',
+    consumptionHT: SAH4,
+    consumptionLT: SAL4,
+    production: SAP4,
+    surplus: SAS4,
+  });
+
+  const customerId = config.get<string>('wattrouter.enmon.customerId');
+  const token = config.get<string>('wattrouter.enmon.token');
+  const devEUI = config.get<string>('wattrouter.enmon.devEUI');
+
+  const values = [
+    [`consumption-ht`, SAH4],
+    [`consumption-lt`, SAL4],
+    [`production`, SAP4],
+    [`surplus`, SAS4],
+  ] as const;
+
+  const enmonApiClient = new EnmonApiClient(config.get<EnmonEnv>('wattrouter.enmon.env'));
+
+  try {
+    const result = await enmonApiClient.postMeterPlainCounterMulti({
+      customerId,
+      token,
+      payload: values.map(([type, value]) => ({
+        date: new Date(),
+        devEUI: `${devEUI}-${type}`,
+        counter: parseFloat(value),
+      })),
+    });
+    log({ msg: 'post meter plain counter multiple result', result });
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      const { statusText, status } = e.response ?? {};
+      log({
+        msg: 'failed to post multiple meter counters',
+        status,
+        statusText,
+        data: e.response?.data,
+      });
+    } else {
+      log({ msg: 'failed to post meter counter', error: e });
+    }
+    throw e;
+  }
+
+  return undefined;
+}
+
+async function handleJobTick() {
+  log({ msg: 'job execution started', at: new Date() });
+
+  await Promise.all([handleTemperature(), handleWattrouter()]);
 
   log({ msg: 'job execution ended' });
 }
