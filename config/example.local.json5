@@ -1,7 +1,17 @@
 {
   thermometer: {
     enmon: {
+      customerId: "",
       devEUI: "",
+      token: "",
+    },
+  },
+  wattrouter: {
+    baseURL: "",
+    enmon: {
+      customerId: "",
+      devEUI: "",
+      token: "",
     },
   },
 }
