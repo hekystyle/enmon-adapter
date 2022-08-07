@@ -30,7 +30,7 @@ jobs:
       - run: yarn install --immutable
 
   lint:
-    needs: [build]
+    needs: [deps, build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -83,8 +83,7 @@ jobs:
           key: image-${{ github.sha }}
 
   test:
-    if: ${{ false }}
-    needs: [deps, lint, build]
+    needs: [deps, build, lint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
