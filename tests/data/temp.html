@@ -1,0 +1,142 @@
+<html>
+<title>Nastavení wifi teploměru</title>
+<meta charset="utf-8" />
+<style>
+    label {
+        display: block;
+    }
+
+    input {
+        display: block;
+    }
+
+    #main {
+        padding: 30px;
+        border-radius: 5px;
+        background-color: yellow;
+        width: 600px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 18px;
+    }
+
+    input {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 20px;
+        border-radius: 5px;
+        background-color: lightblue;
+        padding: 4px
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    span {
+        font-size: 50px;
+        font-weight: bold;
+    }
+
+    .t {
+        border-radius: 5px;
+        background-color: tomato;
+        color: white;
+        padding: 5px;
+    }
+
+    m {
+        display: block;
+        font-size: 14px;
+        padding-top: 4px;
+        padding-bottom: 6px
+    }
+</style>
+<div id="main">
+    <p></p>
+    <intro></intro>
+    <brrr>
+        <div class="t t3"> Wifi teploměr - Český výrobek</div>
+        <p class="t">Výrobce: Brrr.cz s.r.o. , Autor: Mgr. Zdeněk Macura</p>
+        <p class="t" style="font-size:13px"><b> Pomoc obětem domácího násilí: </b> Od 5.2 2020, 2 až 20 procent ( podle
+            situace ) z každé objednávky posílám na transparetní účet 2300577118 / 2010, z kterého se staví azylové
+            paletové chaloupky pro oběti domácího násilí. Z. Macura</p>
+    </brrr>
+    <form action="/" method="get">
+        <p>Typ: TCZUNI1</p>
+        <p>ID: Teplomer_UNI_190</p>
+        <p>Poslední naměřená teplota: <span>60.81 &deg;C</span></p>
+        <h3>Nastavení wifi spojení:</h3>
+        <m>Jméno wifi routeru: <b>Oby-2G</b></m><label for="name">Jméno Vaší domácí wifi sítě:</label><input type="text"
+            name="wifiname"></input><label for="password">Heslo Vaší domácí wifi sítě:</label><input type="text"
+            name="wifipassword"><br><input type="submit" value="Nastavit teploměr na domácí wifi síť">
+    </form>
+    <h3>Cloud nastavení wifi teploměru:</h3>
+    <m>Příklad: Pro populární český cloud TMEP.CZ, cloud url může vypadat takto: <b>http://brrrcz.tmep.cz/?temp=</b> ,
+        kde brrrcz je parametry doména a temp je parametr GUID. Tyto parametry zadáte při vytváření čidla na serveru
+        tmep.cz</m>
+    <form action="/" method="get">
+        <m>Cloud nastavení: <b>Cloud server zatím nenastaven</b></m><input maxlength="60" size="40" type="text"
+            name="cloudurl" value="" placeholder="Cloud url"></input><input type="submit" value="Nastavit cloud">
+    </form>
+    <form action="/" method="get">
+        <h3>Možnost vypnutí zasílání dat na brrr.cz server</h3>
+        <m>Pokud nechcete zasílat data na server brrr.cz, vyplňte formulář velkým tiskacím NE a odešlete. Jakékoliv jiné
+            zadání, odesílání na brrr.cz server zase obnoví.</m>
+        <m>Stav: <b>Zasílání na brrr.cz vypnuto</b></m><input maxlength="2" size="2" type="text"
+            name="sendtobrrr"></input><input type="submit" value="Vypnutí zasílání na brrr.cz server ">
+    </form>
+    <form action="/" method="get">
+        <h3>Možnost vypnutí Wifi signálu teploměru po 5 minutách</h3>
+        <m>Pokud chcete vypnout wifi signál teploměru po 5 minutách, vyplňte formulář velkým tiskacím ANO a odešlete.
+        </m>
+        <m>Stav: <b>Wifi signál teploměru je po pěti minutách vypnut.</b></m><input maxlength="3" size="3" type="text"
+            name="stopbroadcastwifi"></input><input type="submit" value="Vypnutí wifi signálu po pěti minutách ">
+    </form>
+    <form action="/" method="get">
+        <h3>Nastavení hesla</h3>
+        <m>Od výroby nastavuji wifi teploměr bez hesla. Zde můžete nastavit heslo. V případě ztráty hesla, nastavte
+            HotSpot na mobilu: <b>teplomerreset</b> a teploměr znovu zasuňte a heslo se vymaže.</m>
+        <m>Stav: <b>Bez hesla</b></m><input size="20" name="password"></input><input type="submit"
+            value="Nastavit heslo">
+    </form>
+    <form action="/" method="get">
+        <h3>Změna wifi jména teploměru</h3>
+        <m>Wifi jméno teploměru: <b>Teplomer_UNI_190</b></m><input maxlength="30" size="30" name="ssidap"></input><input
+            type="submit" value="Nastavit wifi jméno teploměru">
+    </form>
+    <form action="/" method="get">
+        <h3>Jednobodová kalibrace teploměru</h3>
+        <m>kalibrace: <b>-0.37</b></m><input value="" type="text" name="cal1" maxlength="5"
+            onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 45) || (event.charCode == 46)'></input><input
+            type="submit" value="Nastavit kalibraci teploměru">
+    </form>
+    <h3>Další údaje:</h3>
+    <ul>
+        <li>MAC: FC:F5:C4:89:A6:03
+        <li>Test připojení k routeru: Teploměr úspěšně připojen k routeru
+        <li>Test připojení k internetu: Teploměr úspěšně se může připojovat k internetu
+        <li>Zasílání při změně teploty o : 0.5 &deg;C
+        <li>Maximální interval neodesílání (minuty) : 360
+        <li>Čtení v lokální síti: http://192.168.4.1/temp/
+        <li>Brrr zasílací servery:</td>
+            <td>brrr2.cz
+        <li>BME280 čidlo pro vlhkost a tlak:</td>
+            <td>Čidlo BME280 pro vlhkost a tlak nepřitomné, možno dokoupit a ručně přidat
+        <li>Display:</td>
+            <td>Display nepřítomen, možno dokoupit a ručně přidat
+    </ul>
+    <h3>POMOC, máte potíže ?</h3>
+    <pomoc></pomoc>
+    <brrr>
+        <p>V dokumentaci ( http://brrr.cz/navod_TCZUNI1.html ) si projděte sekci pro POMOC. Pokud neuspějete, můžete
+            výrobek vrátit nebo reklamovat na stránce:http://brrr.cz/reklamace/ . Není v mém zájmu, aby kdokoliv utrácel
+            peníze za něco, co pak uspokojivě neslouží. Mgr. Zdeněk Macura
+    </brrr>
+</div>
+</body>
+
+</html>

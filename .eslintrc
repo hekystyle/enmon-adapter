@@ -2,5 +2,12 @@
   "extends": ["george-lint/typescript"],
   "parserOptions": {
     "project": ["./tsconfig.json"]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.spec.ts", "*.test.ts"],
+      "plugins": ["jest"],
+      "extends": ["plugin:jest/recommended"]
+    }
+  ]
 }

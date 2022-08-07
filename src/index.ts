@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import axios from 'axios';
-import { load } from 'cheerio';
 import debug from 'debug';
 import { CronJob } from 'cron';
 import config from 'config';
+import { parseTemperature } from './parseTemp.js';
 
 const log = debug('app');
 
@@ -34,9 +34,7 @@ async function fetchTemperature(): Promise<undefined | number> {
 
   if (status !== 200) return undefined;
 
-  const $ = load(html);
-
-  const [serializedValue] = $('#main > form > p:nth-child(3) > span').text().split(' ');
+  const serializedValue = parseTemperature(html);
 
   log({
     msg: 'founded serialized temperature value',
