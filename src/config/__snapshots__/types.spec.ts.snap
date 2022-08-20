@@ -1,0 +1,521 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should reject invalid config 0 1`] = `
+Array [
+  ValidationError {
+    "children": Array [],
+    "constraints": Object {
+      "isDefined": "thermometer should not be null or undefined",
+    },
+    "property": "thermometer",
+    "target": Config {},
+    "value": undefined,
+  },
+  ValidationError {
+    "children": Array [],
+    "constraints": Object {
+      "isDefined": "wattrouter should not be null or undefined",
+    },
+    "property": "wattrouter",
+    "target": Config {},
+    "value": undefined,
+  },
+]
+`;
+
+exports[`should reject invalid config 1 1`] = `
+Array [
+  ValidationError {
+    "children": Array [
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isDefined": "dataSourceUrl should not be null or undefined",
+          "isString": "dataSourceUrl must be a string",
+          "isUrl": "dataSourceUrl must be an URL address",
+        },
+        "property": "dataSourceUrl",
+        "target": ConfigThehometer {},
+        "value": undefined,
+      },
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isDefined": "enmon should not be null or undefined",
+        },
+        "property": "enmon",
+        "target": ConfigThehometer {},
+        "value": undefined,
+      },
+    ],
+    "property": "thermometer",
+    "target": Config {
+      "thermometer": ConfigThehometer {},
+      "wattrouter": ConfigWattrouter {},
+    },
+    "value": ConfigThehometer {},
+  },
+  ValidationError {
+    "children": Array [
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isDefined": "baseURL should not be null or undefined",
+          "isString": "baseURL must be a string",
+          "isUrl": "baseURL must be an URL address",
+        },
+        "property": "baseURL",
+        "target": ConfigWattrouter {},
+        "value": undefined,
+      },
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isDefined": "enmon should not be null or undefined",
+        },
+        "property": "enmon",
+        "target": ConfigWattrouter {},
+        "value": undefined,
+      },
+    ],
+    "property": "wattrouter",
+    "target": Config {
+      "thermometer": ConfigThehometer {},
+      "wattrouter": ConfigWattrouter {},
+    },
+    "value": ConfigWattrouter {},
+  },
+]
+`;
+
+exports[`should reject invalid config 2 1`] = `
+Array [
+  ValidationError {
+    "children": Array [
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isUrl": "dataSourceUrl must be an URL address",
+        },
+        "property": "dataSourceUrl",
+        "target": ConfigThehometer {
+          "dataSourceUrl": "invalid URL",
+          "enmon": ConfigEnmon {},
+        },
+        "value": "invalid URL",
+      },
+      ValidationError {
+        "children": Array [
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "env should not be null or undefined",
+              "isEnum": "env must be a valid enum value",
+            },
+            "property": "env",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "customerId should not be null or undefined",
+              "isMongoId": "customerId must be a mongodb id",
+              "isString": "customerId must be a string",
+            },
+            "property": "customerId",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "devEUI should not be null or undefined",
+              "isNotEmpty": "devEUI should not be empty",
+              "isString": "devEUI must be a string",
+            },
+            "property": "devEUI",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "token should not be null or undefined",
+              "isNotEmpty": "token should not be empty",
+              "isString": "token must be a string",
+            },
+            "property": "token",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+        ],
+        "property": "enmon",
+        "target": ConfigThehometer {
+          "dataSourceUrl": "invalid URL",
+          "enmon": ConfigEnmon {},
+        },
+        "value": ConfigEnmon {},
+      },
+    ],
+    "property": "thermometer",
+    "target": Config {
+      "thermometer": ConfigThehometer {
+        "dataSourceUrl": "invalid URL",
+        "enmon": ConfigEnmon {},
+      },
+      "wattrouter": ConfigWattrouter {
+        "baseURL": "invalid URL",
+        "enmon": ConfigEnmon {},
+      },
+    },
+    "value": ConfigThehometer {
+      "dataSourceUrl": "invalid URL",
+      "enmon": ConfigEnmon {},
+    },
+  },
+  ValidationError {
+    "children": Array [
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isUrl": "baseURL must be an URL address",
+        },
+        "property": "baseURL",
+        "target": ConfigWattrouter {
+          "baseURL": "invalid URL",
+          "enmon": ConfigEnmon {},
+        },
+        "value": "invalid URL",
+      },
+      ValidationError {
+        "children": Array [
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "env should not be null or undefined",
+              "isEnum": "env must be a valid enum value",
+            },
+            "property": "env",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "customerId should not be null or undefined",
+              "isMongoId": "customerId must be a mongodb id",
+              "isString": "customerId must be a string",
+            },
+            "property": "customerId",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "devEUI should not be null or undefined",
+              "isNotEmpty": "devEUI should not be empty",
+              "isString": "devEUI must be a string",
+            },
+            "property": "devEUI",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isDefined": "token should not be null or undefined",
+              "isNotEmpty": "token should not be empty",
+              "isString": "token must be a string",
+            },
+            "property": "token",
+            "target": ConfigEnmon {},
+            "value": undefined,
+          },
+        ],
+        "property": "enmon",
+        "target": ConfigWattrouter {
+          "baseURL": "invalid URL",
+          "enmon": ConfigEnmon {},
+        },
+        "value": ConfigEnmon {},
+      },
+    ],
+    "property": "wattrouter",
+    "target": Config {
+      "thermometer": ConfigThehometer {
+        "dataSourceUrl": "invalid URL",
+        "enmon": ConfigEnmon {},
+      },
+      "wattrouter": ConfigWattrouter {
+        "baseURL": "invalid URL",
+        "enmon": ConfigEnmon {},
+      },
+    },
+    "value": ConfigWattrouter {
+      "baseURL": "invalid URL",
+      "enmon": ConfigEnmon {},
+    },
+  },
+]
+`;
+
+exports[`should reject invalid config 3 1`] = `
+Array [
+  ValidationError {
+    "children": Array [
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isUrl": "dataSourceUrl must be an URL address",
+        },
+        "property": "dataSourceUrl",
+        "target": ConfigThehometer {
+          "dataSourceUrl": "invalid URL",
+          "enmon": ConfigEnmon {
+            "customerId": "invalid ID",
+            "devEUI": "",
+            "env": "invalid EnmonEnv",
+            "token": "",
+          },
+        },
+        "value": "invalid URL",
+      },
+      ValidationError {
+        "children": Array [
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isEnum": "env must be a valid enum value",
+            },
+            "property": "env",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "invalid EnmonEnv",
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isMongoId": "customerId must be a mongodb id",
+            },
+            "property": "customerId",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "invalid ID",
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isNotEmpty": "devEUI should not be empty",
+            },
+            "property": "devEUI",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "",
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isNotEmpty": "token should not be empty",
+            },
+            "property": "token",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "",
+          },
+        ],
+        "property": "enmon",
+        "target": ConfigThehometer {
+          "dataSourceUrl": "invalid URL",
+          "enmon": ConfigEnmon {
+            "customerId": "invalid ID",
+            "devEUI": "",
+            "env": "invalid EnmonEnv",
+            "token": "",
+          },
+        },
+        "value": ConfigEnmon {
+          "customerId": "invalid ID",
+          "devEUI": "",
+          "env": "invalid EnmonEnv",
+          "token": "",
+        },
+      },
+    ],
+    "property": "thermometer",
+    "target": Config {
+      "thermometer": ConfigThehometer {
+        "dataSourceUrl": "invalid URL",
+        "enmon": ConfigEnmon {
+          "customerId": "invalid ID",
+          "devEUI": "",
+          "env": "invalid EnmonEnv",
+          "token": "",
+        },
+      },
+      "wattrouter": ConfigWattrouter {
+        "baseURL": "invalid URL",
+        "enmon": ConfigEnmon {
+          "customerId": "invalid ID",
+          "devEUI": "",
+          "env": "invalid EnmonEnv",
+          "token": "",
+        },
+      },
+    },
+    "value": ConfigThehometer {
+      "dataSourceUrl": "invalid URL",
+      "enmon": ConfigEnmon {
+        "customerId": "invalid ID",
+        "devEUI": "",
+        "env": "invalid EnmonEnv",
+        "token": "",
+      },
+    },
+  },
+  ValidationError {
+    "children": Array [
+      ValidationError {
+        "children": Array [],
+        "constraints": Object {
+          "isUrl": "baseURL must be an URL address",
+        },
+        "property": "baseURL",
+        "target": ConfigWattrouter {
+          "baseURL": "invalid URL",
+          "enmon": ConfigEnmon {
+            "customerId": "invalid ID",
+            "devEUI": "",
+            "env": "invalid EnmonEnv",
+            "token": "",
+          },
+        },
+        "value": "invalid URL",
+      },
+      ValidationError {
+        "children": Array [
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isEnum": "env must be a valid enum value",
+            },
+            "property": "env",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "invalid EnmonEnv",
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isMongoId": "customerId must be a mongodb id",
+            },
+            "property": "customerId",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "invalid ID",
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isNotEmpty": "devEUI should not be empty",
+            },
+            "property": "devEUI",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "",
+          },
+          ValidationError {
+            "children": Array [],
+            "constraints": Object {
+              "isNotEmpty": "token should not be empty",
+            },
+            "property": "token",
+            "target": ConfigEnmon {
+              "customerId": "invalid ID",
+              "devEUI": "",
+              "env": "invalid EnmonEnv",
+              "token": "",
+            },
+            "value": "",
+          },
+        ],
+        "property": "enmon",
+        "target": ConfigWattrouter {
+          "baseURL": "invalid URL",
+          "enmon": ConfigEnmon {
+            "customerId": "invalid ID",
+            "devEUI": "",
+            "env": "invalid EnmonEnv",
+            "token": "",
+          },
+        },
+        "value": ConfigEnmon {
+          "customerId": "invalid ID",
+          "devEUI": "",
+          "env": "invalid EnmonEnv",
+          "token": "",
+        },
+      },
+    ],
+    "property": "wattrouter",
+    "target": Config {
+      "thermometer": ConfigThehometer {
+        "dataSourceUrl": "invalid URL",
+        "enmon": ConfigEnmon {
+          "customerId": "invalid ID",
+          "devEUI": "",
+          "env": "invalid EnmonEnv",
+          "token": "",
+        },
+      },
+      "wattrouter": ConfigWattrouter {
+        "baseURL": "invalid URL",
+        "enmon": ConfigEnmon {
+          "customerId": "invalid ID",
+          "devEUI": "",
+          "env": "invalid EnmonEnv",
+          "token": "",
+        },
+      },
+    },
+    "value": ConfigWattrouter {
+      "baseURL": "invalid URL",
+      "enmon": ConfigEnmon {
+        "customerId": "invalid ID",
+        "devEUI": "",
+        "env": "invalid EnmonEnv",
+        "token": "",
+      },
+    },
+  },
+]
+`;
