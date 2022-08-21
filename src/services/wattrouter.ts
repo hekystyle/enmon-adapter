@@ -47,7 +47,7 @@ export class WATTrouterMxApiClient {
   private http: AxiosInstance;
 
   constructor(baseURL: string) {
-    this.http = axios.create({
+    this.http = axios.default.create({
       baseURL,
     });
   }

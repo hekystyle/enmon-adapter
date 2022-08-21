@@ -33,7 +33,7 @@ export class EnmonApiClient {
   private http: AxiosInstance;
 
   constructor(env: EnmonEnv) {
-    this.http = axios.create({
+    this.http = axios.default.create({
       baseURL: `https://${env}.enmon.tech`,
     });
   }
