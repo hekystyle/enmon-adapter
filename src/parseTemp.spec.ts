@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import { parseTemperature } from './parseTemp';
+import { parseTemperature } from './parseTemp.js';
 
 it('should parse temperature value from example HTML file', async () => {
   const html = await readFile('./tests/data/temp.html', 'utf8');
