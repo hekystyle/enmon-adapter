@@ -1,10 +1,11 @@
+import 'reflect-metadata';
 import 'dotenv/config';
 import debug from 'debug';
 import { CronJob } from 'cron';
-import config from 'config';
 import axios from 'axios';
+import config from './config/index.js';
 import { parseTemperature } from './parseTemp.js';
-import { EnmonApiClient, EnmonEnv } from './services/enmon.js';
+import { EnmonApiClient } from './services/enmon.js';
 import { WATTrouterMxApiClient } from './services/wattrouter.js';
 
 const log = debug('app');
@@ -23,7 +24,7 @@ async function fetchTemperature(): Promise<undefined | number> {
     status,
     statusText,
     data: html,
-  } = await axios.get<string>(config.get('thermometer.dataSourceUrl'), {
+  } = await axios.default.get<string>(config.thermometer.dataSourceUrl, {
     validateStatus: () => true,
   });
 
@@ -55,19 +56,18 @@ async function fetchTemperature(): Promise<undefined | number> {
 }
 
 async function uploadTemperature(temperature: number): Promise<void> {
-  const env = config.get<string>('thermometer.enmon.env');
-  const customerId = config.get<string>('thermometer.enmon.customerId');
+  const { env, customerId } = config.thermometer.enmon;
 
-  const { status, statusText, data } = await axios.post<unknown>(
+  const { status, statusText, data } = await axios.default.post<unknown>(
     `https://${env}.enmon.tech/meter/plain/${customerId}/value`,
     {
-      devEUI: config.get<string>('thermometer.enmon.devEUI'),
+      devEUI: config.thermometer.enmon.devEUI,
       date: new Date(),
       value: temperature,
     },
     {
       headers: {
-        Authorization: `Bearer ${config.get<string>('thermometer.enmon.token')}`,
+        Authorization: `Bearer ${config.thermometer.enmon.token}`,
       },
       validateStatus: () => true,
     },
@@ -83,11 +83,11 @@ async function handleTemperature() {
 }
 
 async function getAllTimeStats() {
-  const wattrouterApiClient = new WATTrouterMxApiClient(config.get<string>('wattrouter.baseURL'));
+  const wattrouterApiClient = new WATTrouterMxApiClient(config.wattrouter.baseURL);
   try {
     return await wattrouterApiClient.getAllTimeStats();
   } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (axios.default.isAxiosError(e)) {
       const { statusText, status } = e.response ?? {};
       log({
         msg: 'failed to fetch wattrouter alltime stats',
@@ -114,9 +114,7 @@ async function handleWattrouter() {
     surplus: SAS4,
   });
 
-  const customerId = config.get<string>('wattrouter.enmon.customerId');
-  const token = config.get<string>('wattrouter.enmon.token');
-  const devEUI = config.get<string>('wattrouter.enmon.devEUI');
+  const { customerId, token, devEUI } = config.wattrouter.enmon;
 
   const values = [
     [`consumption-ht`, SAH4],
@@ -125,7 +123,7 @@ async function handleWattrouter() {
     [`surplus`, SAS4],
   ] as const;
 
-  const enmonApiClient = new EnmonApiClient(config.get<EnmonEnv>('wattrouter.enmon.env'));
+  const enmonApiClient = new EnmonApiClient(config.wattrouter.enmon.env);
 
   try {
     const result = await enmonApiClient.postMeterPlainCounterMulti({
@@ -139,7 +137,7 @@ async function handleWattrouter() {
     });
     log({ msg: 'post meter plain counter multiple result', result });
   } catch (e) {
-    if (axios.isAxiosError(e)) {
+    if (axios.default.isAxiosError(e)) {
       const { statusText, status } = e.response ?? {};
       log({
         msg: 'failed to post multiple meter counters',
