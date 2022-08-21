@@ -1,8 +1,8 @@
 import { ObjectId } from 'bson';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
-import { Config } from './types';
-import { EnmonEnv } from '../services/enmon';
+import { Config } from './types.js';
+import { EnmonEnv } from '../services/enmon.js';
 
 const VALID_CONFIG: Config = {
   thermometer: {
