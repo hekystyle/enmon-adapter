@@ -1,12 +1,4 @@
-import { plainToInstance } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
-import configObj from 'config';
-import { Config } from './types.js';
+import plainConfig from 'config';
+import { parseConfig } from './parse.js';
 
-const i = plainToInstance(Config, configObj);
-
-validateOrReject(i);
-
-const config: Readonly<Config> = i;
-
-export default config;
+export default await parseConfig(plainConfig);

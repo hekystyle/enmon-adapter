@@ -1,8 +1,7 @@
 import { ObjectId } from 'bson';
-import { plainToInstance } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
 import { Config } from './types.js';
 import { EnmonEnv } from '../services/enmon.js';
+import { parseConfig } from './parse.js';
 
 const VALID_CONFIG: Config = {
   thermometer: {
@@ -25,10 +24,10 @@ const VALID_CONFIG: Config = {
   },
 };
 
-it.each([[VALID_CONFIG]])('should validate example config', configObj => {
-  const i = plainToInstance(Config, configObj);
-  expect(i).toBeInstanceOf(Config);
-  return expect(validateOrReject(i)).resolves.toBeUndefined();
+it.each([[VALID_CONFIG]])('should validate example config', async configObj => {
+  const promise = parseConfig(configObj);
+
+  await expect(promise).resolves.toBeInstanceOf(Config);
 });
 
 it.each([
@@ -58,9 +57,7 @@ it.each([
     },
   ],
 ])('should reject invalid config %#', async configObj => {
-  const i = plainToInstance(Config, configObj);
-  expect(i).toBeInstanceOf(Config);
-  const p = validateOrReject(i);
-  await expect(p).rejects.toBeInstanceOf(Array);
-  await expect(p).rejects.toMatchSnapshot();
+  const promise = parseConfig(configObj);
+  await expect(promise).rejects.toBeInstanceOf(Array);
+  await expect(promise).rejects.toMatchSnapshot();
 });
