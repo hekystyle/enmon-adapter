@@ -132,7 +132,7 @@ async function handleWattrouter() {
       payload: values.map(([type, value]) => ({
         date: new Date(),
         devEUI: `${devEUI}-${type}`,
-        counter: parseFloat(value),
+        counter: value,
       })),
     });
     log({ msg: 'post meter plain counter multiple result', result });
