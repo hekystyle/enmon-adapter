@@ -3,6 +3,7 @@
   "extends": ["config:base"],
   "assigneesFromCodeOwners": true,
   "reviewersFromCodeOwners": true,
+  "labels": ["dependencies"],
   "major": {
     "dependencyDashboardApproval": true
   }
