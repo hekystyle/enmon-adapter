@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [master]
 
-concurrency: 
+concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
@@ -150,6 +150,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Push all Docker image tags to registry
         run: docker push --all-tags ghcr.io/${{ github.repository }}
