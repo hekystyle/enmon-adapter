@@ -1,0 +1,2 @@
+# required by node/no-unpublished-import ESLint rule
+src/**/*.spec.ts
