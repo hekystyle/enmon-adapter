@@ -164,7 +164,9 @@ async function handleJobTick() {
 
 const job = new CronJob({
   cronTime: '* * * * *',
-  onTick: handleJobTick,
+  onTick: () => {
+    handleJobTick().catch((e: unknown) => log({ msg: 'job tick error', error: e }));
+  },
   runOnInit: true,
 });
 
