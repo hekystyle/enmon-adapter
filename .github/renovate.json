@@ -5,6 +5,6 @@
   "reviewersFromCodeOwners": true,
   "labels": ["dependencies"],
   "major": {
-    "dependencyDashboardApproval": true
+    "dependencyDashboardApproval": false
   }
 }
