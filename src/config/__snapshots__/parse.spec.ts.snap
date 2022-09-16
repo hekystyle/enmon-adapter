@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should reject invalid config 0 1`] = `
-Array [
+[
   ValidationError {
-    "children": Array [],
-    "constraints": Object {
+    "children": [],
+    "constraints": {
       "isDefined": "thermometer should not be null or undefined",
     },
     "property": "thermometer",
@@ -12,8 +12,8 @@ Array [
     "value": undefined,
   },
   ValidationError {
-    "children": Array [],
-    "constraints": Object {
+    "children": [],
+    "constraints": {
       "isDefined": "wattrouter should not be null or undefined",
     },
     "property": "wattrouter",
@@ -24,12 +24,12 @@ Array [
 `;
 
 exports[`should reject invalid config 1 1`] = `
-Array [
+[
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "dataSourceUrl should not be null or undefined",
           "isString": "dataSourceUrl must be a string",
           "isUrl": "dataSourceUrl must be an URL address",
@@ -39,8 +39,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "enmon should not be null or undefined",
         },
         "property": "enmon",
@@ -56,10 +56,10 @@ Array [
     "value": ConfigThehometer {},
   },
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "baseURL should not be null or undefined",
           "isString": "baseURL must be a string",
           "isUrl": "baseURL must be an URL address",
@@ -69,8 +69,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "enmon should not be null or undefined",
         },
         "property": "enmon",
@@ -89,12 +89,12 @@ Array [
 `;
 
 exports[`should reject invalid config 2 1`] = `
-Array [
+[
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isUrl": "dataSourceUrl must be an URL address",
         },
         "property": "dataSourceUrl",
@@ -105,10 +105,10 @@ Array [
         "value": "invalid URL",
       },
       ValidationError {
-        "children": Array [
+        "children": [
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "env should not be null or undefined",
               "isEnum": "env must be a valid enum value",
             },
@@ -117,8 +117,8 @@ Array [
             "value": undefined,
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "customerId should not be null or undefined",
               "isMongoId": "customerId must be a mongodb id",
               "isString": "customerId must be a string",
@@ -128,8 +128,8 @@ Array [
             "value": undefined,
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "devEUI should not be null or undefined",
               "isNotEmpty": "devEUI should not be empty",
               "isString": "devEUI must be a string",
@@ -139,8 +139,8 @@ Array [
             "value": undefined,
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "token should not be null or undefined",
               "isNotEmpty": "token should not be empty",
               "isString": "token must be a string",
@@ -175,10 +175,10 @@ Array [
     },
   },
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isUrl": "baseURL must be an URL address",
         },
         "property": "baseURL",
@@ -189,10 +189,10 @@ Array [
         "value": "invalid URL",
       },
       ValidationError {
-        "children": Array [
+        "children": [
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "env should not be null or undefined",
               "isEnum": "env must be a valid enum value",
             },
@@ -201,8 +201,8 @@ Array [
             "value": undefined,
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "customerId should not be null or undefined",
               "isMongoId": "customerId must be a mongodb id",
               "isString": "customerId must be a string",
@@ -212,8 +212,8 @@ Array [
             "value": undefined,
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "devEUI should not be null or undefined",
               "isNotEmpty": "devEUI should not be empty",
               "isString": "devEUI must be a string",
@@ -223,8 +223,8 @@ Array [
             "value": undefined,
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isDefined": "token should not be null or undefined",
               "isNotEmpty": "token should not be empty",
               "isString": "token must be a string",
@@ -262,12 +262,12 @@ Array [
 `;
 
 exports[`should reject invalid config 3 1`] = `
-Array [
+[
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isUrl": "dataSourceUrl must be an URL address",
         },
         "property": "dataSourceUrl",
@@ -283,10 +283,10 @@ Array [
         "value": "invalid URL",
       },
       ValidationError {
-        "children": Array [
+        "children": [
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isEnum": "env must be a valid enum value",
             },
             "property": "env",
@@ -299,8 +299,8 @@ Array [
             "value": "invalid EnmonEnv",
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isMongoId": "customerId must be a mongodb id",
             },
             "property": "customerId",
@@ -313,8 +313,8 @@ Array [
             "value": "invalid ID",
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isNotEmpty": "devEUI should not be empty",
             },
             "property": "devEUI",
@@ -327,8 +327,8 @@ Array [
             "value": "",
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isNotEmpty": "token should not be empty",
             },
             "property": "token",
@@ -391,10 +391,10 @@ Array [
     },
   },
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isUrl": "baseURL must be an URL address",
         },
         "property": "baseURL",
@@ -410,10 +410,10 @@ Array [
         "value": "invalid URL",
       },
       ValidationError {
-        "children": Array [
+        "children": [
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isEnum": "env must be a valid enum value",
             },
             "property": "env",
@@ -426,8 +426,8 @@ Array [
             "value": "invalid EnmonEnv",
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isMongoId": "customerId must be a mongodb id",
             },
             "property": "customerId",
@@ -440,8 +440,8 @@ Array [
             "value": "invalid ID",
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isNotEmpty": "devEUI should not be empty",
             },
             "property": "devEUI",
@@ -454,8 +454,8 @@ Array [
             "value": "",
           },
           ValidationError {
-            "children": Array [],
-            "constraints": Object {
+            "children": [],
+            "constraints": {
               "isNotEmpty": "token should not be empty",
             },
             "property": "token",

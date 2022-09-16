@@ -23,10 +23,10 @@ AllTimeStats {
 `;
 
 exports[`should reject invalid 1`] = `
-Array [
+[
   ValidationError {
-    "children": Array [],
-    "constraints": Object {
+    "children": [],
+    "constraints": {
       "isDefined": "stat_alltime should not be null or undefined",
     },
     "property": "stat_alltime",
@@ -37,12 +37,12 @@ Array [
 `;
 
 exports[`should reject invalid 2`] = `
-Array [
+[
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDateString": "SAD must be a valid ISO 8601 date string",
           "isDefined": "SAD should not be null or undefined",
         },
@@ -51,8 +51,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAS1 should not be null or undefined",
           "isNumber": "SAS1 must be a number conforming to the specified constraints",
         },
@@ -61,8 +61,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAH1 should not be null or undefined",
           "isNumber": "SAH1 must be a number conforming to the specified constraints",
         },
@@ -71,8 +71,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAL1 should not be null or undefined",
           "isNumber": "SAL1 must be a number conforming to the specified constraints",
         },
@@ -81,8 +81,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAP1 should not be null or undefined",
           "isNumber": "SAP1 must be a number conforming to the specified constraints",
         },
@@ -91,8 +91,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAS2 should not be null or undefined",
           "isNumber": "SAS2 must be a number conforming to the specified constraints",
         },
@@ -101,8 +101,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAH2 should not be null or undefined",
           "isNumber": "SAH2 must be a number conforming to the specified constraints",
         },
@@ -111,8 +111,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAL2 should not be null or undefined",
           "isNumber": "SAL2 must be a number conforming to the specified constraints",
         },
@@ -121,8 +121,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAP2 should not be null or undefined",
           "isNumber": "SAP2 must be a number conforming to the specified constraints",
         },
@@ -131,8 +131,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAS3 should not be null or undefined",
           "isNumber": "SAS3 must be a number conforming to the specified constraints",
         },
@@ -141,8 +141,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAH3 should not be null or undefined",
           "isNumber": "SAH3 must be a number conforming to the specified constraints",
         },
@@ -151,8 +151,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAL3 should not be null or undefined",
           "isNumber": "SAL3 must be a number conforming to the specified constraints",
         },
@@ -161,8 +161,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAP3 should not be null or undefined",
           "isNumber": "SAP3 must be a number conforming to the specified constraints",
         },
@@ -171,8 +171,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAS4 should not be null or undefined",
           "isNumber": "SAS4 must be a number conforming to the specified constraints",
         },
@@ -181,8 +181,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAH4 should not be null or undefined",
           "isNumber": "SAH4 must be a number conforming to the specified constraints",
         },
@@ -191,8 +191,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAL4 should not be null or undefined",
           "isNumber": "SAL4 must be a number conforming to the specified constraints",
         },
@@ -201,8 +201,8 @@ Array [
         "value": undefined,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDefined": "SAP4 should not be null or undefined",
           "isNumber": "SAP4 must be a number conforming to the specified constraints",
         },
@@ -221,12 +221,12 @@ Array [
 `;
 
 exports[`should reject invalid 3`] = `
-Array [
+[
   ValidationError {
-    "children": Array [
+    "children": [
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isDateString": "SAD must be a valid ISO 8601 date string",
         },
         "property": "SAD",
@@ -252,8 +252,8 @@ Array [
         "value": "invalid date",
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAS1 must be a number conforming to the specified constraints",
         },
         "property": "SAS1",
@@ -279,8 +279,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAH1 must be a number conforming to the specified constraints",
         },
         "property": "SAH1",
@@ -306,8 +306,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAL1 must be a number conforming to the specified constraints",
         },
         "property": "SAL1",
@@ -333,8 +333,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAP1 must be a number conforming to the specified constraints",
         },
         "property": "SAP1",
@@ -360,8 +360,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAS2 must be a number conforming to the specified constraints",
         },
         "property": "SAS2",
@@ -387,8 +387,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAH2 must be a number conforming to the specified constraints",
         },
         "property": "SAH2",
@@ -414,8 +414,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAL2 must be a number conforming to the specified constraints",
         },
         "property": "SAL2",
@@ -441,8 +441,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAP2 must be a number conforming to the specified constraints",
         },
         "property": "SAP2",
@@ -468,8 +468,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAS3 must be a number conforming to the specified constraints",
         },
         "property": "SAS3",
@@ -495,8 +495,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAH3 must be a number conforming to the specified constraints",
         },
         "property": "SAH3",
@@ -522,8 +522,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAL3 must be a number conforming to the specified constraints",
         },
         "property": "SAL3",
@@ -549,8 +549,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAP3 must be a number conforming to the specified constraints",
         },
         "property": "SAP3",
@@ -576,8 +576,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAS4 must be a number conforming to the specified constraints",
         },
         "property": "SAS4",
@@ -603,8 +603,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAH4 must be a number conforming to the specified constraints",
         },
         "property": "SAH4",
@@ -630,8 +630,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAL4 must be a number conforming to the specified constraints",
         },
         "property": "SAL4",
@@ -657,8 +657,8 @@ Array [
         "value": NaN,
       },
       ValidationError {
-        "children": Array [],
-        "constraints": Object {
+        "children": [],
+        "constraints": {
           "isNumber": "SAP4 must be a number conforming to the specified constraints",
         },
         "property": "SAP4",
