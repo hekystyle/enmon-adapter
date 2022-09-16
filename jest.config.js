@@ -5,10 +5,13 @@ export default {
   testMatch: ['**/?(*.)+(spec|test).[t]s?(x)'],
   setupFilesAfterEnv: ['<rootDir>/tests/env-setup.ts'],
   collectCoverageFrom: ['src/**/*.ts'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
+  transform: {
+    '.*': [
+      'ts-jest',
+      {
+        useESM: true,
+      },
+    ],
   },
   moduleNameMapper: {
     // ESM support (https://kulshekhar.github.io/ts-jest/docs/guides/esm-support/)
