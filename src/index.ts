@@ -24,7 +24,7 @@ async function fetchTemperature(): Promise<undefined | number> {
     status,
     statusText,
     data: html,
-  } = await axios.default.get<string>(config.thermometer.dataSourceUrl, {
+  } = await axios.get<string>(config.thermometer.dataSourceUrl, {
     validateStatus: () => true,
   });
 
@@ -58,7 +58,7 @@ async function fetchTemperature(): Promise<undefined | number> {
 async function uploadTemperature(temperature: number): Promise<void> {
   const { env, customerId } = config.thermometer.enmon;
 
-  const { status, statusText, data } = await axios.default.post<unknown>(
+  const { status, statusText, data } = await axios.post<unknown>(
     `https://${env}.enmon.tech/meter/plain/${customerId}/value`,
     {
       devEUI: config.thermometer.enmon.devEUI,
@@ -87,7 +87,7 @@ async function getAllTimeStats() {
   try {
     return await wattrouterApiClient.getAllTimeStats();
   } catch (e) {
-    if (axios.default.isAxiosError(e)) {
+    if (axios.isAxiosError<unknown>(e)) {
       const { statusText, status } = e.response ?? {};
       log({
         msg: 'failed to fetch wattrouter alltime stats',
@@ -137,7 +137,7 @@ async function handleWattrouter() {
     });
     log({ msg: 'post meter plain counter multiple result', result });
   } catch (e) {
-    if (axios.default.isAxiosError(e)) {
+    if (axios.isAxiosError<unknown>(e)) {
       const { statusText, status } = e.response ?? {};
       log({
         msg: 'failed to post multiple meter counters',
