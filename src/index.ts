@@ -116,11 +116,17 @@ async function handleWattrouter() {
 
   const { customerId, token, devEUI } = config.wattrouter.enmon;
 
-  const values = [
+  const legacyCounters = [
     [`consumption-ht`, SAH4],
     [`consumption-lt`, SAL4],
     [`production`, SAP4],
     [`surplus`, SAS4],
+  ] as const;
+
+  const registersCounters = [
+    [`1-1.8.2`, SAH4],
+    [`1-1.8.3`, SAL4],
+    [`1-2.8.0`, SAS4],
   ] as const;
 
   const enmonApiClient = new EnmonApiClient(config.wattrouter.enmon.env);
@@ -129,11 +135,19 @@ async function handleWattrouter() {
     const result = await enmonApiClient.postMeterPlainCounterMulti({
       customerId,
       token,
-      payload: values.map(([type, value]) => ({
-        date: new Date(),
-        devEUI: `${devEUI}-${type}`,
-        counter: value,
-      })),
+      payload: [
+        ...legacyCounters.map(([type, counter]) => ({
+          date: new Date(),
+          devEUI: `${devEUI}-${type}`,
+          counter,
+        })),
+        ...registersCounters.map(([meterRegister, counter]) => ({
+          date: new Date(),
+          devEUI,
+          meterRegister,
+          counter,
+        })),
+      ],
     });
     log({ msg: 'post meter plain counter multiple result', result });
   } catch (e) {

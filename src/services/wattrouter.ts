@@ -19,7 +19,7 @@ export class WATTrouterMxApiClient {
         Accept: 'text/xml',
       },
     });
-    const plain: unknown = await parseStringPromise(response.data);
+    const plain: unknown = await parseStringPromise(response.data, { explicitArray: false });
     return parseAllTimeStats(plain);
   }
 }
