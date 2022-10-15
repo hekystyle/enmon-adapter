@@ -3,6 +3,7 @@ import 'dotenv/config';
 import debug from 'debug';
 import { CronJob } from 'cron';
 import axios from 'axios';
+import { Decimal } from 'decimal.js';
 import config from './config/index.js';
 import { parseTemperature } from './parseTemp.js';
 import { EnmonApiClient } from './services/enmon.js';
@@ -124,10 +125,16 @@ async function handleWattrouter() {
   ] as const;
 
   const registersCounters = [
+    [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
     [`1-1.8.2`, SAH4],
     [`1-1.8.3`, SAL4],
     [`1-2.8.0`, SAS4],
   ] as const;
+
+  log({
+    msg: 'counters',
+    registersCounters,
+  });
 
   const enmonApiClient = new EnmonApiClient(config.wattrouter.enmon.env);
 
