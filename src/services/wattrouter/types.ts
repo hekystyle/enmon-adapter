@@ -114,3 +114,17 @@ export class AllTimeStatsShape {
   // eslint-disable-next-line camelcase
   stat_alltime!: AllTimeStats;
 }
+
+export class Measurement {
+  /** Voltage on Phase L1 */
+  @Transform(({ value }) => tryParseFloat(value))
+  @IsDefined()
+  VAC!: number;
+}
+
+export class MeasurementShape {
+  @Type(() => Measurement)
+  @ValidateNested()
+  @IsDefined()
+  meas!: Measurement;
+}

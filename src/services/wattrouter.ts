@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { parseStringPromise } from 'xml2js';
 import { parseAllTimeStats } from './wattrouter/parse.js';
-import type { AllTimeStats } from './wattrouter/types.js';
+import { parseMeasurement } from './wattrouter/parseMeasurement.js';
+import type { AllTimeStats, Measurement } from './wattrouter/types.js';
 
 export class WATTrouterMxApiClient {
   private http: AxiosInstance;
@@ -20,6 +21,16 @@ export class WATTrouterMxApiClient {
       },
     });
     const plain: unknown = await parseStringPromise(response.data, { explicitArray: false });
-    return parseAllTimeStats(plain);
+    return await parseAllTimeStats(plain);
+  }
+
+  async getMeasurement(): Promise<Measurement> {
+    const response = await this.http.get<string>('meas.xml', {
+      responseType: 'text',
+      headers: {
+        Accept: 'text/xml',
+      },
+    });
+    return await parseMeasurement(response.data);
   }
 }

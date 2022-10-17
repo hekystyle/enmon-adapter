@@ -57,22 +57,19 @@ async function fetchTemperature(): Promise<undefined | number> {
 }
 
 async function uploadTemperature(temperature: number): Promise<void> {
-  const { env, customerId } = config.thermometer.enmon;
+  const { env, customerId, devEUI, token } = config.thermometer.enmon;
 
-  const { status, statusText, data } = await axios.post<unknown>(
-    `https://${env}.enmon.tech/meter/plain/${customerId}/value`,
-    {
-      devEUI: config.thermometer.enmon.devEUI,
+  const client = new EnmonApiClient(env);
+
+  const { status, statusText, data } = await client.postMeterPlainValue({
+    customerId,
+    token,
+    payload: {
+      devEUI,
       date: new Date(),
       value: temperature,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${config.thermometer.enmon.token}`,
-      },
-      validateStatus: () => true,
-    },
-  );
+  });
 
   log({ msg: 'upload temperature result', status, statusText, data });
 }
@@ -83,10 +80,9 @@ async function handleTemperature() {
   if (temperature) await uploadTemperature(temperature);
 }
 
-async function getAllTimeStats() {
-  const wattrouterApiClient = new WATTrouterMxApiClient(config.wattrouter.baseURL);
+async function getAllTimeStats(client: WATTrouterMxApiClient) {
   try {
-    return await wattrouterApiClient.getAllTimeStats();
+    return await client.getAllTimeStats();
   } catch (e) {
     if (axios.isAxiosError<unknown>(e)) {
       const { statusText, status } = e.response ?? {};
@@ -97,22 +93,25 @@ async function getAllTimeStats() {
         data: e.response?.data,
       });
     } else {
-      log({ msg: 'failed to fetch wattrouter alltime stats', error: e });
+      throw e;
     }
     return undefined;
   }
 }
 
 async function handleWattrouter() {
-  const allTimeStats = await getAllTimeStats();
-  if (!allTimeStats) return undefined;
+  const wattrouterApiClient = new WATTrouterMxApiClient(config.wattrouter.baseURL);
+  const allTimeStats = await getAllTimeStats(wattrouterApiClient);
+  if (!allTimeStats) return;
+  const measurements = await wattrouterApiClient.getMeasurement();
   const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
   log({
-    msg: 'fetched wattrouter alltime stats',
+    msg: 'fetched wattrouter stats',
     consumptionHT: SAH4,
     consumptionLT: SAL4,
     production: SAP4,
     surplus: SAS4,
+    voltageL1: measurements.VAC,
   });
 
   const { customerId, token, devEUI } = config.wattrouter.enmon;
@@ -133,6 +132,7 @@ async function handleWattrouter() {
 
   log({
     msg: 'counters',
+    legacyCounters,
     registersCounters,
   });
 
@@ -167,12 +167,41 @@ async function handleWattrouter() {
         data: e.response?.data,
       });
     } else {
-      log({ msg: 'failed to post meter counter', error: e });
+      throw e;
     }
-    throw e;
   }
 
-  return undefined;
+  const payload = {
+    meterRegister: `1-32.7.0`, // voltage on phase L1
+    value: measurements.VAC,
+  } as const;
+
+  log({ msg: 'voltage on phase L1', payload });
+
+  try {
+    const { status, statusText, data } = await enmonApiClient.postMeterPlainValue({
+      customerId,
+      token,
+      payload: {
+        date: new Date(),
+        devEUI,
+        ...payload,
+      },
+    });
+    log({ msg: 'post meter plain value result', status, statusText, data });
+  } catch (e) {
+    if (axios.isAxiosError<unknown>(e)) {
+      const { statusText, status } = e.response ?? {};
+      log({
+        msg: 'failed to post meter value',
+        status,
+        statusText,
+        data: e.response?.data,
+      });
+    } else {
+      throw e;
+    }
+  }
 }
 
 async function handleJobTick() {
