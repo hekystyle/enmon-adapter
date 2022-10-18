@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export enum EnmonEnv {
   App = 'app',
@@ -7,8 +7,8 @@ export enum EnmonEnv {
 
 type PlainDataPoint = {
   devEUI: string;
-  counter: number;
   date: Date;
+  meterRegister?: string;
 } & ({ value: number } | { counter: number });
 
 export interface PostMeterCounterArgs {
@@ -27,6 +27,12 @@ interface PostMeterPlainCounterMultiResult {
   successCount: number;
   errorCount: number;
   errorDocs: (PlainDataPoint & { error: string | ValidationErrorItem[] })[];
+}
+
+export interface PostMeterPlainValueArgs {
+  payload: PlainDataPoint;
+  customerId: string;
+  token: string;
 }
 
 export class EnmonApiClient {
@@ -54,5 +60,14 @@ export class EnmonApiClient {
       },
     );
     return result.data;
+  }
+
+  async postMeterPlainValue({ customerId, token, payload }: PostMeterPlainValueArgs): Promise<AxiosResponse<void>> {
+    return await this.http.post<void>(`meter/plain/${customerId}/value`, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      validateStatus: () => true,
+    });
   }
 }

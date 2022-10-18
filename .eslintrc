@@ -14,13 +14,14 @@
   },
   "rules": {
     "import/prefer-default-export": "off",
-    "node/no-missing-import": "off"
+    "node/no-missing-import": "off",
+    "@typescript-eslint/return-await": ["error", "always"]
   },
   "overrides": [
     {
       "files": ["*.spec.ts", "*.test.ts"],
       "plugins": ["jest"],
-      "extends": ["plugin:jest/recommended"],
+      "extends": ["plugin:jest/recommended", "plugin:jest/style"],
       "rules": {
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
       }
