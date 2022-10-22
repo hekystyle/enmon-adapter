@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import 'dotenv/config';
-import debug from 'debug';
+import debug, { Debugger } from 'debug';
 import { CronJob } from 'cron';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
@@ -204,34 +204,57 @@ async function handleWattrouter() {
   }
 }
 
-async function handleJobTick() {
-  log({ msg: 'job execution started', at: new Date() });
+function createJobTickHandler(logger: Debugger, promise: Promise<unknown>): () => void {
+  return function handleJobTick(): void {
+    logger({ msg: 'job execution started', at: new Date() });
 
-  await Promise.all([handleTemperature(), handleWattrouter()]);
-
-  log({ msg: 'job execution ended' });
+    promise
+      .then(() => logger({ msg: 'job execution ended' }))
+      .catch((e: unknown) => logger({ msg: 'job tick error', error: e }));
+  };
 }
 
-const job = new CronJob({
-  cronTime: '* * * * *',
-  onTick: () => {
-    handleJobTick().catch((e: unknown) => log({ msg: 'job tick error', error: e }));
-  },
-  runOnInit: true,
-});
+const jobs = [
+  [
+    'temperature',
+    new CronJob({
+      cronTime: '* * * * *',
+      onTick: createJobTickHandler(log.extend('job').extend('temperature'), handleTemperature()),
+      runOnInit: true,
+    }),
+  ],
+  [
+    'wattrouter',
+    new CronJob({
+      cronTime: '* * * * *',
+      onTick: createJobTickHandler(log.extend('job').extend('wattrouter'), handleWattrouter()),
+      runOnInit: true,
+    }),
+  ],
+] as const;
 
-const handleAppShutdown = () => {
-  log({ msg: 'received shutdown signal, shutting down job ...' });
-  job.stop();
-  log({ msg: 'job shuted down, exiting process ...' });
+const handleAppShutdown = (signal: NodeJS.Signals) => {
+  log(`received ${signal} signal, stopping all jobs ...`);
+  jobs.forEach(([name, job]) => {
+    log(`stopping job ${name} ...`);
+    job.stop();
+    log(`stopped job ${name}`);
+  });
+  log({ msg: 'all jobs stopped, exiting process ...' });
   process.exit(0);
 };
 
 process.once('SIGINT', handleAppShutdown);
 process.once('SIGTERM', handleAppShutdown);
 
-log('starting job ...');
+log('starting jobs ...');
 
-job.start();
-
-log({ msg: 'job started', nextRun: job.nextDate().toJSDate() });
+jobs.forEach(([name, job]) => {
+  log(`starting job ${name} ...`);
+  job.start();
+  log({
+    msg: 'job started',
+    name,
+    nextRun: job.nextDate().toJSDate(),
+  });
+});
