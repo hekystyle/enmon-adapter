@@ -151,10 +151,10 @@ jobs:
             git checkout $SHA
             git status
             echo "Stopping service"
-            sudo systemctl stop enmon-middleman
+            systemctl --user stop enmon-middleman
             echo "Installing dependencies"
             yarn install --immutable
             echo "Building"
             yarn build
             echo "Restarting service"
-            sudo systemctl restart enmon-middleman
+            systemctl --user restart enmon-middleman

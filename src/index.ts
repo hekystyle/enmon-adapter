@@ -204,11 +204,11 @@ async function handleWattrouter() {
   }
 }
 
-function createJobTickHandler(logger: Debugger, promise: Promise<unknown>): () => void {
+function createJobTickHandler(logger: Debugger, asyncHandler: () => Promise<unknown>): () => void {
   return function handleJobTick(): void {
     logger({ msg: 'job execution started', at: new Date() });
 
-    promise
+    asyncHandler()
       .then(() => logger({ msg: 'job execution ended' }))
       .catch((e: unknown) => logger({ msg: 'job tick error', error: e }));
   };
@@ -219,7 +219,7 @@ const jobs = [
     'temperature',
     new CronJob({
       cronTime: '* * * * *',
-      onTick: createJobTickHandler(log.extend('job').extend('temperature'), handleTemperature()),
+      onTick: createJobTickHandler(log.extend('job').extend('temperature'), handleTemperature),
       runOnInit: true,
     }),
   ],
@@ -227,7 +227,7 @@ const jobs = [
     'wattrouter',
     new CronJob({
       cronTime: '* * * * *',
-      onTick: createJobTickHandler(log.extend('job').extend('wattrouter'), handleWattrouter()),
+      onTick: createJobTickHandler(log.extend('job').extend('wattrouter'), handleWattrouter),
       runOnInit: true,
     }),
   ],
