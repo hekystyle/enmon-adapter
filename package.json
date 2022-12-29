@@ -7,7 +7,7 @@
   "author": "Tomáš Hekrla (Heky) <tomas@heky.eu>",
   "license": "MIT",
   "private": true,
-  "packageManager": "yarn@3.2.4",
+  "packageManager": "yarn@3.3.1",
   "engines": {
     "node": "^16.0.0"
   },
