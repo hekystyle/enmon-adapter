@@ -2057,10 +2057,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decimal.js@npm:10.4.2":
-  version: 10.4.2
-  resolution: "decimal.js@npm:10.4.2"
-  checksum: 536cd6816a3197f2e1aa3da4860856cb5a2db73f6fafe8cb3b924ccc63f9b7d78296acc13dccbd419bd958ccc6357921fb15467f883b37cab04bfba7044cada2
+"decimal.js@npm:10.4.3":
+  version: 10.4.3
+  resolution: "decimal.js@npm:10.4.3"
+  checksum: 796404dcfa9d1dbfdc48870229d57f788b48c21c603c3f6554a1c17c10195fc1024de338b0cf9e1efe0c7c167eeb18f04548979bcc5fdfabebb7cc0ae3287bae
   languageName: node
   linkType: hard
 
@@ -2267,7 +2267,7 @@ __metadata:
     config: 3.3.8
     cron: 2.1.0
     debug: 4.3.4
-    decimal.js: 10.4.2
+    decimal.js: 10.4.3
     dotenv: 16.0.3
     eslint: 8.28.0
     eslint-config-airbnb-base: 15.0.0
