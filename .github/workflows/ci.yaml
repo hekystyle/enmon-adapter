@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - deploy
   pull_request:
     branches:
       - '**'
@@ -13,8 +14,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deps:
-    runs-on: ubuntu-latest
+  install:
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -32,8 +33,8 @@ jobs:
       - run: yarn install --immutable
 
   lint:
-    needs: [deps]
-    runs-on: ubuntu-latest
+    needs: [install]
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -51,8 +52,8 @@ jobs:
       - run: yarn run lint
 
   build:
-    needs: [deps]
-    runs-on: ubuntu-latest
+    needs: [install]
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -71,8 +72,8 @@ jobs:
 
   build_docker:
     if: ${{ false }}
-    needs: [deps]
-    runs-on: ubuntu-latest
+    needs: [install]
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -105,8 +106,8 @@ jobs:
           key: image-${{ github.sha }}
 
   test:
-    needs: [deps, build, lint]
-    runs-on: ubuntu-latest
+    needs: [install, build, lint]
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
 
@@ -128,30 +129,32 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
-  publish:
-    if: ${{ false }}
-    needs: [deps, lint, build]
-    runs-on: ubuntu-latest
-    # if: ${{ github.event_name == 'push' && ( github.ref == 'refs/heads/publishing' || github.ref == 'refs/heads/master' ) }}
+  deploy:
+    needs: [install, lint, build, test]
+    runs-on: ubuntu-22.04
+    if: ${{ github.event_name == 'push' && ( github.ref_name == 'deploy' || github.ref_name == 'master' ) }}
+    environment: production
+    env:
+      SHA: ${{ github.sha }}
     steps:
-      - name: Restore Docker image
-        uses: actions/cache@v3
+      - uses: appleboy/ssh-action@v0.1.6
         with:
-          path: image.tar
-          key: image-${{ github.sha }}
-
-      - name: Import Docker image
-        run: docker image import image.tar ghcr.io/${{ github.repository }}
-
-      - name: Create additional tags for Docker image
-        run: docker image tag ghcr.io/${{ github.repository }} ghcr.io/${{ github.repository }}:${{ github.sha }}
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push all Docker image tags to registry
-        run: docker push --all-tags ghcr.io/${{ github.repository }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: SHA
+          script: |
+            cd /opt/enmon-middleman
+            git status
+            git fetch --all
+            git status
+            git checkout $SHA
+            git status
+            echo "Stopping service"
+            sudo systemctl stop enmon-middleman
+            echo "Installing dependencies"
+            yarn install --immutable
+            echo "Building"
+            yarn build
+            echo "Restarting service"
+            sudo systemctl restart enmon-middleman
