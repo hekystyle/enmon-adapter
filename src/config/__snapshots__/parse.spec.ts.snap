@@ -35,7 +35,7 @@ exports[`should reject invalid config 1 1`] = `
           "isUrl": "dataSourceUrl must be an URL address",
         },
         "property": "dataSourceUrl",
-        "target": ConfigThehometer {},
+        "target": ConfigThermometer {},
         "value": undefined,
       },
       ValidationError {
@@ -44,16 +44,16 @@ exports[`should reject invalid config 1 1`] = `
           "isDefined": "enmon should not be null or undefined",
         },
         "property": "enmon",
-        "target": ConfigThehometer {},
+        "target": ConfigThermometer {},
         "value": undefined,
       },
     ],
     "property": "thermometer",
     "target": Config {
-      "thermometer": ConfigThehometer {},
+      "thermometer": ConfigThermometer {},
       "wattrouter": ConfigWattrouter {},
     },
-    "value": ConfigThehometer {},
+    "value": ConfigThermometer {},
   },
   ValidationError {
     "children": [
@@ -80,7 +80,7 @@ exports[`should reject invalid config 1 1`] = `
     ],
     "property": "wattrouter",
     "target": Config {
-      "thermometer": ConfigThehometer {},
+      "thermometer": ConfigThermometer {},
       "wattrouter": ConfigWattrouter {},
     },
     "value": ConfigWattrouter {},
@@ -98,7 +98,7 @@ exports[`should reject invalid config 2 1`] = `
           "isUrl": "dataSourceUrl must be an URL address",
         },
         "property": "dataSourceUrl",
-        "target": ConfigThehometer {
+        "target": ConfigThermometer {
           "dataSourceUrl": "invalid URL",
           "enmon": ConfigEnmon {},
         },
@@ -151,7 +151,7 @@ exports[`should reject invalid config 2 1`] = `
           },
         ],
         "property": "enmon",
-        "target": ConfigThehometer {
+        "target": ConfigThermometer {
           "dataSourceUrl": "invalid URL",
           "enmon": ConfigEnmon {},
         },
@@ -160,7 +160,7 @@ exports[`should reject invalid config 2 1`] = `
     ],
     "property": "thermometer",
     "target": Config {
-      "thermometer": ConfigThehometer {
+      "thermometer": ConfigThermometer {
         "dataSourceUrl": "invalid URL",
         "enmon": ConfigEnmon {},
       },
@@ -169,7 +169,7 @@ exports[`should reject invalid config 2 1`] = `
         "enmon": ConfigEnmon {},
       },
     },
-    "value": ConfigThehometer {
+    "value": ConfigThermometer {
       "dataSourceUrl": "invalid URL",
       "enmon": ConfigEnmon {},
     },
@@ -244,7 +244,7 @@ exports[`should reject invalid config 2 1`] = `
     ],
     "property": "wattrouter",
     "target": Config {
-      "thermometer": ConfigThehometer {
+      "thermometer": ConfigThermometer {
         "dataSourceUrl": "invalid URL",
         "enmon": ConfigEnmon {},
       },
@@ -271,7 +271,7 @@ exports[`should reject invalid config 3 1`] = `
           "isUrl": "dataSourceUrl must be an URL address",
         },
         "property": "dataSourceUrl",
-        "target": ConfigThehometer {
+        "target": ConfigThermometer {
           "dataSourceUrl": "invalid URL",
           "enmon": ConfigEnmon {
             "customerId": "invalid ID",
@@ -342,7 +342,7 @@ exports[`should reject invalid config 3 1`] = `
           },
         ],
         "property": "enmon",
-        "target": ConfigThehometer {
+        "target": ConfigThermometer {
           "dataSourceUrl": "invalid URL",
           "enmon": ConfigEnmon {
             "customerId": "invalid ID",
@@ -361,7 +361,7 @@ exports[`should reject invalid config 3 1`] = `
     ],
     "property": "thermometer",
     "target": Config {
-      "thermometer": ConfigThehometer {
+      "thermometer": ConfigThermometer {
         "dataSourceUrl": "invalid URL",
         "enmon": ConfigEnmon {
           "customerId": "invalid ID",
@@ -380,7 +380,7 @@ exports[`should reject invalid config 3 1`] = `
         },
       },
     },
-    "value": ConfigThehometer {
+    "value": ConfigThermometer {
       "dataSourceUrl": "invalid URL",
       "enmon": ConfigEnmon {
         "customerId": "invalid ID",
@@ -488,7 +488,7 @@ exports[`should reject invalid config 3 1`] = `
     ],
     "property": "wattrouter",
     "target": Config {
-      "thermometer": ConfigThehometer {
+      "thermometer": ConfigThermometer {
         "dataSourceUrl": "invalid URL",
         "enmon": ConfigEnmon {
           "customerId": "invalid ID",

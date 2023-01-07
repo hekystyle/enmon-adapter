@@ -1,4 +1,4 @@
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 export default {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
@@ -6,7 +6,7 @@ export default {
   setupFilesAfterEnv: ['<rootDir>/tests/env-setup.ts'],
   collectCoverageFrom: ['src/**/*.ts'],
   transform: {
-    '.*': [
+    '^.+\\.tsx?$': [
       'ts-jest',
       {
         useESM: true,

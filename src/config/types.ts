@@ -24,7 +24,7 @@ class ConfigEnmon {
   readonly token!: string;
 }
 
-class ConfigThehometer {
+class ConfigThermometer {
   @IsDefined()
   @IsString()
   @IsUrl()
@@ -51,8 +51,8 @@ class ConfigWattrouter {
 export class Config {
   @IsDefined()
   @ValidateNested()
-  @Type(() => ConfigThehometer)
-  readonly thermometer!: Readonly<ConfigThehometer>;
+  @Type(() => ConfigThermometer)
+  readonly thermometer!: Readonly<ConfigThermometer>;
 
   @IsDefined()
   @ValidateNested()
