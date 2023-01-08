@@ -144,6 +144,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           envs: SHA
           command_timeout: 20m
+          script_stop: true
           script: |
             cd /opt/enmon-middleman
             git status
@@ -152,10 +153,10 @@ jobs:
             git checkout $SHA
             git status
             echo "Stopping service"
-            systemctl --user stop enmon-middleman
+            sudo systemctl stop enmon-middleman
             echo "Installing dependencies"
             yarn install --immutable
             echo "Building"
             yarn build
             echo "Restarting service"
-            systemctl --user restart enmon-middleman
+            sudo systemctl restart enmon-middleman
