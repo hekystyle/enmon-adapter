@@ -17,15 +17,15 @@ jobs:
   install:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3.6.0
         with:
           node-version: lts/*
           cache: "yarn"
 
       - name: Restore node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -36,15 +36,15 @@ jobs:
     needs: [install]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3.6.0
         with:
           node-version: lts/*
           cache: "yarn"
 
       - name: Restore node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -55,15 +55,15 @@ jobs:
     needs: [install]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3.6.0
         with:
           node-version: lts/*
           cache: "yarn"
 
       - name: Restore node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -75,19 +75,19 @@ jobs:
     needs: [install]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
 
       - name: Restore node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v2.2.1
 
       - name: Build Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v3.2.0
         with:
           context: .
           push: false
@@ -100,7 +100,7 @@ jobs:
         run: docker image save -o image.tar ghcr.io/${{ github.repository }}
 
       - name: Cache docker image
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: image.tar
           key: image-${{ github.sha }}
@@ -109,15 +109,15 @@ jobs:
     needs: [install, build, lint]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3.6.0
         with:
           node-version: lts/*
           cache: "yarn"
 
       - name: Restore node_modules
-        uses: actions/cache@v3
+        uses: actions/cache@v3.2.2
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
@@ -137,13 +137,14 @@ jobs:
     env:
       SHA: ${{ github.sha }}
     steps:
-      - uses: appleboy/ssh-action@v0.1.6
+      - uses: appleboy/ssh-action@4a03da89e5c43da56e502053be4bbcb293411883
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           envs: SHA
           command_timeout: 20m
+          script_stop: true
           script: |
             cd /opt/enmon-middleman
             git status
@@ -152,10 +153,10 @@ jobs:
             git checkout $SHA
             git status
             echo "Stopping service"
-            systemctl --user stop enmon-middleman
+            sudo systemctl stop enmon-middleman
             echo "Installing dependencies"
             yarn install --immutable
             echo "Building"
             yarn build
             echo "Restarting service"
-            systemctl --user restart enmon-middleman
+            sudo systemctl restart enmon-middleman
