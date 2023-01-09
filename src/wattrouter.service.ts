@@ -40,13 +40,6 @@ export class WATTrouterService {
 
     const { customerId, token, devEUI } = this.config.wattrouter.enmon;
 
-    const legacyCounters = [
-      [`consumption-ht`, SAH4],
-      [`consumption-lt`, SAL4],
-      [`production`, SAP4],
-      [`surplus`, SAS4],
-    ] as const;
-
     const registersCounters = [
       [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
       [`1-1.8.2`, SAH4],
@@ -56,7 +49,6 @@ export class WATTrouterService {
 
     this.logger.log({
       msg: 'counters',
-      legacyCounters,
       registersCounters,
     });
 
@@ -66,19 +58,12 @@ export class WATTrouterService {
       const result = await enmonApiClient.postMeterPlainCounterMulti({
         customerId,
         token,
-        payload: [
-          ...legacyCounters.map(([type, counter]) => ({
-            date: new Date(),
-            devEUI: `${devEUI}-${type}`,
-            counter,
-          })),
-          ...registersCounters.map(([meterRegister, counter]) => ({
-            date: new Date(),
-            devEUI,
-            meterRegister,
-            counter,
-          })),
-        ],
+        payload: registersCounters.map(([meterRegister, counter]) => ({
+          date: new Date(),
+          devEUI,
+          meterRegister,
+          counter,
+        })),
       });
       this.logger.log({ msg: 'post meter plain counter multiple result', result });
     } catch (e) {
