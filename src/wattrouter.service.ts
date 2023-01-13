@@ -11,7 +11,7 @@ import { WATTrouterMxApiClient } from './services/wattrouter.js';
 export class WATTrouterService {
   private readonly logger: Logger;
 
-  constructor(logger: Logger, private readonly config: Config) {
+  constructor(logger: Logger, private readonly config: Config, private readonly enmonApiClient: EnmonApiClient) {
     this.logger = logger.extend(WATTrouterService.name);
   }
 
@@ -38,7 +38,7 @@ export class WATTrouterService {
       voltageL1: measurements.VAC,
     });
 
-    const { customerId, token, devEUI } = this.config.wattrouter.enmon;
+    const { env, customerId, token, devEUI } = this.config.wattrouter.enmon;
 
     const registersCounters = [
       [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
@@ -52,10 +52,9 @@ export class WATTrouterService {
       registersCounters,
     });
 
-    const enmonApiClient = new EnmonApiClient(this.config.wattrouter.enmon.env);
-
     try {
-      const result = await enmonApiClient.postMeterPlainCounterMulti({
+      const result = await this.enmonApiClient.postMeterPlainCounterMulti({
+        env,
         customerId,
         token,
         payload: registersCounters.map(([meterRegister, counter]) => ({
@@ -88,7 +87,8 @@ export class WATTrouterService {
     this.logger.log({ msg: 'voltage on phase L1', payload });
 
     try {
-      const { status, statusText, data } = await enmonApiClient.postMeterPlainValue({
+      const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
+        env,
         customerId,
         token,
         payload: {
