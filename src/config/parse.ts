@@ -5,7 +5,7 @@ import { Config } from './types.js';
 /**
  * @throws {ValidationError[]} if the config is invalid
  */
-export const parseConfig = async (config: unknown): Promise<Readonly<Config>> => {
+export const parseConfig = async (config: unknown): Promise<Config> => {
   const instance = plainToInstance(Config, config);
 
   await validateOrReject(instance);
