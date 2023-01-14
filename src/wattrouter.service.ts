@@ -11,7 +11,12 @@ import { WATTrouterMxApiClient } from './services/wattrouter.js';
 export class WATTrouterService {
   private readonly logger: Logger;
 
-  constructor(logger: Logger, private readonly config: Config, private readonly enmonApiClient: EnmonApiClient) {
+  constructor(
+    logger: Logger,
+    private readonly config: Config,
+    private readonly enmonApiClient: EnmonApiClient,
+    private readonly wattrouterApiClient: WATTrouterMxApiClient,
+  ) {
     this.logger = logger.extend(WATTrouterService.name);
   }
 
@@ -24,10 +29,9 @@ export class WATTrouterService {
   private async handleWattrouterValues() {
     this.logger.log(this.handleWattrouterValues.name);
 
-    const wattrouterApiClient = new WATTrouterMxApiClient(this.config.wattrouter.baseURL);
-    const allTimeStats = await this.getAllTimeStats(wattrouterApiClient);
+    const allTimeStats = await this.getAllTimeStats();
     if (!allTimeStats) return;
-    const measurements = await wattrouterApiClient.getMeasurement();
+    const measurements = await this.wattrouterApiClient.getMeasurement();
     const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
     this.logger.log({
       msg: 'fetched wattrouter stats',
@@ -113,9 +117,9 @@ export class WATTrouterService {
     }
   }
 
-  private async getAllTimeStats(client: WATTrouterMxApiClient) {
+  private async getAllTimeStats() {
     try {
-      return await client.getAllTimeStats();
+      return await this.wattrouterApiClient.getAllTimeStats();
     } catch (e) {
       if (axios.isAxiosError<unknown>(e)) {
         const { statusText, status } = e.response ?? {};
