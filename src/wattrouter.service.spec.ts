@@ -3,13 +3,20 @@ import { testConfigProvider } from '../tests/config.provider.js';
 import { enmonApiClientProvider } from './enmonApiClient.provider.js';
 import { loggerFactoryProvider } from './logger.provider.js';
 import { WATTrouterService } from './wattrouter.service.js';
+import { wattrouterApiClientProvider } from './wattrouterApiClient.provider.js';
 
 describe('WattrouterService', () => {
   let service: WATTrouterService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [WATTrouterService, testConfigProvider, loggerFactoryProvider, enmonApiClientProvider],
+      providers: [
+        WATTrouterService,
+        testConfigProvider,
+        loggerFactoryProvider,
+        enmonApiClientProvider,
+        wattrouterApiClientProvider,
+      ],
     }).compile();
 
     service = module.get<WATTrouterService>(WATTrouterService);

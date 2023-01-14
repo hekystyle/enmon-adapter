@@ -5,9 +5,17 @@ import { enmonApiClientProvider } from './enmonApiClient.provider.js';
 import { loggerFactoryProvider } from './logger.provider.js';
 import { ThermometerService } from './thermometer.service.js';
 import { WATTrouterService } from './wattrouter.service.js';
+import { wattrouterApiClientProvider } from './wattrouterApiClient.provider.js';
 
 @Module({
   imports: [ScheduleModule.forRoot()],
-  providers: [configProvider, loggerFactoryProvider, enmonApiClientProvider, ThermometerService, WATTrouterService],
+  providers: [
+    configProvider,
+    loggerFactoryProvider,
+    enmonApiClientProvider,
+    wattrouterApiClientProvider,
+    ThermometerService,
+    WATTrouterService,
+  ],
 })
 export class AppModule {}
