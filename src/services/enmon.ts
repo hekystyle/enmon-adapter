@@ -12,6 +12,7 @@ type PlainDataPoint = {
 } & ({ value: number } | { counter: number });
 
 export interface PostMeterCounterArgs {
+  env: EnmonEnv | undefined;
   payload: PlainDataPoint[];
   customerId: string;
   token: string;
@@ -30,26 +31,22 @@ interface PostMeterPlainCounterMultiResult {
 }
 
 export interface PostMeterPlainValueArgs {
+  env: EnmonEnv | undefined;
   payload: PlainDataPoint;
   customerId: string;
   token: string;
 }
 
 export class EnmonApiClient {
-  private http: AxiosInstance;
-
-  constructor(env: EnmonEnv) {
-    this.http = axios.create({
-      baseURL: `https://${env}.enmon.tech`,
-    });
-  }
+  constructor(public readonly env: EnmonEnv) {}
 
   async postMeterPlainCounterMulti({
+    env,
     customerId,
     token,
     payload,
   }: PostMeterCounterArgs): Promise<PostMeterPlainCounterMultiResult> {
-    const result = await this.http.post<PostMeterPlainCounterMultiResult>(
+    const result = await this.http({ env }).post<PostMeterPlainCounterMultiResult>(
       `meter/plain/${customerId}/counter-multi`,
       payload,
       {
@@ -62,12 +59,23 @@ export class EnmonApiClient {
     return result.data;
   }
 
-  async postMeterPlainValue({ customerId, token, payload }: PostMeterPlainValueArgs): Promise<AxiosResponse<void>> {
-    return await this.http.post<void>(`meter/plain/${customerId}/value`, payload, {
+  async postMeterPlainValue({
+    env,
+    customerId,
+    token,
+    payload,
+  }: PostMeterPlainValueArgs): Promise<AxiosResponse<void>> {
+    return await this.http({ env }).post<void>(`meter/plain/${customerId}/value`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       validateStatus: () => true,
+    });
+  }
+
+  private http({ env }: { env?: EnmonEnv | undefined }): AxiosInstance {
+    return axios.create({
+      baseURL: `https://${this.env ?? env}.enmon.tech`,
     });
   }
 }

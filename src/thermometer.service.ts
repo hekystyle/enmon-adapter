@@ -10,7 +10,7 @@ import { EnmonApiClient } from './services/enmon.js';
 export class ThermometerService {
   private readonly logger: Logger;
 
-  constructor(logger: Logger, private readonly config: Config) {
+  constructor(logger: Logger, private readonly config: Config, private readonly enmonApiClient: EnmonApiClient) {
     this.logger = logger.extend(ThermometerService.name);
   }
 
@@ -67,9 +67,8 @@ export class ThermometerService {
   private async uploadTemperature(temperature: number): Promise<void> {
     const { env, customerId, devEUI, token } = this.config.thermometer.enmon;
 
-    const client = new EnmonApiClient(env);
-
-    const { status, statusText, data } = await client.postMeterPlainValue({
+    const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
+      env,
       customerId,
       token,
       payload: {
