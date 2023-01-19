@@ -1,4 +1,4 @@
-import { ObjectId } from 'bson';
+import { faker } from '@faker-js/faker';
 import { Config } from './types.js';
 import { EnmonEnv } from '../services/enmon.js';
 import { parseConfig } from './parse.js';
@@ -7,7 +7,7 @@ const VALID_CONFIG: Config = {
   thermometer: {
     dataSourceUrl: 'http://10.0.0.0',
     enmon: {
-      customerId: new ObjectId().toHexString(),
+      customerId: faker.database.mongodbObjectId(),
       devEUI: 'devEUI',
       env: EnmonEnv.Dev,
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U',
@@ -16,7 +16,7 @@ const VALID_CONFIG: Config = {
   wattrouter: {
     baseURL: 'http://10.0.0.0',
     enmon: {
-      customerId: new ObjectId().toHexString(),
+      customerId: faker.database.mongodbObjectId(),
       devEUI: 'devEUI',
       env: EnmonEnv.Dev,
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U',
