@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "7.6.0",
-    "@nestjs/cli": "9.1.8",
+    "@nestjs/cli": "9.1.9",
     "@nestjs/schematics": "9.0.4",
     "@nestjs/testing": "9.2.1",
     "@tsconfig/node16-strictest-esm": "1.0.3",
