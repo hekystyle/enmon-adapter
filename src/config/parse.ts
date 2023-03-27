@@ -2,8 +2,15 @@ import { plainToInstance } from 'class-transformer';
 import { validateOrReject, ValidationError } from 'class-validator';
 import { Config } from './types.js';
 
+export class ParseError extends Error {
+  constructor(message: string, public readonly errors: ValidationError[]) {
+    super(message);
+    this.name = ParseError.name;
+  }
+}
+
 /**
- * @throws {ValidationError[]} if the config is invalid
+ * @throws {ParseError} if the config is invalid
  */
 export const parseConfig = async (config: unknown): Promise<Config> => {
   const instance = plainToInstance(Config, config);
@@ -12,7 +19,7 @@ export const parseConfig = async (config: unknown): Promise<Config> => {
     await validateOrReject(instance);
   } catch (e) {
     if (Array.isArray(e) && e.every((value): value is ValidationError => value instanceof ValidationError)) {
-      throw new Error(e.map(error => error.toString()).join('\n'));
+      throw new ParseError(e.map(error => error.toString()).join('\n'), e);
     }
     throw e;
   }
