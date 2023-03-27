@@ -23,7 +23,8 @@
     "node/no-missing-import": "off",
     "@typescript-eslint/return-await": ["error", "always"],
     "@typescript-eslint/member-ordering": ["error"],
-    "@typescript-eslint/no-empty-function": ["error", { "allow": ["private-constructors"] }]
+    "@typescript-eslint/no-empty-function": ["error", { "allow": ["private-constructors"] }],
+    "@typescript-eslint/array-type": ["error", { "default": "array-simple", "readonly": "array-simple" }]
   },
   "overrides": [
     {

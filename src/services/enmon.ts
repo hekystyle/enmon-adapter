@@ -27,7 +27,7 @@ interface ValidationErrorItem {
 interface PostMeterPlainCounterMultiResult {
   successCount: number;
   errorCount: number;
-  errorDocs: (PlainDataPoint & { error: string | ValidationErrorItem[] })[];
+  errorDocs: Array<PlainDataPoint & { error: string | ValidationErrorItem[] }>;
 }
 
 export interface PostMeterPlainValueArgs {
