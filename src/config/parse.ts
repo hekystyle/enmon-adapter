@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
+import { validateOrReject, ValidationError } from 'class-validator';
 import { Config } from './types.js';
 
 /**
@@ -8,7 +8,14 @@ import { Config } from './types.js';
 export const parseConfig = async (config: unknown): Promise<Config> => {
   const instance = plainToInstance(Config, config);
 
-  await validateOrReject(instance);
+  try {
+    await validateOrReject(instance);
+  } catch (e) {
+    if (Array.isArray(e) && e.every((value): value is ValidationError => value instanceof ValidationError)) {
+      throw new Error(e.map(error => error.toString()).join('\n'));
+    }
+    throw e;
+  }
 
   return instance;
 };
