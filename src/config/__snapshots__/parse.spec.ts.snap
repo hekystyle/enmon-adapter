@@ -41,7 +41,7 @@ exports[`should reject invalid config 1 1`] = `
         "constraints": {
           "isDefined": "dataSourceUrl should not be null or undefined",
           "isString": "dataSourceUrl must be a string",
-          "isUrl": "dataSourceUrl must be an URL address",
+          "isUrl": "dataSourceUrl must be a URL address",
         },
         "property": "dataSourceUrl",
         "target": ConfigThermometerV1 {},
@@ -75,7 +75,7 @@ exports[`should reject invalid config 1 1`] = `
             "children": [],
             "constraints": {
               "isDefined": "model should not be null or undefined",
-              "isEnum": "model must be a valid enum value",
+              "isEnum": "model must be one of the following values: ",
               "isString": "model must be a string",
             },
             "property": "model",
@@ -87,7 +87,7 @@ exports[`should reject invalid config 1 1`] = `
             "constraints": {
               "isDefined": "dataSourceUrl should not be null or undefined",
               "isString": "dataSourceUrl must be a string",
-              "isUrl": "dataSourceUrl must be an URL address",
+              "isUrl": "dataSourceUrl must be a URL address",
             },
             "property": "dataSourceUrl",
             "target": ConfigThermometer {},
@@ -129,7 +129,7 @@ exports[`should reject invalid config 1 1`] = `
         "constraints": {
           "isDefined": "baseURL should not be null or undefined",
           "isString": "baseURL must be a string",
-          "isUrl": "baseURL must be an URL address",
+          "isUrl": "baseURL must be a URL address",
         },
         "property": "baseURL",
         "target": ConfigWattrouter {},
@@ -165,7 +165,7 @@ exports[`should reject invalid config 2 1`] = `
       ValidationError {
         "children": [],
         "constraints": {
-          "isUrl": "dataSourceUrl must be an URL address",
+          "isUrl": "dataSourceUrl must be a URL address",
         },
         "property": "dataSourceUrl",
         "target": ConfigThermometerV1 {
@@ -180,7 +180,7 @@ exports[`should reject invalid config 2 1`] = `
             "children": [],
             "constraints": {
               "isDefined": "env should not be null or undefined",
-              "isEnum": "env must be a valid enum value",
+              "isEnum": "env must be one of the following values: app, dev",
             },
             "property": "env",
             "target": ConfigEnmon {},
@@ -258,7 +258,7 @@ exports[`should reject invalid config 2 1`] = `
           ValidationError {
             "children": [],
             "constraints": {
-              "isEnum": "model must be a valid enum value",
+              "isEnum": "model must be one of the following values: ",
             },
             "property": "model",
             "target": ConfigThermometer {
@@ -271,7 +271,7 @@ exports[`should reject invalid config 2 1`] = `
           ValidationError {
             "children": [],
             "constraints": {
-              "isUrl": "dataSourceUrl must be an URL address",
+              "isUrl": "dataSourceUrl must be a URL address",
             },
             "property": "dataSourceUrl",
             "target": ConfigThermometer {
@@ -287,7 +287,7 @@ exports[`should reject invalid config 2 1`] = `
                 "children": [],
                 "constraints": {
                   "isDefined": "env should not be null or undefined",
-                  "isEnum": "env must be a valid enum value",
+                  "isEnum": "env must be one of the following values: app, dev",
                 },
                 "property": "env",
                 "target": ConfigEnmon {},
@@ -382,7 +382,7 @@ exports[`should reject invalid config 2 1`] = `
       ValidationError {
         "children": [],
         "constraints": {
-          "isUrl": "baseURL must be an URL address",
+          "isUrl": "baseURL must be a URL address",
         },
         "property": "baseURL",
         "target": ConfigWattrouter {
@@ -397,7 +397,7 @@ exports[`should reject invalid config 2 1`] = `
             "children": [],
             "constraints": {
               "isDefined": "env should not be null or undefined",
-              "isEnum": "env must be a valid enum value",
+              "isEnum": "env must be one of the following values: app, dev",
             },
             "property": "env",
             "target": ConfigEnmon {},
@@ -478,7 +478,7 @@ exports[`should reject invalid config 3 1`] = `
       ValidationError {
         "children": [],
         "constraints": {
-          "isUrl": "dataSourceUrl must be an URL address",
+          "isUrl": "dataSourceUrl must be a URL address",
         },
         "property": "dataSourceUrl",
         "target": ConfigThermometerV1 {
@@ -497,7 +497,7 @@ exports[`should reject invalid config 3 1`] = `
           ValidationError {
             "children": [],
             "constraints": {
-              "isEnum": "env must be a valid enum value",
+              "isEnum": "env must be one of the following values: app, dev",
             },
             "property": "env",
             "target": ConfigEnmon {
@@ -619,7 +619,7 @@ exports[`should reject invalid config 3 1`] = `
           ValidationError {
             "children": [],
             "constraints": {
-              "isEnum": "model must be a valid enum value",
+              "isEnum": "model must be one of the following values: ",
             },
             "property": "model",
             "target": ConfigThermometer {
@@ -637,7 +637,7 @@ exports[`should reject invalid config 3 1`] = `
           ValidationError {
             "children": [],
             "constraints": {
-              "isUrl": "dataSourceUrl must be an URL address",
+              "isUrl": "dataSourceUrl must be a URL address",
             },
             "property": "dataSourceUrl",
             "target": ConfigThermometer {
@@ -657,7 +657,7 @@ exports[`should reject invalid config 3 1`] = `
               ValidationError {
                 "children": [],
                 "constraints": {
-                  "isEnum": "env must be a valid enum value",
+                  "isEnum": "env must be one of the following values: app, dev",
                 },
                 "property": "env",
                 "target": ConfigEnmon {
@@ -806,7 +806,7 @@ exports[`should reject invalid config 3 1`] = `
       ValidationError {
         "children": [],
         "constraints": {
-          "isUrl": "baseURL must be an URL address",
+          "isUrl": "baseURL must be a URL address",
         },
         "property": "baseURL",
         "target": ConfigWattrouter {
@@ -825,7 +825,7 @@ exports[`should reject invalid config 3 1`] = `
           ValidationError {
             "children": [],
             "constraints": {
-              "isEnum": "env must be a valid enum value",
+              "isEnum": "env must be one of the following values: app, dev",
             },
             "property": "env",
             "target": ConfigEnmon {
