@@ -1238,13 +1238,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cron@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@types/cron@npm:2.0.0"
+"@types/cron@npm:2.0.1":
+  version: 2.0.1
+  resolution: "@types/cron@npm:2.0.1"
   dependencies:
     "@types/luxon": "*"
     "@types/node": "*"
-  checksum: 392d2cfca51504140397533c30be8facd2196251074eb26ee09232a7e983144ff1d8364cd64922ed22d142686a4724934a70672fc8353b441fea729ac0ed0611
+  checksum: 4268c784750a1373036b4de95cd1f35ab4fa5227c1639302eedb25a35900d7805271e33b557ad7ccccd6d1829944963df25cd0d9d0d603abf3bcdf148b69ea5d
   languageName: node
   linkType: hard
 
@@ -2776,12 +2776,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cron@npm:2.2.0":
-  version: 2.2.0
-  resolution: "cron@npm:2.2.0"
+"cron@npm:2.3.0":
+  version: 2.3.0
+  resolution: "cron@npm:2.3.0"
   dependencies:
     luxon: ^3.2.1
-  checksum: 53905d0f55e052742cf4fed34598a4ebfc311f4f9143c90384225bb4376fa639cd12f485cbf5d3dca00db377bf5117f27a1cae405f15e4745d1f69808e4fb9ac
+  checksum: 70b220f3fc4b6bcd594f7f2c690bbf7a3a03b0e081eb0119f8e3ca21635f2da07d89e038d561d4c0742c8b0dd04977f25e307d0608455ef9f527a556b2da92fc
   languageName: node
   linkType: hard
 
@@ -3084,7 +3084,7 @@ __metadata:
     "@nestjs/testing": 9.2.1
     "@tsconfig/node16-strictest-esm": 1.0.3
     "@types/config": 3.3.0
-    "@types/cron": 2.0.0
+    "@types/cron": 2.0.1
     "@types/debug": 4.1.7
     "@types/jest": 29.4.0
     "@types/node": 17.0.23
@@ -3097,7 +3097,7 @@ __metadata:
     class-transformer: 0.5.1
     class-validator: 0.14.0
     config: 3.3.9
-    cron: 2.2.0
+    cron: 2.3.0
     debug: 4.3.4
     decimal.js: 10.4.3
     dotenv: 16.0.3
