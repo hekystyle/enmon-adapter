@@ -70,6 +70,14 @@ jobs:
 
       - run: yarn build
 
+      - run: tar -cv dist | gzip -v -9 > dist-${{ github.sha }}.tar.gz
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-${{ github.sha }}
+          path: dist-${{ github.sha }}.tar.gz
+
   build_docker:
     if: ${{ false }}
     needs: [install]
