@@ -5,14 +5,12 @@ import { Decimal } from 'decimal.js';
 import { Config } from '../config/types.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
-import { WATTrouterMxApiClient } from './wattrouter.js';
+import { WATTrouterMxApiClient } from './MxApiClient.js';
 
 @Injectable()
 export class WATTrouterService {
-  private readonly logger: Logger;
-
   constructor(
-    logger: Logger,
+    private readonly logger: Logger,
     private readonly config: Config,
     private readonly enmonApiClient: EnmonApiClient,
     private readonly wattrouterApiClient: WATTrouterMxApiClient,
