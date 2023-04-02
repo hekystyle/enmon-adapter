@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { parseStringPromise } from 'xml2js';
-import { parseAllTimeStats } from './wattrouter/parse.js';
-import { parseMeasurement } from './wattrouter/parseMeasurement.js';
-import type { AllTimeStats, Measurement } from './wattrouter/types.js';
+import { parseAllTimeStats } from './utils/parseAllTimeStats.js';
+import { parseMeasurement } from './utils/parseMeasurement.js';
+import type { AllTimeStats, Measurement } from './types.js';
 
 export class WATTrouterMxApiClient {
   private http: AxiosInstance;

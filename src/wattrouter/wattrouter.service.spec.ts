@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { testConfigProvider } from '../tests/config.provider.js';
-import { enmonApiClientProvider } from './enmonApiClient.provider.js';
-import { loggerFactoryProvider } from './logger.provider.js';
+import { testConfigProvider } from '../../tests/config.provider.js';
+import { enmonApiClientProvider } from '../enmonApiClient.provider.js';
+import { loggerFactoryProvider } from '../logger.provider.js';
 import { WATTrouterService } from './wattrouter.service.js';
 import { wattrouterApiClientProvider } from './wattrouterApiClient.provider.js';
 
