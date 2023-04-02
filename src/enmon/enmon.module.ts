@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { enmonApiClientProvider } from './enmonApiClient.provider.js';
 
 @Module({
@@ -6,13 +6,4 @@ import { enmonApiClientProvider } from './enmonApiClient.provider.js';
   providers: [enmonApiClientProvider],
   exports: [enmonApiClientProvider],
 })
-export class EnmonModule {
-  static forRoot(): DynamicModule {
-    return {
-      global: true,
-      module: EnmonModule,
-      providers: [enmonApiClientProvider],
-      exports: [enmonApiClientProvider],
-    };
-  }
-}
+export class EnmonModule {}
