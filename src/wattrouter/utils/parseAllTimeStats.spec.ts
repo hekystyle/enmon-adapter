@@ -1,5 +1,5 @@
-import { parseAllTimeStats } from './parse.js';
-import { AllTimeStats } from './types.js';
+import { parseAllTimeStats } from './parseAllTimeStats.js';
+import { AllTimeStats } from '../types.js';
 
 it.each([
   [{}],

@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
-import { Config } from './config/types.js';
-import { Logger } from './logger.js';
-import { EnmonApiClient } from './services/enmon.js';
-import { WATTrouterMxApiClient } from './services/wattrouter.js';
+import { Config } from '../config/types.js';
+import { Logger } from '../logger.js';
+import { EnmonApiClient } from '../services/enmon.js';
+import { WATTrouterMxApiClient } from './wattrouter.js';
 
 @Injectable()
 export class WATTrouterService {

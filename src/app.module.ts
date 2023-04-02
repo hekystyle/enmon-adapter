@@ -1,23 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { configProvider } from './config.provider.js';
-import { enmonApiClientProvider } from './enmonApiClient.provider.js';
+import { enmonApiClientProvider } from './enmon/enmonApiClient.provider.js';
 import { loggerFactoryProvider } from './logger.provider.js';
-import { TasksService } from './tasks.service.js';
-import { ThermometerService } from './thermometer.service.js';
-import { WATTrouterService } from './wattrouter.service.js';
-import { wattrouterApiClientProvider } from './wattrouterApiClient.provider.js';
+import { ConfigModule } from './config/config.module.js';
+import { EnmonModule } from './enmon/enmon.module.js';
 
 @Module({
-  imports: [ScheduleModule.forRoot()],
-  providers: [
-    configProvider,
-    loggerFactoryProvider,
-    enmonApiClientProvider,
-    wattrouterApiClientProvider,
-    TasksService,
-    ThermometerService,
-    WATTrouterService,
-  ],
+  imports: [ConfigModule.forRoot(), ScheduleModule.forRoot(), EnmonModule.forRoot()],
+  providers: [loggerFactoryProvider, enmonApiClientProvider],
 })
 export class AppModule {}

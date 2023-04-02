@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@nestjs/common';
-import { Config } from './config/types.js';
-import { WATTrouterMxApiClient } from './services/wattrouter.js';
+import { Config } from '../config/types.js';
+import { WATTrouterMxApiClient } from './wattrouter.js';
 
 export const wattrouterApiClientProvider: FactoryProvider<WATTrouterMxApiClient> = {
   provide: WATTrouterMxApiClient,
