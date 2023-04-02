@@ -1,16 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { testConfigProvider } from '../../tests/config.provider.js';
-import { loggerFactoryProvider } from '../logger.provider.js';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ThermometerService } from './thermometer.service.js';
 import { EnmonModule } from '../enmon/enmon.module.js';
+import { LogModule } from '../log/log.module.js';
+import { ThermometersModule } from './thermometers.module.js';
+import { TestConfigModule } from '../../tests/config.module.js';
 
 describe('ThermometerService', () => {
   let service: ThermometerService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ThermometerService, testConfigProvider, loggerFactoryProvider],
-      imports: [EnmonModule.forRoot()],
+      imports: [TestConfigModule, EnmonModule, LogModule, ThermometersModule, ScheduleModule.forRoot()],
+      providers: [],
     }).compile();
 
     service = module.get<ThermometerService>(ThermometerService);

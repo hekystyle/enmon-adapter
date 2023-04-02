@@ -36,7 +36,7 @@ export class TasksService implements OnApplicationBootstrap {
               tickLogger.log({ msg: 'handling thermometer', model });
               new ThermometerUNI7xxx(tickLogger, thermometerConfig, this.enmonApiClient)
                 .handleTemperature()
-                .catch(reason => this.logger.error(reason));
+                .catch((reason: unknown) => this.logger.error({ reason }));
               break;
             default:
               tickLogger.error({ msg: 'unknown thermometer model', model });
