@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { configProvider } from './config.provider.js';
 import { enmonApiClientProvider } from './enmonApiClient.provider.js';
 import { loggerFactoryProvider } from './logger.provider.js';
+import { ConfigModule } from './config/config.module.js';
 
 @Module({
-  imports: [ScheduleModule.forRoot()],
-  providers: [configProvider, loggerFactoryProvider, enmonApiClientProvider],
-  exports: [configProvider],
+  imports: [ConfigModule.forRoot(), ScheduleModule.forRoot()],
+  providers: [loggerFactoryProvider, enmonApiClientProvider],
 })
 export class AppModule {}
