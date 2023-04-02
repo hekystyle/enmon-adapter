@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Type } from 'class-transformer';
 import { IsDefined, IsEnum, IsMongoId, IsNotEmpty, IsString, IsUrl, ValidateNested } from 'class-validator';
-import { EnmonEnv } from '../services/enmon.js';
+import { EnmonEnv } from '../enmon/ApiClient.js';
 
 class ConfigEnmon {
   @IsDefined()

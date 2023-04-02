@@ -4,7 +4,7 @@ import { CronJob } from 'cron';
 import { randomUUID } from 'crypto';
 import { Config } from '../config/types.js';
 import { Logger } from '../logger.js';
-import { EnmonApiClient } from '../services/enmon.js';
+import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
 
 @Injectable()

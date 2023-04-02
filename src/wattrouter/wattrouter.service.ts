@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Decimal } from 'decimal.js';
 import { Config } from '../config/types.js';
 import { Logger } from '../logger.js';
-import { EnmonApiClient } from '../services/enmon.js';
+import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './wattrouter.js';
 
 @Injectable()
