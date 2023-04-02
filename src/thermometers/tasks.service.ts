@@ -2,9 +2,9 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { randomUUID } from 'crypto';
-import { Config } from './config/types.js';
-import { Logger } from './logger.js';
-import { EnmonApiClient } from './services/enmon.js';
+import { Config } from '../config/types.js';
+import { Logger } from '../logger.js';
+import { EnmonApiClient } from '../services/enmon.js';
 import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
 
 @Injectable()

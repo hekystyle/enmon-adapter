@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
-import { Config } from './config/types.js';
-import { Logger } from './logger.js';
+import { Config } from '../config/types.js';
+import { Logger } from '../logger.js';
 import { parseTemperature } from './utils/parseTemp.js';
-import { EnmonApiClient } from './services/enmon.js';
+import { EnmonApiClient } from '../services/enmon.js';
 
 @Injectable()
 export class ThermometerService {
