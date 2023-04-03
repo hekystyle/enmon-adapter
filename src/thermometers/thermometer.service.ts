@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Config } from '../config/types.js';
 import { Logger } from '../logger.js';
 import { parseTemperature } from './utils/parseTemp.js';
-import { EnmonApiClient } from '../services/enmon.js';
+import { EnmonApiClient } from '../enmon/ApiClient.js';
 
 @Injectable()
 export class ThermometerService {

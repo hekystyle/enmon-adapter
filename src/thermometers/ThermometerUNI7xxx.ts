@@ -2,7 +2,7 @@ import axios from 'axios';
 import { load } from 'cheerio';
 import { Config } from '../config/types.js';
 import { Logger } from '../logger.js';
-import { EnmonApiClient } from '../services/enmon.js';
+import { EnmonApiClient } from '../enmon/ApiClient.js';
 
 interface TemperatureConfig {
   dataSourceUrl: string;

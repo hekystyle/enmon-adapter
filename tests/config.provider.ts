@@ -2,7 +2,7 @@ import { Provider } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { parseConfig } from '../src/config/parse.js';
 import { Config } from '../src/config/types.js';
-import { EnmonEnv } from '../src/services/enmon.js';
+import { EnmonEnv } from '../src/enmon/ApiClient.js';
 
 export const testConfigProvider: Provider = {
   provide: Config,

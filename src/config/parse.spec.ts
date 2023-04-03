@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { Config } from './types.js';
-import { EnmonEnv } from '../services/enmon.js';
+import { EnmonEnv } from '../enmon/ApiClient.js';
 import { parseConfig, ParseError } from './parse.js';
 
 const VALID_CONFIG: Config = {
