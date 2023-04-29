@@ -158,7 +158,7 @@ jobs:
           source: dist-${{ github.sha }}.tar.gz
           target: /opt/enmon-middleman
 
-      - uses: appleboy/ssh-action@4a03da89e5c43da56e502053be4bbcb293411883
+      - uses: appleboy/ssh-action@d87d276960fd7693a6c0d13631bf6e92196a62b9
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
