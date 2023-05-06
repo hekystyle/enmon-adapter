@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 import { parseStringPromise } from 'xml2js';
 import { parseAllTimeStats } from './utils/parseAllTimeStats.js';
 import { parseMeasurement } from './utils/parseMeasurement.js';
