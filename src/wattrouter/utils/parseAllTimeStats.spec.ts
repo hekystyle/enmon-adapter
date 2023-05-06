@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { parseAllTimeStats } from './parseAllTimeStats.js';
 import { AllTimeStats } from '../types.js';
 

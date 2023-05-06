@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node16-strictest-esm/tsconfig.json",
-  "include": ["src", "tests", "config", "jest.config.js"],
+  "include": ["src", "tests", "config", "vitest.config.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 

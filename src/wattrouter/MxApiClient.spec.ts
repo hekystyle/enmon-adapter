@@ -1,3 +1,4 @@
+import { expect, it } from 'vitest';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
 
 it('should create an instance', () => {
