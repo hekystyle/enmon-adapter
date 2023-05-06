@@ -1,4 +1,4 @@
-import { FactoryProvider } from '@nestjs/common';
+import type { FactoryProvider } from '@nestjs/common';
 import { Config } from './types.js';
 
 export const configProvider: FactoryProvider<Config> = {

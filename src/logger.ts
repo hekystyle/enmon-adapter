@@ -1,4 +1,4 @@
-import { LoggerService, LogLevel } from '@nestjs/common';
+import type { LoggerService, LogLevel } from '@nestjs/common';
 import type { Debugger } from 'debug';
 
 export class Logger implements LoggerService {
