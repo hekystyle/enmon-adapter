@@ -1,5 +1,6 @@
 import { readFile } from 'fs/promises';
 import path from 'path';
+import { expect, it } from 'vitest';
 import { parseMeasurement } from './parseMeasurement.js';
 import type { Measurement } from '../types.js';
 

@@ -1,4 +1,5 @@
 import { readFile } from 'fs/promises';
+import { expect, it } from 'vitest';
 import { parseTemperature } from './parseTemp.js';
 
 it('should parse temperature value from example HTML file', async () => {

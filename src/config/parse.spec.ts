@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { expect, it } from 'vitest';
 import { Config } from './types.js';
 import { EnmonEnv } from '../enmon/ApiClient.js';
 import { parseConfig, ParseError } from './parse.js';

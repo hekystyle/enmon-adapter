@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
@@ -10,6 +10,7 @@ import { WATTrouterMxApiClient } from './MxApiClient.js';
 @Injectable()
 export class WATTrouterService {
   constructor(
+    @Inject(Logger)
     private readonly logger: Logger,
     private readonly config: Config,
     private readonly enmonApiClient: EnmonApiClient,

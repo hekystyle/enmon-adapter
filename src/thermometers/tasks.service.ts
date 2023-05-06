@@ -1,4 +1,4 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { randomUUID } from 'crypto';
@@ -10,6 +10,7 @@ import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
 @Injectable()
 export class TasksService implements OnApplicationBootstrap {
   constructor(
+    @Inject(Logger)
     private readonly logger: Logger,
     private readonly config: Config,
     private readonly registry: SchedulerRegistry,

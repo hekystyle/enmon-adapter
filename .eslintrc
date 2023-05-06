@@ -15,8 +15,7 @@
     "sourceType": "module"
   },
   "env": {
-    "node": true,
-    "jest": true
+    "node": true
   },
   "rules": {
     "import/prefer-default-export": "off",
@@ -28,9 +27,8 @@
   },
   "overrides": [
     {
-      "files": ["*.spec.ts", "*.test.ts"],
-      "plugins": ["jest"],
-      "extends": ["plugin:jest/recommended", "plugin:jest/style"],
+      "files": ["*.spec.ts", "*.test.ts", "vitest.config.ts"],
+      "extends": ["plugin:vitest/recommended"],
       "rules": {
         "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
       }

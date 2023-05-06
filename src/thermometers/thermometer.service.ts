@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
 import { Config } from '../config/types.js';
@@ -8,9 +8,12 @@ import { EnmonApiClient } from '../enmon/ApiClient.js';
 
 @Injectable()
 export class ThermometerService {
-  private readonly logger: Logger;
-
-  constructor(logger: Logger, private readonly config: Config, private readonly enmonApiClient: EnmonApiClient) {
+  constructor(
+    @Inject(Logger)
+    private readonly logger: Logger,
+    private readonly config: Config,
+    private readonly enmonApiClient: EnmonApiClient,
+  ) {
     this.logger = logger.extend(ThermometerService.name);
   }
 
