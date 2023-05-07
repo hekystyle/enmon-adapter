@@ -1,18 +1,13 @@
 import axios from 'axios';
 import { load } from 'cheerio';
-import { Config } from '../config/types.js';
+import { ConfigThermometer } from '../config/types.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
-
-interface TemperatureConfig {
-  dataSourceUrl: string;
-  enmon: Config['thermometer']['enmon'];
-}
 
 export class ThermometerUNI7xxx {
   constructor(
     private readonly logger: Logger,
-    private readonly config: TemperatureConfig,
+    private readonly config: ConfigThermometer,
     private readonly enmonApiClient: EnmonApiClient,
   ) {
     this.logger = logger.extend(ThermometerUNI7xxx.name);
