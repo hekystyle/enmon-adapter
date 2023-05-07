@@ -5,15 +5,6 @@ exports[`should reject invalid config 0 1`] = `
   ValidationError {
     "children": [],
     "constraints": {
-      "isDefined": "thermometer should not be null or undefined",
-    },
-    "property": "thermometer",
-    "target": Config {},
-    "value": undefined,
-  },
-  ValidationError {
-    "children": [],
-    "constraints": {
       "isDefined": "thermometers should not be null or undefined",
     },
     "property": "thermometers",
