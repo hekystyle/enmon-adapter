@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
-import { Config } from '../config/types.js';
+import { Config, ConfigThermometerV1 } from '../config/types.js';
 import { Logger } from '../logger.js';
 import { parseTemperature } from './utils/parseTemp.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 
 /**
- * @deprecated use {@link ThermometerUNI1xxx} instead
+ * @deprecated Use {@link ThermometerUNI1xxx} instead.
  */
 @Injectable()
 export class ThermometerService {
@@ -21,25 +21,30 @@ export class ThermometerService {
   }
 
   @Cron(CronExpression.EVERY_MINUTE)
-  triggerThermometerValueHandling() {
+  triggerThermometerValueHandling(): void {
     this.logger.log(this.triggerThermometerValueHandling.name);
-    this.handleTemperature().catch(reason => this.logger.error(reason));
+    const config = this.config.thermometer;
+    if (config) {
+      this.handleTemperature(config).catch(reason => this.logger.error(reason));
+    } else {
+      this.logger.warn('legacy thermometer config is not defined');
+    }
   }
 
-  private async handleTemperature() {
+  private async handleTemperature(config: ConfigThermometerV1) {
     this.logger.log(this.handleTemperature.name);
 
-    const temperature = await this.fetchTemperature();
+    const temperature = await this.fetchTemperature(config);
 
-    if (temperature) await this.uploadTemperature(temperature);
+    if (temperature) await this.uploadTemperature(config, temperature);
   }
 
-  private async fetchTemperature(): Promise<undefined | number> {
+  private async fetchTemperature(config: ConfigThermometerV1): Promise<undefined | number> {
     const {
       status,
       statusText,
       data: html,
-    } = await axios.get<string>(this.config.thermometer.dataSourceUrl, {
+    } = await axios.get<string>(config.dataSourceUrl, {
       validateStatus: () => true,
     });
 
@@ -70,8 +75,8 @@ export class ThermometerService {
     return Number.isNaN(temperature) ? undefined : temperature;
   }
 
-  private async uploadTemperature(temperature: number): Promise<void> {
-    const { env, customerId, devEUI, token } = this.config.thermometer.enmon;
+  private async uploadTemperature(config: ConfigThermometerV1, temperature: number): Promise<void> {
+    const { env, customerId, devEUI, token } = config.enmon;
 
     const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
       env,

@@ -27,7 +27,10 @@ class ConfigEnmon {
   readonly token!: string;
 }
 
-class ConfigThermometerV1 {
+/**
+ * @deprecated This option is legacy and will be removed in future. Use `thermometers` with `UNI1xxx` model instead.
+ */
+export class ConfigThermometerV1 {
   @IsDefined()
   @IsString()
   @IsUrl()
@@ -60,12 +63,11 @@ class ConfigWattrouter {
 
 export class Config {
   /**
-   * @deprecated Use `thermometers` instead.
+   * @deprecated This option is legacy and will be removed in future. Use `thermometers` with `UNI1xxx` model instead.
    */
-  @IsDefined()
   @ValidateNested()
   @Type(() => ConfigThermometerV1)
-  readonly thermometer!: Readonly<ConfigThermometerV1>;
+  readonly thermometer?: Readonly<ConfigThermometerV1>;
 
   @IsDefined()
   @ValidateNested({ each: true })
