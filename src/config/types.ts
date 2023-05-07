@@ -27,10 +27,12 @@ class ConfigEnmon {
   readonly token!: string;
 }
 
-/**
- * @deprecated This option is legacy and will be removed in future. Use `thermometers` with `UNI1xxx` model instead.
- */
-export class ConfigThermometerV1 {
+export class ConfigThermometer {
+  @IsDefined()
+  @IsString()
+  @IsEnum(THERMOMETER_MODELS)
+  readonly model!: ThermometerModel;
+
   @IsDefined()
   @IsString()
   @IsUrl()
@@ -40,13 +42,6 @@ export class ConfigThermometerV1 {
   @ValidateNested()
   @Type(() => ConfigEnmon)
   readonly enmon!: Readonly<ConfigEnmon>;
-}
-
-export class ConfigThermometer extends ConfigThermometerV1 {
-  @IsDefined()
-  @IsString()
-  @IsEnum(THERMOMETER_MODELS)
-  readonly model!: ThermometerModel;
 }
 
 class ConfigWattrouter {
@@ -62,13 +57,6 @@ class ConfigWattrouter {
 }
 
 export class Config {
-  /**
-   * @deprecated This option is legacy and will be removed in future. Use `thermometers` with `UNI1xxx` model instead.
-   */
-  @ValidateNested()
-  @Type(() => ConfigThermometerV1)
-  readonly thermometer?: Readonly<ConfigThermometerV1>;
-
   @IsDefined()
   @ValidateNested({ each: true })
   @Type(() => ConfigThermometer)
