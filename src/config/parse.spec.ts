@@ -4,17 +4,18 @@ import { Config } from './types.js';
 import { EnmonEnv } from '../enmon/ApiClient.js';
 import { parseConfig, ParseError } from './parse.js';
 
-const VALID_CONFIG: Config = {
-  thermometer: {
-    dataSourceUrl: 'http://10.0.0.0',
-    enmon: {
-      customerId: faker.database.mongodbObjectId(),
-      devEUI: 'devEUI',
-      env: EnmonEnv.Dev,
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U',
-    },
-  },
+const VALID_CONFIG = {
   thermometers: [
+    {
+      model: 'UNI1xxx',
+      dataSourceUrl: 'http://10.0.0.0',
+      enmon: {
+        customerId: faker.database.mongodbObjectId(),
+        devEUI: 'devEUI',
+        env: EnmonEnv.Dev,
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U',
+      },
+    },
     {
       model: 'UNI7xxx',
       dataSourceUrl: `http://10.0.0.0`,
@@ -35,7 +36,7 @@ const VALID_CONFIG: Config = {
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U',
     },
   },
-};
+} satisfies Config;
 
 it.each([[VALID_CONFIG]])('should validate example config', async configObj => {
   const promise = parseConfig(configObj);

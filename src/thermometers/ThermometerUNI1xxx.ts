@@ -1,29 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
-import { Config } from '../config/types.js';
 import { Logger } from '../logger.js';
 import { parseTemperature } from './utils/parseTemp.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
+import type { ConfigThermometer } from '../config/types.js';
 
-@Injectable()
-export class ThermometerService {
+export class ThermometerUNI1xxx {
   constructor(
-    @Inject(Logger)
     private readonly logger: Logger,
-    private readonly config: Config,
+    private readonly config: ConfigThermometer,
     private readonly enmonApiClient: EnmonApiClient,
   ) {
-    this.logger = logger.extend(ThermometerService.name);
+    this.logger = logger.extend(ThermometerUNI1xxx.name);
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
-  triggerThermometerValueHandling() {
-    this.logger.log(this.triggerThermometerValueHandling.name);
-    this.handleTemperature().catch(reason => this.logger.error(reason));
-  }
-
-  private async handleTemperature() {
+  public async handleTemperature() {
     this.logger.log(this.handleTemperature.name);
 
     const temperature = await this.fetchTemperature();
@@ -36,7 +26,7 @@ export class ThermometerService {
       status,
       statusText,
       data: html,
-    } = await axios.get<string>(this.config.thermometer.dataSourceUrl, {
+    } = await axios.get<string>(this.config.dataSourceUrl, {
       validateStatus: () => true,
     });
 
@@ -68,7 +58,7 @@ export class ThermometerService {
   }
 
   private async uploadTemperature(temperature: number): Promise<void> {
-    const { env, customerId, devEUI, token } = this.config.thermometer.enmon;
+    const { env, customerId, devEUI, token } = this.config.enmon;
 
     const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
       env,

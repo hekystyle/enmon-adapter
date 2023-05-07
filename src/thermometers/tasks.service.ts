@@ -6,6 +6,7 @@ import { Config } from '../config/types.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
+import { ThermometerUNI1xxx } from './ThermometerUNI1xxx.js';
 
 @Injectable()
 export class TasksService implements OnApplicationBootstrap {
@@ -32,10 +33,15 @@ export class TasksService implements OnApplicationBootstrap {
           const tickLogger = jobLogger.extend(randomUUID());
           tickLogger.log({ msg: 'tick' });
           const { model } = thermometerConfig;
+          tickLogger.log({ msg: 'handling thermometer', model });
           switch (model) {
             case 'UNI7xxx':
-              tickLogger.log({ msg: 'handling thermometer', model });
               new ThermometerUNI7xxx(tickLogger, thermometerConfig, this.enmonApiClient)
+                .handleTemperature()
+                .catch((reason: unknown) => this.logger.error({ reason }));
+              break;
+            case 'UNI1xxx':
+              new ThermometerUNI1xxx(tickLogger, thermometerConfig, this.enmonApiClient)
                 .handleTemperature()
                 .catch((reason: unknown) => this.logger.error({ reason }));
               break;
