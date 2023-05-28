@@ -22,7 +22,7 @@
     "test": "vitest --coverage"
   },
   "devDependencies": {
-    "@faker-js/faker": "7.6.0",
+    "@faker-js/faker": "8.0.2",
     "@nestjs/cli": "9.3.0",
     "@nestjs/schematics": "9.1.0",
     "@nestjs/testing": "9.4.0",
