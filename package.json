@@ -24,8 +24,8 @@
   "devDependencies": {
     "@faker-js/faker": "8.0.2",
     "@nestjs/cli": "9.3.0",
-    "@nestjs/schematics": "9.1.0",
-    "@nestjs/testing": "9.4.0",
+    "@nestjs/schematics": "9.2.0",
+    "@nestjs/testing": "9.4.3",
     "@tsconfig/esm": "1.0.3",
     "@tsconfig/node16": "1.0.4",
     "@tsconfig/strictest": "2.0.1",
@@ -54,8 +54,8 @@
     "vitest": "0.31.0"
   },
   "dependencies": {
-    "@nestjs/common": "9.4.0",
-    "@nestjs/core": "9.4.0",
+    "@nestjs/common": "9.4.3",
+    "@nestjs/core": "9.4.3",
     "@nestjs/schedule": "2.2.1",
     "axios": "1.4.0",
     "cheerio": "1.0.0-rc.12",
