@@ -2244,6 +2244,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cron@npm:2.3.1":
+  version: 2.3.1
+  resolution: "cron@npm:2.3.1"
+  dependencies:
+    luxon: ^3.2.1
+  checksum: ac27c257cb8dba4b51978b4767119fc79bfc0dfa35ef0be2533bc4142ae006130515236e2102d04ee3ce44bffc2a4e37a3bee18a2152bbb303bf5ff944e25204
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
@@ -2534,7 +2543,7 @@ __metadata:
     class-transformer: 0.5.1
     class-validator: 0.14.0
     config: 3.3.9
-    cron: 2.3.0
+    cron: 2.3.1
     debug: 4.3.4
     decimal.js: 10.4.3
     dotenv: 16.3.1
