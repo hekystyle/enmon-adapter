@@ -596,17 +596,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/schedule@npm:2.2.1":
-  version: 2.2.1
-  resolution: "@nestjs/schedule@npm:2.2.1"
+"@nestjs/schedule@npm:2.2.3":
+  version: 2.2.3
+  resolution: "@nestjs/schedule@npm:2.2.3"
   dependencies:
-    cron: 2.3.0
+    cron: 2.3.1
     uuid: 9.0.0
   peerDependencies:
     "@nestjs/common": ^7.0.0 || ^8.0.0 || ^9.0.0
     "@nestjs/core": ^7.0.0 || ^8.0.0 || ^9.0.0
     reflect-metadata: ^0.1.12
-  checksum: 7c570a6a508ad6aac932769ad143942c047e33d96db3237fd02160090c0df4a7eb2e8c8fb38594b476c259e91ae89b57f52fda36e8f5ef6e1dcaeedba85c2fdb
+  checksum: e9c9dbe0a7829a39a955f6f55ef584de5a0c217b2618d991ab5c89c5fe745ebbadcad7047e1852ae641a9d072de46c3768fb6aa27f45ee9ebbdaee2252c938c8
   languageName: node
   linkType: hard
 
@@ -2523,7 +2523,7 @@ __metadata:
     "@nestjs/cli": 9.3.0
     "@nestjs/common": 9.4.3
     "@nestjs/core": 9.4.3
-    "@nestjs/schedule": 2.2.1
+    "@nestjs/schedule": 2.2.3
     "@nestjs/schematics": 9.2.0
     "@nestjs/testing": 9.4.3
     "@tsconfig/esm": 1.0.3
