@@ -2,7 +2,7 @@ import axios, { type AxiosInstance } from 'axios';
 import { parseStringPromise } from 'xml2js';
 import { parseAllTimeStats } from './utils/parseAllTimeStats.js';
 import { parseMeasurement } from './utils/parseMeasurement.js';
-import type { AllTimeStats, Measurement } from './types.js';
+import type { AllTimeStats, Measurement } from './schemas.js';
 
 export class WATTrouterMxApiClient {
   private http: AxiosInstance;

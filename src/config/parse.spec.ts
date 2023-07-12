@@ -1,8 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { expect, it } from 'vitest';
-import { Config } from './types.js';
+import { ZodError } from 'zod';
+import { type Config } from './schemas.js';
 import { EnmonEnv } from '../enmon/ApiClient.js';
-import { parseConfig, ParseError } from './parse.js';
+import { parseConfig } from './parse.js';
+import { getError } from '../../tests/utils/getError.js';
 
 const VALID_CONFIG = {
   thermometers: [
@@ -21,7 +23,7 @@ const VALID_CONFIG = {
       dataSourceUrl: `http://10.0.0.0`,
       enmon: {
         customerId: faker.database.mongodbObjectId(),
-        devEUI: faker.random.alphaNumeric(16),
+        devEUI: faker.string.alphanumeric(16),
         env: EnmonEnv.Dev,
         token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U',
       },
@@ -41,7 +43,7 @@ const VALID_CONFIG = {
 it.each([[VALID_CONFIG]])('should validate example config', async configObj => {
   const promise = parseConfig(configObj);
 
-  await expect(promise).resolves.toBeInstanceOf(Config);
+  await expect(promise).resolves.toStrictEqual(configObj);
 });
 
 it.each([
@@ -80,15 +82,7 @@ it.each([
     },
   ],
 ])('should reject invalid config %#', async configObj => {
-  const getError = async () => {
-    try {
-      await parseConfig(configObj);
-      throw new Error('Error not thrown');
-    } catch (e) {
-      return e;
-    }
-  };
-  const e = await getError();
-  expect(e).toBeInstanceOf(ParseError);
-  expect((e as ParseError).errors).toMatchSnapshot();
+  const e = await getError(() => parseConfig(configObj));
+  expect(e).toBeInstanceOf(ZodError);
+  expect((e as ZodError).errors).toMatchSnapshot();
 });

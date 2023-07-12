@@ -1,11 +1,11 @@
 import type { FactoryProvider } from '@nestjs/common';
-import { Config } from './types.js';
+import { type Config } from './schemas.js';
 
 export const configProvider: FactoryProvider<Config> = {
-  provide: Config,
+  provide: 'config',
   useFactory: async () => {
     // eslint-disable-next-line n/no-unsupported-features/es-syntax -- dynamic import is supported
     const module = await import('./index.js');
-    return module.default;
+    return await module.default();
   },
 };

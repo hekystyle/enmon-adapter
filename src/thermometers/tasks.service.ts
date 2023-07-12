@@ -2,7 +2,7 @@ import { Inject, Injectable, type OnApplicationBootstrap } from '@nestjs/common'
 import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { randomUUID } from 'crypto';
-import { Config } from '../config/types.js';
+import { configProvider, type Config } from '../config/index.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
@@ -13,6 +13,7 @@ export class TasksService implements OnApplicationBootstrap {
   constructor(
     @Inject(Logger)
     private readonly logger: Logger,
+    @Inject(configProvider.provide)
     private readonly config: Config,
     private readonly registry: SchedulerRegistry,
     private readonly enmonApiClient: EnmonApiClient,
