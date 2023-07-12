@@ -1,6 +1,7 @@
 import { expect, it } from 'vitest';
+import { ZodError } from 'zod';
 import { parseAllTimeStats } from './parseAllTimeStats.js';
-import { AllTimeStats } from '../types.js';
+import { getError } from '../../../tests/utils/getError.js';
 
 it.each([
   [{}],
@@ -29,9 +30,9 @@ it.each([
     },
   ],
 ])('should reject invalid', async plain => {
-  const promise = parseAllTimeStats(plain);
-  await expect(promise).rejects.toBeInstanceOf(Array);
-  await expect(promise).rejects.toMatchSnapshot();
+  const e = await getError(() => parseAllTimeStats(plain));
+  expect(e).toBeInstanceOf(ZodError);
+  expect((e as ZodError).errors).toMatchSnapshot();
 });
 
 it.each([
@@ -60,6 +61,5 @@ it.each([
   ] as const,
 ])('should parse valid', async plain => {
   const promise = parseAllTimeStats(plain);
-  await expect(promise).resolves.toBeInstanceOf(AllTimeStats);
   await expect(promise).resolves.toMatchSnapshot();
 });

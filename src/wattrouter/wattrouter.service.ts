@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
-import { Config } from '../config/types.js';
+import { configProvider, type Config } from '../config/index.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
@@ -12,6 +12,7 @@ export class WATTrouterService {
   constructor(
     @Inject(Logger)
     private readonly logger: Logger,
+    @Inject(configProvider.provide)
     private readonly config: Config,
     private readonly enmonApiClient: EnmonApiClient,
     private readonly wattrouterApiClient: WATTrouterMxApiClient,

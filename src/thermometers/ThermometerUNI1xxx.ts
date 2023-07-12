@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Logger } from '../logger.js';
 import { parseTemperature } from './utils/parseTemp.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
-import type { ConfigThermometer } from '../config/types.js';
+import type { ConfigThermometer } from '../config/index.js';
 
 export class ThermometerUNI1xxx {
   constructor(

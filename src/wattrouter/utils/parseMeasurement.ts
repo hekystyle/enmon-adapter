@@ -1,11 +1,8 @@
-import { plainToInstance } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
 import { parseStringPromise } from 'xml2js';
-import { Measurement, MeasurementShape } from '../types.js';
+import { type Measurement, measurementShapeSchema } from '../schemas.js';
 
 export const parseMeasurement = async (xml: string): Promise<Measurement> => {
   const plain: unknown = await parseStringPromise(xml, { explicitArray: false });
-  const instance = plainToInstance(MeasurementShape, plain);
-  await validateOrReject(instance);
+  const instance = await measurementShapeSchema.parseAsync(plain);
   return instance.meas;
 };

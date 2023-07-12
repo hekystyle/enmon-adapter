@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { load } from 'cheerio';
-import { ConfigThermometer } from '../config/types.js';
+import { type ConfigThermometer } from '../config/index.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 

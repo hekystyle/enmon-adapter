@@ -1,9 +1,6 @@
-import { plainToInstance } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
-import { AllTimeStats, AllTimeStatsShape } from '../types.js';
+import { type AllTimeStats, allTimeStatsShapeSchema } from '../schemas.js';
 
 export const parseAllTimeStats = async (plain: unknown): Promise<AllTimeStats> => {
-  const instance = plainToInstance(AllTimeStatsShape, plain);
-  await validateOrReject(instance);
+  const instance = await allTimeStatsShapeSchema.parseAsync(plain);
   return instance.stat_alltime;
 };
