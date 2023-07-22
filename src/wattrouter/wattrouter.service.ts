@@ -48,6 +48,7 @@ export class WATTrouterService {
       [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
       [`1-1.8.2`, SAH4],
       [`1-1.8.3`, SAL4],
+      [`1-1.8.4`, SAP4],
       [`1-2.8.0`, SAS4],
     ] as const;
 
