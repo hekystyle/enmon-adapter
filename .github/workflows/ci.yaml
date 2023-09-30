@@ -150,7 +150,7 @@ jobs:
         with:
           name: dist-${{ github.sha }}
 
-      - uses: appleboy/scp-action@8a92fcdb1eb4ffbf538b2fa286739760aac8a95b
+      - uses: appleboy/scp-action@3710327b67602586de2a7681d53fb1c009105c5d
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
