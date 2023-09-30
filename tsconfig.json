@@ -2,13 +2,10 @@
   "extends": [
     "@tsconfig/node16/tsconfig.json",
     "@tsconfig/strictest/tsconfig.json",
-    "@tsconfig/esm/tsconfig.json",
   ],
   "include": ["src", "tests", "config", "vitest.config.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
-
-    "ignoreDeprecations": "5.0",
 
     /* Projects */
     // "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */

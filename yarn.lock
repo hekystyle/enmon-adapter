@@ -712,13 +712,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/esm@npm:1.0.3":
-  version: 1.0.3
-  resolution: "@tsconfig/esm@npm:1.0.3"
-  checksum: 07216f491c2603fbd7a5c214f39a2efa183c810dabb77d282ae930bab62f99ff7dbb2ddd7372e5e56ce72e8fb55eb92e3ee5dd6a46c0a7f980c1b59c402fa60b
-  languageName: node
-  linkType: hard
-
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.9
   resolution: "@tsconfig/node10@npm:1.0.9"
@@ -2525,7 +2518,6 @@ __metadata:
     "@nestjs/schedule": 3.0.1
     "@nestjs/schematics": 10.0.1
     "@nestjs/testing": 10.0.5
-    "@tsconfig/esm": 1.0.3
     "@tsconfig/node16": 1.0.4
     "@tsconfig/strictest": 2.0.1
     "@types/config": 3.3.0
