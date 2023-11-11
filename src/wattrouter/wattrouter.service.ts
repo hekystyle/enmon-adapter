@@ -1,24 +1,21 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
 import { configProvider, type Config } from '../config/index.js';
-import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
 
 @Injectable()
 export class WATTrouterService {
+  private readonly logger = new Logger(WATTrouterService.name);
+
   constructor(
-    @Inject(Logger)
-    private readonly logger: Logger,
     @Inject(configProvider.provide)
     private readonly config: Config,
     private readonly enmonApiClient: EnmonApiClient,
-    private readonly wattrouterApiClient: WATTrouterMxApiClient,
-  ) {
-    this.logger = logger.extend(WATTrouterService.name);
-  }
+    private readonly wattRouterApiClient: WATTrouterMxApiClient,
+  ) {}
 
   @Cron(CronExpression.EVERY_MINUTE)
   public triggerWattrouterValuesHandling() {
@@ -31,7 +28,7 @@ export class WATTrouterService {
 
     const allTimeStats = await this.getAllTimeStats();
     if (!allTimeStats) return;
-    const measurements = await this.wattrouterApiClient.getMeasurement();
+    const measurements = await this.wattRouterApiClient.getMeasurement();
     const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
     this.logger.log({
       msg: 'fetched wattrouter stats',
@@ -120,7 +117,7 @@ export class WATTrouterService {
 
   private async getAllTimeStats() {
     try {
-      return await this.wattrouterApiClient.getAllTimeStats();
+      return await this.wattRouterApiClient.getAllTimeStats();
     } catch (e) {
       if (axios.isAxiosError<unknown>(e)) {
         const { statusText, status } = e.response ?? {};

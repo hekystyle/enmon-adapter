@@ -1,32 +1,29 @@
 import axios from 'axios';
 import { load } from 'cheerio';
+import { Injectable, Logger } from '@nestjs/common';
 import { type ConfigThermometer } from '../config/index.js';
-import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 
+@Injectable()
 export class ThermometerUNI7xxx {
-  constructor(
-    private readonly logger: Logger,
-    private readonly config: ConfigThermometer,
-    private readonly enmonApiClient: EnmonApiClient,
-  ) {
-    this.logger = logger.extend(ThermometerUNI7xxx.name);
+  private logger = new Logger(ThermometerUNI7xxx.name);
+
+  constructor(private readonly enmonApiClient: EnmonApiClient) {}
+
+  public async process(config: ConfigThermometer) {
+    const temperatures = await this.fetchTemperature(config.dataSourceUrl);
+
+    await this.uploadTemperatures(config.enmon, temperatures);
   }
 
-  public async handleTemperature() {
-    const temperatures = await this.fetchTemperature();
-
-    await this.uploadTemperatures(temperatures);
-  }
-
-  private async fetchTemperature(): Promise<number[]> {
+  private async fetchTemperature(dataSourceUrl: string): Promise<number[]> {
     this.logger.log({ msg: 'fetching temperature meter HTML page' });
 
     const {
       status,
       statusText,
       data: html,
-    } = await axios.get<string>(this.config.dataSourceUrl, {
+    } = await axios.get<string>(dataSourceUrl, {
       validateStatus: () => true,
     });
 
@@ -73,8 +70,8 @@ export class ThermometerUNI7xxx {
     });
   }
 
-  private async uploadTemperatures(temperatures: number[]): Promise<void> {
-    const { env, customerId, devEUI, token } = this.config.enmon;
+  private async uploadTemperatures(config: ConfigThermometer['enmon'], temperatures: number[]): Promise<void> {
+    const { env, customerId, devEUI, token } = config;
 
     await Promise.all(
       temperatures.map(async (temperature, index) => {

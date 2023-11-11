@@ -1,37 +1,59 @@
-import type { LoggerService, LogLevel } from '@nestjs/common';
-import type { Debugger } from 'debug';
+import { Inject, Injectable, LoggerService, Scope } from '@nestjs/common';
+import { AsyncLocalStorage } from 'async_hooks';
+import { WINSTON_MODULE_NEST_PROVIDER, WinstonLogger } from 'nest-winston';
 
-export class Logger implements LoggerService {
-  private levels: readonly LogLevel[] = ['log', 'error', 'warn'];
+@Injectable({ scope: Scope.TRANSIENT })
+export class AppLogger implements LoggerService {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: WinstonLogger,
+    @Inject(AsyncLocalStorage)
+    private readonly asyncLocalStorage: AsyncLocalStorage<unknown>,
+  ) {}
 
-  constructor(public readonly instance: Debugger) {}
-
-  log(message: unknown, ...optionalParams: unknown[]) {
-    if (this.levels.includes('log')) this.instance(message, ...optionalParams);
+  log(message: unknown, context?: string) {
+    const store = this.asyncLocalStorage.getStore();
+    this.logger.log(
+      message,
+      // @ts-expect-error - this is a hack to get the logger to print the context
+      { name: context, store },
+    );
   }
 
-  error(message: unknown, ...optionalParams: unknown[]) {
-    if (this.levels.includes('error')) this.instance(message, ...optionalParams);
+  error(message: unknown, trace?: string, context?: string) {
+    const store = this.asyncLocalStorage.getStore();
+    this.logger.error(
+      message,
+      trace,
+      // @ts-expect-error - this is a hack to get the logger to print the context
+      { name: context, store },
+    );
   }
 
-  warn(message: unknown, ...optionalParams: unknown[]) {
-    if (this.levels.includes('warn')) this.instance(message, ...optionalParams);
+  warn(message: unknown, context?: string) {
+    const store = this.asyncLocalStorage.getStore();
+    this.logger.warn(
+      message,
+      // @ts-expect-error - this is a hack to get the logger to print the context
+      { name: context, store },
+    );
   }
 
-  debug(message: unknown, ...optionalParams: unknown[]) {
-    if (this.levels.includes('debug')) this.instance(message, ...optionalParams);
+  debug(message: unknown, context?: string) {
+    const store = this.asyncLocalStorage.getStore();
+    this.logger.debug?.(
+      message,
+      // @ts-expect-error - this is a hack to get the logger to print the context
+      { name: context, store },
+    );
   }
 
-  verbose(message: unknown, ...optionalParams: unknown[]) {
-    if (this.levels.includes('verbose')) this.instance(message, ...optionalParams);
-  }
-
-  setLogLevels(levels: LogLevel[]) {
-    this.levels = [...levels];
-    return this;
-  }
-
-  extend(namespace: string) {
-    return new Logger(this.instance.extend(namespace));
+  verbose(message: unknown, context?: string) {
+    const store = this.asyncLocalStorage.getStore();
+    this.logger.verbose?.(
+      message,
+      // @ts-expect-error -- this is a hack to get the logger to print the context
+      { name: context, store },
+    );
   }
 }

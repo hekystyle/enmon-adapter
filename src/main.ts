@@ -2,11 +2,15 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
-import { Logger } from './logger.js';
+import { AppLogger } from './logger.js';
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(AppModule);
-  app.useLogger(app.get(Logger));
+  const app = await NestFactory.createApplicationContext(AppModule, {
+    bufferLogs: true,
+  });
+  const logger = await app.resolve(AppLogger);
+  app.useLogger(logger);
+
   await app.init();
 }
 

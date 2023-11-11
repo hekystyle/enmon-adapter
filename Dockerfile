@@ -14,6 +14,6 @@ WORKDIR /app
 COPY --from=build /workspace/dist /workspace/package.json ./
 COPY --from=build /workspace/node_modules ./node_modules
 
-ENV DEBUG=app
+ENV NODE_ENV=production
 
 CMD [ "node", "index.js" ]

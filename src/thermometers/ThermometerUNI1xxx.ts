@@ -1,32 +1,29 @@
 import axios from 'axios';
-import { Logger } from '../logger.js';
+import { Injectable, Logger } from '@nestjs/common';
 import { parseTemperature } from './utils/parseTemp.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
-import type { ConfigThermometer } from '../config/index.js';
+import { ConfigThermometer } from '../config/schemas.js';
 
+@Injectable()
 export class ThermometerUNI1xxx {
-  constructor(
-    private readonly logger: Logger,
-    private readonly config: ConfigThermometer,
-    private readonly enmonApiClient: EnmonApiClient,
-  ) {
-    this.logger = logger.extend(ThermometerUNI1xxx.name);
+  private readonly logger = new Logger(ThermometerUNI1xxx.name);
+
+  constructor(private readonly enmonApiClient: EnmonApiClient) {}
+
+  public async process(config: ConfigThermometer) {
+    this.logger.log(this.process.name);
+
+    const temperature = await this.fetchTemperature(config.dataSourceUrl);
+
+    if (temperature) await this.uploadTemperature(config.enmon, temperature);
   }
 
-  public async handleTemperature() {
-    this.logger.log(this.handleTemperature.name);
-
-    const temperature = await this.fetchTemperature();
-
-    if (temperature) await this.uploadTemperature(temperature);
-  }
-
-  private async fetchTemperature(): Promise<undefined | number> {
+  private async fetchTemperature(dataSourceUrl: string): Promise<undefined | number> {
     const {
       status,
       statusText,
       data: html,
-    } = await axios.get<string>(this.config.dataSourceUrl, {
+    } = await axios.get<string>(dataSourceUrl, {
       validateStatus: () => true,
     });
 
@@ -57,8 +54,8 @@ export class ThermometerUNI1xxx {
     return Number.isNaN(temperature) ? undefined : temperature;
   }
 
-  private async uploadTemperature(temperature: number): Promise<void> {
-    const { env, customerId, devEUI, token } = this.config.enmon;
+  private async uploadTemperature(config: ConfigThermometer['enmon'], temperature: number): Promise<void> {
+    const { env, customerId, devEUI, token } = config;
 
     const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
       env,
