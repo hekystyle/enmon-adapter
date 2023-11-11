@@ -28,28 +28,25 @@ export class TasksService implements OnApplicationBootstrap {
       const jobLogger = this.logger.extend(jobName);
 
       jobLogger.log({ msg: 'creating cron job' });
-      const job = new CronJob({
-        cronTime: CronExpression.EVERY_MINUTE,
-        onTick: () => {
-          const tickLogger = jobLogger.extend(randomUUID());
-          tickLogger.log({ msg: 'tick' });
-          const { model } = thermometerConfig;
-          tickLogger.log({ msg: 'handling thermometer', model });
-          switch (model) {
-            case 'UNI7xxx':
-              new ThermometerUNI7xxx(tickLogger, thermometerConfig, this.enmonApiClient)
-                .handleTemperature()
-                .catch((reason: unknown) => this.logger.error({ reason }));
-              break;
-            case 'UNI1xxx':
-              new ThermometerUNI1xxx(tickLogger, thermometerConfig, this.enmonApiClient)
-                .handleTemperature()
-                .catch((reason: unknown) => this.logger.error({ reason }));
-              break;
-            default:
-              tickLogger.error({ msg: 'unknown thermometer model', model });
-          }
-        },
+      const job = new CronJob(CronExpression.EVERY_MINUTE, () => {
+        const tickLogger = jobLogger.extend(randomUUID());
+        tickLogger.log({ msg: 'tick' });
+        const { model } = thermometerConfig;
+        tickLogger.log({ msg: 'handling thermometer', model });
+        switch (model) {
+          case 'UNI7xxx':
+            new ThermometerUNI7xxx(tickLogger, thermometerConfig, this.enmonApiClient)
+              .handleTemperature()
+              .catch((reason: unknown) => this.logger.error({ reason }));
+            break;
+          case 'UNI1xxx':
+            new ThermometerUNI1xxx(tickLogger, thermometerConfig, this.enmonApiClient)
+              .handleTemperature()
+              .catch((reason: unknown) => this.logger.error({ reason }));
+            break;
+          default:
+            tickLogger.error({ msg: 'unknown thermometer model', model });
+        }
       });
 
       jobLogger.log({ msg: 'starting cron job' });
