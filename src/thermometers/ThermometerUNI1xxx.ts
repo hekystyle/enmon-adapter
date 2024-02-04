@@ -1,16 +1,18 @@
 import axios from 'axios';
-import { Logger } from '../logger.js';
+import { Logger } from '@nestjs/common';
 import { parseTemperature } from './utils/parseTemp.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import type { ConfigThermometer } from '../config/index.js';
 
 export class ThermometerUNI1xxx {
+  private readonly logger: Logger;
+
   constructor(
-    private readonly logger: Logger,
+    workerId: string,
     private readonly config: ConfigThermometer,
     private readonly enmonApiClient: EnmonApiClient,
   ) {
-    this.logger = logger.extend(ThermometerUNI1xxx.name);
+    this.logger = new Logger(`${ThermometerUNI1xxx.name}:${workerId}`);
   }
 
   public async handleTemperature() {

@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TasksService } from './tasks.service.js';
+import { ThermometersTasksService } from './tasks.service.js';
 import { EnmonModule } from '../enmon/enmon.module.js';
+import { ThermometerWorkerFactory } from './worker-factory.js';
 
 @Module({
   imports: [EnmonModule],
-  providers: [TasksService],
+  providers: [ThermometersTasksService, ThermometerWorkerFactory],
   exports: [],
 })
 export class ThermometersModule {}
