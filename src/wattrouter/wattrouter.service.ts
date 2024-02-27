@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
 import { configProvider, type Config } from '../config/index.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
+import { CronExpression } from '../cron/expression.js';
 
 @Injectable()
 export class WATTrouterService {
@@ -15,23 +16,23 @@ export class WATTrouterService {
     @Inject(configProvider.provide)
     private readonly config: Config,
     private readonly enmonApiClient: EnmonApiClient,
-    private readonly wattrouterApiClient: WATTrouterMxApiClient,
+    private readonly wattRouterApiClient: WATTrouterMxApiClient,
   ) {
     this.logger = logger.extend(WATTrouterService.name);
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
-  public triggerWattrouterValuesHandling() {
-    this.logger.log(this.triggerWattrouterValuesHandling.name);
-    this.handleWattrouterValues().catch(reason => this.logger.error(reason));
+  @Cron(CronExpression.Every15Minutes)
+  public triggerWattRouterValuesHandling() {
+    this.logger.log(this.triggerWattRouterValuesHandling.name);
+    this.handleWattRouterValues().catch(reason => this.logger.error(reason));
   }
 
-  private async handleWattrouterValues() {
-    this.logger.log(this.handleWattrouterValues.name);
+  private async handleWattRouterValues() {
+    this.logger.log(this.handleWattRouterValues.name);
 
     const allTimeStats = await this.getAllTimeStats();
     if (!allTimeStats) return;
-    const measurements = await this.wattrouterApiClient.getMeasurement();
+    const measurements = await this.wattRouterApiClient.getMeasurement();
     const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
     this.logger.log({
       msg: 'fetched wattrouter stats',
@@ -120,7 +121,7 @@ export class WATTrouterService {
 
   private async getAllTimeStats() {
     try {
-      return await this.wattrouterApiClient.getAllTimeStats();
+      return await this.wattRouterApiClient.getAllTimeStats();
     } catch (e) {
       if (axios.isAxiosError<unknown>(e)) {
         const { statusText, status } = e.response ?? {};
