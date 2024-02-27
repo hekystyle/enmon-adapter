@@ -27,7 +27,7 @@
     "@nestjs/schematics": "10.0.3",
     "@nestjs/testing": "10.2.8",
     "@tsconfig/node20": "20.1.2",
-    "@tsconfig/strictest": "2.0.2",
+    "@tsconfig/strictest": "2.0.3",
     "@types/config": "3.3.3",
     "@types/cron": "2.0.1",
     "@types/debug": "4.1.12",
