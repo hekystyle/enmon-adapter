@@ -989,12 +989,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/xml2js@npm:0.4.12":
-  version: 0.4.12
-  resolution: "@types/xml2js@npm:0.4.12"
+"@types/xml2js@npm:0.4.14":
+  version: 0.4.14
+  resolution: "@types/xml2js@npm:0.4.14"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10c0/9a40c345e01fded0bb2628eaf6399229ab5c3d7fffc2a65b305571b68ac7cb3d011d9fd9c1f725ab1aac29edecfd9834d73b1179aa470ea8eb8830ad9d09294f
+  checksum: 10c0/06776e7f7aec55a698795e60425417caa7d7db3ff680a7b4ccaae1567c5fec28ff49b9975e9a0d74ff4acb8f4a43730501bbe64f9f761d784c6476ba4db12e13
   languageName: node
   linkType: hard
 
@@ -2608,7 +2608,7 @@ __metadata:
     "@types/debug": "npm:4.1.12"
     "@types/node": "npm:20.11.16"
     "@types/supertest": "npm:2.0.16"
-    "@types/xml2js": "npm:0.4.12"
+    "@types/xml2js": "npm:0.4.14"
     "@typescript-eslint/eslint-plugin": "npm:6.21.0"
     "@typescript-eslint/parser": "npm:6.21.0"
     "@vitest/coverage-v8": "npm:0.34.6"
