@@ -1,8 +1,9 @@
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import assert from 'assert';
+import { EnmonIntegrationConfig } from './config.schema.js';
 
-export enum EnmonEnv {
-  App = 'app',
-  Dev = 'dev',
+interface ConfigProp {
+  config: Partial<EnmonIntegrationConfig> | undefined;
 }
 
 type PlainDataPoint = {
@@ -11,11 +12,8 @@ type PlainDataPoint = {
   meterRegister?: string;
 } & ({ value: number } | { counter: number });
 
-export interface PostMeterCounterArgs {
-  env: EnmonEnv | undefined;
+export interface PostMeterCounterArgs extends ConfigProp {
   payload: PlainDataPoint[];
-  customerId: string;
-  token: string;
 }
 
 interface ValidationErrorItem {
@@ -30,52 +28,66 @@ interface PostMeterPlainCounterMultiResult {
   errorDocs: Array<PlainDataPoint & { error: string | ValidationErrorItem[] }>;
 }
 
-export interface PostMeterPlainValueArgs {
-  env: EnmonEnv | undefined;
+export interface PostMeterPlainValueArgs extends ConfigProp {
   payload: PlainDataPoint;
-  customerId: string;
-  token: string;
 }
 
 export class EnmonApiClient {
-  constructor(public readonly env: EnmonEnv) {}
+  constructor(public readonly config: EnmonIntegrationConfig | undefined) {}
 
-  async postMeterPlainCounterMulti({
-    env,
-    customerId,
-    token,
-    payload,
-  }: PostMeterCounterArgs): Promise<PostMeterPlainCounterMultiResult> {
-    const result = await this.http({ env }).post<PostMeterPlainCounterMultiResult>(
-      `meter/plain/${customerId}/counter-multi`,
+  async postMeterPlainCounterMulti(args: PostMeterCounterArgs): Promise<PostMeterPlainCounterMultiResult> {
+    const { payload, config } = args;
+
+    const selectedCustomerId = this.config?.customerId ?? config?.customerId;
+
+    assert(
+      selectedCustomerId,
+      `${'customerId' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
+    );
+
+    const result = await this.http(config).post<PostMeterPlainCounterMultiResult>(
+      `meter/plain/${selectedCustomerId}/counter-multi`,
       payload,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         validateStatus: status => (status >= 200 && status < 300) || status === 412,
       },
     );
     return result.data;
   }
 
-  async postMeterPlainValue({
-    env,
-    customerId,
-    token,
-    payload,
-  }: PostMeterPlainValueArgs): Promise<AxiosResponse<void>> {
-    return await this.http({ env }).post<void>(`meter/plain/${customerId}/value`, payload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  async postMeterPlainValue(args: PostMeterPlainValueArgs): Promise<AxiosResponse<void>> {
+    const { payload, config } = args;
+
+    const selectedCustomerId = this.config?.customerId ?? config?.customerId;
+
+    assert(
+      selectedCustomerId,
+      `${'customerId' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
+    );
+
+    return await this.http(config).post<void>(`meter/plain/${selectedCustomerId}/value`, payload, {
       validateStatus: () => true,
     });
   }
 
-  private http({ env }: { env?: EnmonEnv | undefined }): AxiosInstance {
+  private http(config: Partial<EnmonIntegrationConfig> | undefined): AxiosInstance {
+    const selectedEnv = this.config?.env ?? config?.env;
+    const selectedToken = this.config?.token ?? config?.token;
+
+    assert(
+      selectedEnv,
+      `${'env' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
+    );
+    assert(
+      selectedToken,
+      `${'token' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
+    );
+
     return axios.create({
-      baseURL: `https://${this.env ?? env}.enmon.tech`,
+      baseURL: `https://${selectedEnv}.enmon.tech`,
+      headers: {
+        Authorization: `Bearer ${selectedToken}`,
+      },
     });
   }
 }

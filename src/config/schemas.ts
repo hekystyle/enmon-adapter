@@ -1,15 +1,14 @@
 import { z } from 'zod';
-import { EnmonEnv } from '../enmon/ApiClient.js';
+import { enmonIntegrationConfigSchema } from '../enmon/config.schema.js';
 
 export const THERMOMETER_MODELS = ['UNI7xxx', 'UNI1xxx'] as const;
 export type ThermometerModel = (typeof THERMOMETER_MODELS)[number];
 
-const configEnmonSchema = z.object({
-  env: z.nativeEnum(EnmonEnv),
-  customerId: z.string(),
-  devEUI: z.string(),
-  token: z.string(),
-});
+const configEnmonSchema = z
+  .object({
+    devEUI: z.string(),
+  })
+  .merge(enmonIntegrationConfigSchema.partial());
 
 const configThermometerSchema = z.object({
   model: z.enum(THERMOMETER_MODELS),
@@ -25,6 +24,12 @@ const configWattrouterSchema = z.object({
 });
 
 export const configSchema = z.object({
+  integrations: z
+    .object({
+      enmon: enmonIntegrationConfigSchema,
+    })
+    .partial()
+    .optional(),
   thermometers: z.array(configThermometerSchema),
   wattrouter: configWattrouterSchema,
 });

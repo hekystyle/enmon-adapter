@@ -74,7 +74,7 @@ export class ThermometerUNI7xxx {
   }
 
   private async uploadTemperatures(temperatures: number[]): Promise<void> {
-    const { env, customerId, devEUI, token } = this.config.enmon;
+    const { devEUI } = this.config.enmon;
 
     await Promise.all(
       temperatures.map(async (temperature, index) => {
@@ -88,9 +88,7 @@ export class ThermometerUNI7xxx {
         this.logger.log({ msg: 'uploading temperature ...', payload });
 
         const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-          env,
-          customerId,
-          token,
+          config: this.config.enmon,
           payload,
         });
 

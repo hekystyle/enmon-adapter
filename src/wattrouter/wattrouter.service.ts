@@ -43,7 +43,7 @@ export class WATTrouterService {
       voltageL1: measurements.VAC,
     });
 
-    const { env, customerId, token, devEUI } = this.config.wattrouter.enmon;
+    const { devEUI } = this.config.wattrouter.enmon;
 
     const registersCounters = [
       [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
@@ -60,9 +60,7 @@ export class WATTrouterService {
 
     try {
       const result = await this.enmonApiClient.postMeterPlainCounterMulti({
-        env,
-        customerId,
-        token,
+        config: this.config.wattrouter.enmon,
         payload: registersCounters.map(([meterRegister, counter]) => ({
           date: new Date(),
           devEUI,
@@ -94,9 +92,7 @@ export class WATTrouterService {
 
     try {
       const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-        env,
-        customerId,
-        token,
+        config: this.config.wattrouter.enmon,
         payload: {
           date: new Date(),
           devEUI,

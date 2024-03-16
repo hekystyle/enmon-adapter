@@ -1,7 +1,9 @@
 import type { FactoryProvider } from '@nestjs/common';
-import { EnmonApiClient, EnmonEnv } from './ApiClient.js';
+import { EnmonApiClient } from './ApiClient.js';
+import { Config, configProvider } from '../config/index.js';
 
 export const enmonApiClientProvider: FactoryProvider<EnmonApiClient> = {
   provide: EnmonApiClient,
-  useFactory: () => new EnmonApiClient(EnmonEnv.Dev),
+  inject: [configProvider.provide],
+  useFactory: (config: Config) => new EnmonApiClient(config.integrations?.enmon),
 };

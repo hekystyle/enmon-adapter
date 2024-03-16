@@ -58,12 +58,10 @@ export class ThermometerUNI1xxx {
   }
 
   private async uploadTemperature(temperature: number): Promise<void> {
-    const { env, customerId, devEUI, token } = this.config.enmon;
+    const { devEUI } = this.config.enmon;
 
     const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-      env,
-      customerId,
-      token,
+      config: this.config.enmon,
       payload: {
         devEUI,
         date: new Date(),
