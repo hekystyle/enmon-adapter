@@ -2,11 +2,11 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
-import { Logger } from './logger.js';
+import { ContextAwareLogger } from './log/context-aware.logger.js';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
-  app.useLogger(app.get(Logger));
+  app.useLogger(app.get(ContextAwareLogger).setContext('App'));
   await app.init();
 }
 

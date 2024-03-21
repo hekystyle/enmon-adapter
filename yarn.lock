@@ -866,15 +866,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/debug@npm:4.1.12":
-  version: 4.1.12
-  resolution: "@types/debug@npm:4.1.12"
-  dependencies:
-    "@types/ms": "npm:*"
-  checksum: 10c0/5dcd465edbb5a7f226e9a5efd1f399c6172407ef5840686b73e3608ce135eeca54ae8037dcd9f16bdb2768ac74925b820a8b9ecc588a58ca09eca6acabe33e2f
-  languageName: node
-  linkType: hard
-
 "@types/eslint-scope@npm:^3.7.3":
   version: 3.7.4
   resolution: "@types/eslint-scope@npm:3.7.4"
@@ -948,13 +939,6 @@ __metadata:
   version: 3.3.2
   resolution: "@types/luxon@npm:3.3.2"
   checksum: 10c0/6ffa50e6c16bfcc48cd8ba9bc5fb4a8b7582a768809f640b99ce20b1b31d6df301f0610d1f79476366322b163c7c9221c283998b1e9d787659ce742a0dc4b6db
-  languageName: node
-  linkType: hard
-
-"@types/ms@npm:*":
-  version: 0.7.31
-  resolution: "@types/ms@npm:0.7.31"
-  checksum: 10c0/19fae4f587651e8761c76a0c72ba8af1700d37054476878d164b758edcc926f4420ed06037a1a7fdddc1dbea25265895d743c8b2ea44f3f3f7ac06c449b9221e
   languageName: node
   linkType: hard
 
@@ -2391,7 +2375,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:4.3.4, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.3, debug@npm:^4.3.4":
+"debug@npm:4, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.3, debug@npm:^4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
   dependencies:
@@ -2674,7 +2658,6 @@ __metadata:
     "@tsconfig/strictest": "npm:2.0.3"
     "@types/config": "npm:3.3.3"
     "@types/cron": "npm:2.0.1"
-    "@types/debug": "npm:4.1.12"
     "@types/node": "npm:20.11.16"
     "@types/supertest": "npm:2.0.16"
     "@types/xml2js": "npm:0.4.12"
@@ -2685,7 +2668,6 @@ __metadata:
     cheerio: "npm:1.0.0-rc.12"
     config: "npm:3.3.11"
     cron: "npm:3.1.6"
-    debug: "npm:4.3.4"
     decimal.js: "npm:10.4.3"
     dotenv: "npm:16.3.1"
     eslint: "npm:8.57.0"
