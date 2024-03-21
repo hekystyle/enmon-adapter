@@ -6,6 +6,7 @@ import { AlsValues, Host } from '../als/values-host.js';
 interface Meta {
   [key: string]: unknown;
   message?: string;
+  method?: (() => unknown)['name'];
   error?: unknown;
 }
 

@@ -35,12 +35,14 @@ export class TasksService {
         new Host({
           jobId: jobName,
         }),
-        () => this.sendTemperatureToEnmon(thermometerConfig).catch(reason => this.handleRejection(reason)),
+        () => this.sendTemperatureToEnmon(thermometerConfig),
       )
-      .catch(reason => this.logger.error({ error: reason }));
+      .catch(reason => this.handleRejection(reason));
   }
 
   private handleRejection(error: unknown) {
+    this.logger.debug({ method: this.handleRejection.name });
+
     this.logger.error({ error });
   }
 

@@ -27,7 +27,7 @@ export class BitcoinService {
   // @Cron(CronExpression.Every15Minutes)
   @Cron(CronExpression.EVERY_MINUTE)
   handleCron() {
-    this.logger.debug(this.handleCron.name);
+    this.logger.debug({ method: this.handleCron.name });
 
     this.config.bitcoin?.forEach(this.processConfig.bind(this));
 
@@ -37,19 +37,20 @@ export class BitcoinService {
   }
 
   private processConfig(config: BitcoinConfig, index: number) {
-    this.logger.debug(`Processing config ${index}`);
+    this.logger.log(`Processing config ${index}`);
 
     this.als
       .run(
         new Host({
           jobId: randomUUID(),
         }),
-        () => this.sendBlockchainInfoToIntegrations(config).catch(reason => this.handleRejection(reason)),
+        () => this.sendBlockchainInfoToIntegrations(config),
       )
-      .catch(reason => this.logger.error({ error: reason }));
+      .catch(this.handleRejection.bind(this));
   }
 
   private handleRejection(error: unknown) {
+    this.logger.debug({ method: this.handleRejection.name });
     if (error instanceof AxiosError) {
       this.logger.error(error);
     } else {
