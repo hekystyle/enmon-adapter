@@ -18,24 +18,44 @@ export class ContextAwareLogger implements LoggerService {
     private readonly logger: winston.Logger,
   ) {}
 
-  log(message: string, meta?: Meta) {
-    this.logger.info(this.prepareMessage({ message, ...meta }));
+  log(message: string | Meta, meta?: Meta) {
+    this.logger.info(
+      this.prepareMessage({
+        ...(typeof message === 'string' ? { message } : message),
+        ...meta,
+      }),
+    );
   }
 
   error(errorOrMeta: Error | Meta) {
     this.logger.error(this.prepareMessage(errorOrMeta instanceof Error ? { error: errorOrMeta } : errorOrMeta));
   }
 
-  warn(message: string, meta?: Meta) {
-    this.logger.warn(this.prepareMessage({ message, ...meta }));
+  warn(message: string | Meta, meta?: Meta) {
+    this.logger.warn(
+      this.prepareMessage({
+        ...(typeof message === 'string' ? { message } : message),
+        ...meta,
+      }),
+    );
   }
 
-  debug(message: string, meta?: Meta) {
-    this.logger.debug(this.prepareMessage({ message, ...meta }));
+  debug(message: string | Meta, meta?: Meta) {
+    this.logger.debug(
+      this.prepareMessage({
+        ...(typeof message === 'string' ? { message } : message),
+        ...meta,
+      }),
+    );
   }
 
-  verbose(message: string, meta?: Meta) {
-    this.logger.verbose(this.prepareMessage({ message, ...meta }));
+  verbose(message: string | Meta, meta?: Meta) {
+    this.logger.verbose(
+      this.prepareMessage({
+        ...(typeof message === 'string' ? { message } : message),
+        ...meta,
+      }),
+    );
   }
 
   setContext(context: string): this {

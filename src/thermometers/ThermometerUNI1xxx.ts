@@ -1,37 +1,38 @@
 import axios from 'axios';
-import { Logger } from '../logger.js';
+import { Injectable } from '@nestjs/common';
 import { parseTemperature } from './utils/parseTemp.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import type { ConfigThermometer } from '../config/index.js';
+import { ContextAwareLogger } from '../log/context-aware.logger.js';
 
+@Injectable()
 export class ThermometerUNI1xxx {
   constructor(
-    private readonly logger: Logger,
-    private readonly config: ConfigThermometer,
+    private readonly logger: ContextAwareLogger,
     private readonly enmonApiClient: EnmonApiClient,
   ) {
-    this.logger = logger.extend(ThermometerUNI1xxx.name);
+    logger.setContext(ThermometerUNI1xxx.name);
   }
 
-  public async handleTemperature() {
+  public async handleTemperature(config: ConfigThermometer) {
     this.logger.log(this.handleTemperature.name);
 
-    const temperature = await this.fetchTemperature();
+    const temperature = await this.fetchTemperature(config);
 
-    if (temperature) await this.uploadTemperature(temperature);
+    if (temperature) await this.uploadTemperature(temperature, config);
   }
 
-  private async fetchTemperature(): Promise<undefined | number> {
+  private async fetchTemperature(config: ConfigThermometer): Promise<undefined | number> {
     const {
       status,
       statusText,
       data: html,
-    } = await axios.get<string>(this.config.dataSourceUrl, {
+    } = await axios.get<string>(config.dataSourceUrl, {
       validateStatus: () => true,
     });
 
     this.logger.log({
-      msg: 'fetch temperature meter HTML page',
+      message: 'fetch temperature meter HTML page',
       status,
       statusText,
       html: status !== 200 ? html : '<hidden>',
@@ -42,7 +43,7 @@ export class ThermometerUNI1xxx {
     const serializedValue = parseTemperature(html);
 
     this.logger.log({
-      msg: 'founded serialized temperature value',
+      message: 'founded serialized temperature value',
       serialized: serializedValue,
     });
 
@@ -50,18 +51,18 @@ export class ThermometerUNI1xxx {
     const temperature = parseFloat(serializedValue);
 
     this.logger.log({
-      msg: 'parsed temperature value',
+      message: 'parsed temperature value',
       parsed: temperature,
     });
 
     return Number.isNaN(temperature) ? undefined : temperature;
   }
 
-  private async uploadTemperature(temperature: number): Promise<void> {
-    const { devEUI } = this.config.enmon;
+  private async uploadTemperature(temperature: number, config: ConfigThermometer): Promise<void> {
+    const { devEUI } = config.enmon;
 
     const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-      config: this.config.enmon,
+      config: config.enmon,
       payload: {
         devEUI,
         date: new Date(),
@@ -69,6 +70,6 @@ export class ThermometerUNI1xxx {
       },
     });
 
-    this.logger.log({ msg: 'upload temperature result', status, statusText, data });
+    this.logger.log({ message: 'upload temperature result', status, statusText, data });
   }
 }

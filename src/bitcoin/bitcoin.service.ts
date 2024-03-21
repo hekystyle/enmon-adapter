@@ -16,7 +16,6 @@ export class BitcoinService {
   constructor(
     @Inject(configProvider.provide)
     private readonly config: Config,
-    @Inject(AsyncLocalStorage)
     private readonly als: AsyncLocalStorage<Host<AlsValues>>,
     private readonly rpc: RpcService,
     private readonly enmon: EnmonApiClient,

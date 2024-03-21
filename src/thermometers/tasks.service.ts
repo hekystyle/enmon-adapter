@@ -1,59 +1,68 @@
-import { Inject, Injectable, type OnApplicationBootstrap } from '@nestjs/common';
-import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
-import { CronJob } from 'cron';
-import { randomUUID } from 'crypto';
-import { configProvider, type Config } from '../config/index.js';
-import { Logger } from '../logger.js';
-import { EnmonApiClient } from '../enmon/ApiClient.js';
+import { Inject, Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { AsyncLocalStorage } from 'async_hooks';
+import { configProvider, type Config, ConfigThermometer } from '../config/index.js';
 import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
 import { ThermometerUNI1xxx } from './ThermometerUNI1xxx.js';
+import { AlsValues, Host } from '../als/values-host.js';
+import { ContextAwareLogger } from '../log/context-aware.logger.js';
 
 @Injectable()
-export class TasksService implements OnApplicationBootstrap {
+export class TasksService {
   constructor(
-    @Inject(Logger)
-    private readonly logger: Logger,
+    private readonly logger: ContextAwareLogger,
     @Inject(configProvider.provide)
     private readonly config: Config,
-    private readonly registry: SchedulerRegistry,
-    private readonly enmonApiClient: EnmonApiClient,
+    private readonly als: AsyncLocalStorage<Host<AlsValues>>,
+    private readonly thermometerUNI7xxx: ThermometerUNI7xxx,
+    private readonly thermometerUNI1xxx: ThermometerUNI1xxx,
   ) {
-    this.logger = logger.extend(TasksService.name);
+    logger.setContext(TasksService.name);
   }
 
-  onApplicationBootstrap(): void {
+  @Cron(CronExpression.EVERY_MINUTE)
+  handleCron(): void {
     this.logger.log({ msg: 'iterating over thermometers' });
-    this.config.thermometers.forEach((thermometerConfig, index) => {
-      const jobName = `thermometer-${index}`;
-      const jobLogger = this.logger.extend(jobName);
 
-      jobLogger.log({ msg: 'creating cron job' });
-      const job = new CronJob(CronExpression.EVERY_MINUTE, () => {
-        const tickLogger = jobLogger.extend(randomUUID());
-        tickLogger.log({ msg: 'tick' });
-        const { model } = thermometerConfig;
-        tickLogger.log({ msg: 'handling thermometer', model });
-        switch (model) {
-          case 'UNI7xxx':
-            new ThermometerUNI7xxx(tickLogger, thermometerConfig, this.enmonApiClient)
-              .handleTemperature()
-              .catch((reason: unknown) => this.logger.error({ reason }));
-            break;
-          case 'UNI1xxx':
-            new ThermometerUNI1xxx(tickLogger, thermometerConfig, this.enmonApiClient)
-              .handleTemperature()
-              .catch((reason: unknown) => this.logger.error({ reason }));
-            break;
-          default:
-            tickLogger.error({ msg: 'unknown thermometer model', model });
-        }
-      });
+    this.config.thermometers.forEach(this.processConfig.bind(this));
+  }
 
-      jobLogger.log({ msg: 'starting cron job' });
-      job.start();
+  private processConfig(thermometerConfig: ConfigThermometer, index: number) {
+    const jobName = `thermometer-${index}`;
 
-      jobLogger.log({ msg: 'registering cron job' });
-      this.registry.addCronJob(jobName, job);
-    });
+    this.als
+      .run(
+        new Host({
+          jobId: jobName,
+        }),
+        () => this.sendTemperatureToEnmon(thermometerConfig).catch(reason => this.handleRejection(reason)),
+      )
+      .catch(reason => this.logger.error({ error: reason }));
+  }
+
+  private handleRejection(error: unknown) {
+    this.logger.error({ error });
+  }
+
+  private async sendTemperatureToEnmon(thermometerConfig: ConfigThermometer): Promise<void> {
+    const { model } = thermometerConfig;
+    this.logger.log({ msg: 'selecting thermometer processing strategy', model });
+
+    const strategy = this.selectThermometerStrategy(model);
+
+    await strategy?.handleTemperature(thermometerConfig);
+  }
+
+  private selectThermometerStrategy(model: ConfigThermometer['model']) {
+    switch (model) {
+      case 'UNI7xxx':
+        return this.thermometerUNI7xxx;
+      case 'UNI1xxx':
+        return this.thermometerUNI1xxx;
+      default: {
+        this.logger.error({ msg: 'unknown thermometer model', model });
+        return undefined;
+      }
+    }
   }
 }

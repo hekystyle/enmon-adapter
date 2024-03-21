@@ -1,37 +1,38 @@
 import axios from 'axios';
 import { load } from 'cheerio';
+import { Injectable } from '@nestjs/common';
 import { type ConfigThermometer } from '../config/index.js';
-import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
+import { ContextAwareLogger } from '../log/context-aware.logger.js';
 
+@Injectable()
 export class ThermometerUNI7xxx {
   constructor(
-    private readonly logger: Logger,
-    private readonly config: ConfigThermometer,
+    private readonly logger: ContextAwareLogger,
     private readonly enmonApiClient: EnmonApiClient,
   ) {
-    this.logger = logger.extend(ThermometerUNI7xxx.name);
+    logger.setContext(ThermometerUNI7xxx.name);
   }
 
-  public async handleTemperature() {
-    const temperatures = await this.fetchTemperature();
+  public async handleTemperature(config: ConfigThermometer) {
+    const temperatures = await this.fetchTemperature(config);
 
-    await this.uploadTemperatures(temperatures);
+    await this.uploadTemperatures(temperatures, config);
   }
 
-  private async fetchTemperature(): Promise<number[]> {
-    this.logger.log({ msg: 'fetching temperature meter HTML page' });
+  private async fetchTemperature(config: ConfigThermometer): Promise<number[]> {
+    this.logger.log({ message: 'fetching temperature meter HTML page' });
 
     const {
       status,
       statusText,
       data: html,
-    } = await axios.get<string>(this.config.dataSourceUrl, {
+    } = await axios.get<string>(config.dataSourceUrl, {
       validateStatus: () => true,
     });
 
     this.logger.log({
-      msg: 'fetch temperature meter HTML page',
+      message: 'fetch temperature meter HTML page',
       status,
       statusText,
       html: status !== 200 ? html : '<hidden>',
@@ -42,7 +43,7 @@ export class ThermometerUNI7xxx {
     const temperatures = this.parseTemperatures(html);
 
     this.logger.log({
-      msg: 'parsed temperature value',
+      message: 'parsed temperature value',
       parsed: temperatures,
     });
 
@@ -58,7 +59,7 @@ export class ThermometerUNI7xxx {
     });
 
     this.logger.log({
-      msg: 'found serialized temperature values',
+      message: 'found serialized temperature values',
       serialized: serializedValues,
     });
 
@@ -73,8 +74,8 @@ export class ThermometerUNI7xxx {
     });
   }
 
-  private async uploadTemperatures(temperatures: number[]): Promise<void> {
-    const { devEUI } = this.config.enmon;
+  private async uploadTemperatures(temperatures: number[], config: ConfigThermometer): Promise<void> {
+    const { devEUI } = config.enmon;
 
     await Promise.all(
       temperatures.map(async (temperature, index) => {
@@ -85,14 +86,14 @@ export class ThermometerUNI7xxx {
           meterRegister: `20-1.0.${index}`,
         } as const;
 
-        this.logger.log({ msg: 'uploading temperature ...', payload });
+        this.logger.log({ message: 'uploading temperature ...', payload });
 
         const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-          config: this.config.enmon,
+          config: config.enmon,
           payload,
         });
 
-        this.logger.log({ msg: 'upload temperature result', payload, status, statusText, data });
+        this.logger.log({ message: 'upload temperature result', payload, status, statusText, data });
       }),
     );
   }
