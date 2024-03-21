@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker';
 import { expect, it } from 'vitest';
 import { ZodError } from 'zod';
 import { type Config } from './schemas.js';
-import { EnmonEnv } from '../enmon/ApiClient.js';
 import { parseConfig } from './parse.js';
 import { getError } from '../../tests/utils/getError.js';
+import { EnmonEnv } from '../enmon/env.js';
 
 const VALID_CONFIG = {
   thermometers: [
