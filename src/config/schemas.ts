@@ -24,6 +24,8 @@ const configWattrouterSchema = z.object({
   enmon: configEnmonSchema,
 });
 
+export type ConfigWattrouter = z.infer<typeof configWattrouterSchema>;
+
 export const configSchema = z.object({
   integrations: integrationsSchema.optional(),
   thermometers: z.array(configThermometerSchema),

@@ -2,40 +2,73 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
-import { configProvider, type Config } from '../config/index.js';
-import { Logger } from '../logger.js';
+import { AsyncLocalStorage } from 'async_hooks';
+import { configProvider, type Config, ConfigWattrouter } from '../config/index.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
 import { CronExpression } from '../cron/expression.js';
+import { ContextAwareLogger } from '../log/context-aware.logger.js';
+import { AlsValues, Host } from '../als/values-host.js';
 
 @Injectable()
 export class WATTrouterService {
   constructor(
-    @Inject(Logger)
-    private readonly logger: Logger,
+    private readonly logger: ContextAwareLogger,
     @Inject(configProvider.provide)
     private readonly config: Config,
     private readonly enmonApiClient: EnmonApiClient,
     private readonly wattRouterApiClient: WATTrouterMxApiClient,
+    private readonly als: AsyncLocalStorage<Host<AlsValues>>,
   ) {
-    this.logger = logger.extend(WATTrouterService.name);
+    logger.setContext(WATTrouterService.name);
   }
 
   @Cron(CronExpression.Every15Minutes)
-  public triggerWattRouterValuesHandling() {
-    this.logger.log(this.triggerWattRouterValuesHandling.name);
-    this.handleWattRouterValues().catch(reason => this.logger.error(reason));
+  public handleCron() {
+    this.logger.debug({ method: this.handleCron.name });
+
+    [this.config.wattrouter].forEach(this.processConfig.bind(this));
   }
 
-  private async handleWattRouterValues() {
-    this.logger.log(this.handleWattRouterValues.name);
+  private processConfig(config: ConfigWattrouter, index: number) {
+    this.als
+      .run(
+        new Host({
+          jobId: `wattrouter-${index}`,
+        }),
+        () => this.sendValuesToEnmon(config),
+      )
+      .catch(this.handleRejection.bind(this));
+  }
 
-    const allTimeStats = await this.getAllTimeStats();
-    if (!allTimeStats) return;
+  private handleRejection(error: unknown) {
+    this.logger.debug({ method: this.handleRejection.name });
+
+    if (axios.isAxiosError<unknown>(error)) {
+      const { statusText, status } = error.response ?? {};
+      this.logger.error({
+        error,
+        status,
+        statusText,
+        data: error.response?.data,
+      });
+    } else {
+      this.logger.error({ error });
+    }
+  }
+
+  private async sendValuesToEnmon(config: ConfigWattrouter) {
+    this.logger.log(this.sendValuesToEnmon.name);
+
+    this.logger.log('fetching wattrouter stats...');
+    const allTimeStats = await this.wattRouterApiClient.getAllTimeStats();
+
+    this.logger.log('fetching wattrouter measurement...');
     const measurements = await this.wattRouterApiClient.getMeasurement();
+
     const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
     this.logger.log({
-      msg: 'fetched wattrouter stats',
+      msg: 'fetched wattrouter stats & measurement',
       consumptionHT: SAH4,
       consumptionLT: SAL4,
       production: SAP4,
@@ -43,7 +76,7 @@ export class WATTrouterService {
       voltageL1: measurements.VAC,
     });
 
-    const { devEUI } = this.config.wattrouter.enmon;
+    const { devEUI } = config.enmon;
 
     const registersCounters = [
       [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
@@ -58,79 +91,34 @@ export class WATTrouterService {
       registersCounters,
     });
 
-    try {
-      const result = await this.enmonApiClient.postMeterPlainCounterMulti({
-        config: this.config.wattrouter.enmon,
-        payload: registersCounters.map(([meterRegister, counter]) => ({
-          date: new Date(),
-          devEUI,
-          meterRegister,
-          counter,
-        })),
-      });
-      this.logger.log({ msg: 'post meter plain counter multiple result', result });
-    } catch (e) {
-      if (axios.isAxiosError<unknown>(e)) {
-        const { statusText, status } = e.response ?? {};
-        this.logger.error({
-          msg: 'failed to post multiple meter counters',
-          status,
-          statusText,
-          data: e.response?.data,
-        });
-      } else {
-        throw e;
-      }
-    }
+    this.logger.log('posting consumption counters to Enmon...');
+
+    const result = await this.enmonApiClient.postMeterPlainCounterMulti({
+      config: config.enmon,
+      payload: registersCounters.map(([meterRegister, counter]) => ({
+        date: new Date(),
+        devEUI,
+        meterRegister,
+        counter,
+      })),
+    });
+    this.logger.log({ msg: 'posting consumption counters result', result });
 
     const payload = {
       meterRegister: `1-32.7.0`, // voltage on phase L1
       value: measurements.VAC,
     } as const;
 
-    this.logger.log({ msg: 'voltage on phase L1', payload });
+    this.logger.log({ msg: 'posting voltage on phase L1 to Enmon...', payload });
 
-    try {
-      const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-        config: this.config.wattrouter.enmon,
-        payload: {
-          date: new Date(),
-          devEUI,
-          ...payload,
-        },
-      });
-      this.logger.log({ msg: 'post meter plain value result', status, statusText, data });
-    } catch (e) {
-      if (axios.isAxiosError<unknown>(e)) {
-        const { statusText, status } = e.response ?? {};
-        this.logger.error({
-          msg: 'failed to post meter value',
-          status,
-          statusText,
-          data: e.response?.data,
-        });
-      } else {
-        throw e;
-      }
-    }
-  }
-
-  private async getAllTimeStats() {
-    try {
-      return await this.wattRouterApiClient.getAllTimeStats();
-    } catch (e) {
-      if (axios.isAxiosError<unknown>(e)) {
-        const { statusText, status } = e.response ?? {};
-        this.logger.error({
-          msg: 'failed to fetch wattrouter alltime stats',
-          status,
-          statusText,
-          data: e.response?.data,
-        });
-      } else {
-        throw e;
-      }
-      return undefined;
-    }
+    const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
+      config: config.enmon,
+      payload: {
+        date: new Date(),
+        devEUI,
+        ...payload,
+      },
+    });
+    this.logger.log({ msg: 'posting voltage on phase L1 result', status, statusText, data });
   }
 }
