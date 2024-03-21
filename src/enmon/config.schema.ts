@@ -1,10 +1,16 @@
 import { z } from 'zod';
 import { EnmonEnv } from './env.js';
 
-export const enmonIntegrationConfigSchema = z.object({
+export const enmonIntegrationBaseConfigSchema = z.object({
   env: z.nativeEnum(EnmonEnv),
   customerId: z.string(),
   token: z.string(),
 });
 
-export type EnmonIntegrationConfig = z.infer<typeof enmonIntegrationConfigSchema>;
+export type EnmonIntegrationBaseConfig = z.infer<typeof enmonIntegrationBaseConfigSchema>;
+
+export const configEnmonSchema = z
+  .object({
+    devEUI: z.string(),
+  })
+  .merge(enmonIntegrationBaseConfigSchema.partial());

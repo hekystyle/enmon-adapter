@@ -1,14 +1,15 @@
 import { z } from 'zod';
-import { enmonIntegrationConfigSchema } from '../enmon/config.schema.js';
+import { configEnmonSchema, enmonIntegrationBaseConfigSchema } from '../enmon/config.schema.js';
+import { bitcoinConfig } from '../bitcoin/config.js';
 
 export const THERMOMETER_MODELS = ['UNI7xxx', 'UNI1xxx'] as const;
 export type ThermometerModel = (typeof THERMOMETER_MODELS)[number];
 
-const configEnmonSchema = z
+const integrationsSchema = z
   .object({
-    devEUI: z.string(),
+    enmon: enmonIntegrationBaseConfigSchema,
   })
-  .merge(enmonIntegrationConfigSchema.partial());
+  .partial();
 
 const configThermometerSchema = z.object({
   model: z.enum(THERMOMETER_MODELS),
@@ -24,14 +25,10 @@ const configWattrouterSchema = z.object({
 });
 
 export const configSchema = z.object({
-  integrations: z
-    .object({
-      enmon: enmonIntegrationConfigSchema,
-    })
-    .partial()
-    .optional(),
+  integrations: integrationsSchema.optional(),
   thermometers: z.array(configThermometerSchema),
   wattrouter: configWattrouterSchema,
+  bitcoin: z.array(bitcoinConfig).optional(),
 });
 
 export type Config = z.infer<typeof configSchema>;
