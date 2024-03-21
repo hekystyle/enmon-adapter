@@ -68,12 +68,13 @@ export class ContextAwareLogger implements LoggerService {
     const { message, error, ...restMeta } = meta;
 
     const serializedError = this.serializeError(error);
+    const als = this.getAlsStore();
 
     const logObj: Record<string | number, unknown> = {
       message,
       meta: restMeta,
       ...(error ? { error: serializedError } : {}),
-      als: this.getAlsStore(),
+      ...(als ? { als } : {}),
       context: this.context,
     };
 
