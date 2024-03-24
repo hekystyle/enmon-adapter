@@ -15,7 +15,7 @@ import { AlsModule } from './als/als.module.js';
     EnmonModule,
     LogModule,
     ScheduleModule.forRoot(),
-    ThermometersModule,
+    ThermometersModule.register(),
     WATTrouterModule,
     BitcoinModule,
   ],

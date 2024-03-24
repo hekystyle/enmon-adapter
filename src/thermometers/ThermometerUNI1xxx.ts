@@ -7,6 +7,8 @@ import { ContextAwareLogger } from '../log/context-aware.logger.js';
 
 @Injectable()
 export class ThermometerUNI1xxx {
+  readonly model = 'UNI1xxx';
+
   constructor(
     private readonly logger: ContextAwareLogger,
     private readonly enmonApiClient: EnmonApiClient,

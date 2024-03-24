@@ -41,8 +41,9 @@ export class BitcoinService {
 
     this.als
       .run(
-        new Host({
+        new Host<AlsValues>({
           jobId: randomUUID(),
+          configId: `bitcoin.${index}`,
         }),
         () => this.sendBlockchainInfoToIntegrations(config),
       )

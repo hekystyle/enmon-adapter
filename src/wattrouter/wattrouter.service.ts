@@ -3,6 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
 import { AsyncLocalStorage } from 'async_hooks';
+import { randomUUID } from 'crypto';
 import { configProvider, type Config, ConfigWattrouter } from '../config/index.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
@@ -33,8 +34,9 @@ export class WATTrouterService {
   private processConfig(config: ConfigWattrouter, index: number) {
     this.als
       .run(
-        new Host({
-          jobId: `wattrouter-${index}`,
+        new Host<AlsValues>({
+          jobId: randomUUID(),
+          configId: `wattrouter.${index}`,
         }),
         () => this.sendValuesToEnmon(config),
       )
@@ -68,7 +70,7 @@ export class WATTrouterService {
 
     const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
     this.logger.log({
-      msg: 'fetched wattrouter stats & measurement',
+      message: 'fetched wattrouter stats & measurement',
       consumptionHT: SAH4,
       consumptionLT: SAL4,
       production: SAP4,
@@ -87,7 +89,7 @@ export class WATTrouterService {
     ] as const;
 
     this.logger.log({
-      msg: 'counters',
+      message: 'counters',
       registersCounters,
     });
 
@@ -102,14 +104,14 @@ export class WATTrouterService {
         counter,
       })),
     });
-    this.logger.log({ msg: 'posting consumption counters result', result });
+    this.logger.log({ message: 'posting consumption counters result', result });
 
     const payload = {
       meterRegister: `1-32.7.0`, // voltage on phase L1
       value: measurements.VAC,
     } as const;
 
-    this.logger.log({ msg: 'posting voltage on phase L1 to Enmon...', payload });
+    this.logger.log({ message: 'posting voltage on phase L1 to Enmon...', payload });
 
     const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
       config: config.enmon,
@@ -119,6 +121,6 @@ export class WATTrouterService {
         ...payload,
       },
     });
-    this.logger.log({ msg: 'posting voltage on phase L1 result', status, statusText, data });
+    this.logger.log({ message: 'posting voltage on phase L1 result', status, statusText, data });
   }
 }
