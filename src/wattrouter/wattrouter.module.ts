@@ -1,11 +1,21 @@
 import { Module } from '@nestjs/common';
+import { DiscoveryModule } from '@nestjs/core';
 import { WATTrouterService } from './wattrouter.service.js';
-import { wattrouterApiClientProvider } from './wattrouterApiClient.provider.js';
+import { wattRouterApiClientProvider } from './mx-api-client.provider.js';
 import { EnmonModule } from '../enmon/enmon.module.js';
+import { WATTRouterUploadersHost } from './uploaders.host.js';
+import { WATTrouterAdaptersHost } from './adapters.host.js';
+import { WATTrouterMxAdapter } from './mx.adapter.js';
 
 @Module({
-  imports: [EnmonModule],
-  providers: [WATTrouterService, wattrouterApiClientProvider],
+  imports: [EnmonModule, DiscoveryModule],
+  providers: [
+    WATTrouterService,
+    wattRouterApiClientProvider,
+    WATTrouterMxAdapter,
+    WATTrouterAdaptersHost,
+    WATTRouterUploadersHost,
+  ],
   exports: [],
 })
 export class WATTrouterModule {}

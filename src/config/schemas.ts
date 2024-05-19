@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { configEnmonSchema, enmonIntegrationBaseConfigSchema } from '../enmon/config.schema.js';
+import { WATTRouterModel } from '../wattrouter/model.enum.js';
 
 export const THERMOMETER_MODELS = ['UNI7xxx', 'UNI1xxx'] as const;
 export type ThermometerModel = (typeof THERMOMETER_MODELS)[number];
@@ -20,6 +21,7 @@ export type ConfigThermometer = z.infer<typeof configThermometerSchema>;
 
 const configWattrouterSchema = z.object({
   baseURL: z.string().url(),
+  model: z.nativeEnum(WATTRouterModel).optional().default(WATTRouterModel.Mx),
   enmon: configEnmonSchema,
 });
 

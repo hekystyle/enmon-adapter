@@ -1,15 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
-import { Decimal } from 'decimal.js';
 import { AsyncLocalStorage } from 'async_hooks';
 import { randomUUID } from 'crypto';
 import { configProvider, type Config, ConfigWattrouter } from '../config/index.js';
-import { EnmonApiClient } from '../enmon/ApiClient.js';
-import { WATTrouterMxApiClient } from './MxApiClient.js';
 import { AppCronExpression } from '../cron/expression.js';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
 import { AlsValues, Host } from '../als/values-host.js';
+import { WATTRouterUploadersHost } from './uploaders.host.js';
+import { WATTrouterAdaptersHost } from './adapters.host.js';
 
 @Injectable()
 export class WATTrouterService {
@@ -17,9 +16,9 @@ export class WATTrouterService {
     private readonly logger: ContextAwareLogger,
     @Inject(configProvider.provide)
     private readonly config: Config,
-    private readonly enmonApiClient: EnmonApiClient,
-    private readonly wattRouterApiClient: WATTrouterMxApiClient,
     private readonly als: AsyncLocalStorage<Host<AlsValues>>,
+    private readonly adapters: WATTrouterAdaptersHost,
+    private readonly uploadersHost: WATTRouterUploadersHost,
   ) {
     logger.setContext(WATTrouterService.name);
   }
@@ -38,7 +37,7 @@ export class WATTrouterService {
           jobId: randomUUID(),
           configId: `wattrouter.${index}`,
         }),
-        () => this.sendValuesToEnmon(config),
+        () => this.sendValuesToIntegrations(config),
       )
       .catch(this.handleRejection.bind(this));
   }
@@ -59,68 +58,25 @@ export class WATTrouterService {
     }
   }
 
-  private async sendValuesToEnmon(config: ConfigWattrouter) {
-    this.logger.log(this.sendValuesToEnmon.name);
+  private async sendValuesToIntegrations(config: ConfigWattrouter) {
+    this.logger.debug(this.sendValuesToIntegrations.name);
 
-    this.logger.log('fetching wattrouter stats...');
-    const allTimeStats = await this.wattRouterApiClient.getAllTimeStats();
+    const selectedAdapter = this.adapters.ref.find(adapter => adapter.model === config.model);
 
-    this.logger.log('fetching wattrouter measurement...');
-    const measurements = await this.wattRouterApiClient.getMeasurement();
+    if (!selectedAdapter) {
+      this.logger.error({ message: 'Adapter not found', model: config.model });
+      return;
+    }
 
-    const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
-    this.logger.log({
-      message: 'fetched wattrouter stats & measurement',
-      consumptionHT: SAH4,
-      consumptionLT: SAL4,
-      production: SAP4,
-      surplus: SAS4,
-      voltageL1: measurements.VAC,
-    });
+    this.logger.log('fetching WATTrouter stats & measurements...');
+    const values = await selectedAdapter.getValues(config);
 
-    const { devEUI } = config.enmon;
+    await Promise.all(
+      this.uploadersHost.ref.map(uploader =>
+        uploader.upload(values, config).catch(reason => this.handleRejection(reason)),
+      ),
+    );
 
-    const registersCounters = [
-      [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
-      [`1-1.8.2`, SAH4],
-      [`1-1.8.3`, SAL4],
-      [`1-1.8.4`, SAP4],
-      [`1-2.8.0`, SAS4],
-    ] as const;
-
-    this.logger.log({
-      message: 'counters',
-      registersCounters,
-    });
-
-    this.logger.log('posting consumption counters to Enmon...');
-
-    const result = await this.enmonApiClient.postMeterPlainCounterMulti({
-      config: config.enmon,
-      payload: registersCounters.map(([meterRegister, counter]) => ({
-        date: new Date(),
-        devEUI,
-        meterRegister,
-        counter,
-      })),
-    });
-    this.logger.log({ message: 'posting consumption counters result', result });
-
-    const payload = {
-      meterRegister: `1-32.7.0`, // voltage on phase L1
-      value: measurements.VAC,
-    } as const;
-
-    this.logger.log({ message: 'posting voltage on phase L1 to Enmon...', payload });
-
-    const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-      config: config.enmon,
-      payload: {
-        date: new Date(),
-        devEUI,
-        ...payload,
-      },
-    });
-    this.logger.log({ message: 'posting voltage on phase L1 result', status, statusText, data });
+    this.logger.log('WATTrouter values uploaded');
   }
 }
