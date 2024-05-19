@@ -5,7 +5,6 @@ import { EnmonModule } from './enmon/enmon.module.js';
 import { ThermometersModule } from './thermometers/thermometers.module.js';
 import { WATTrouterModule } from './wattrouter/wattrouter.module.js';
 import { LogModule } from './log/log.module.js';
-import { BitcoinModule } from './bitcoin/bitcoin.module.js';
 import { AlsModule } from './als/als.module.js';
 
 @Module({
@@ -17,7 +16,6 @@ import { AlsModule } from './als/als.module.js';
     ScheduleModule.forRoot(),
     ThermometersModule.register(),
     WATTrouterModule,
-    BitcoinModule,
   ],
   providers: [],
   exports: [],
