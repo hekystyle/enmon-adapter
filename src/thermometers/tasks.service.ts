@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { AsyncLocalStorage } from 'async_hooks';
 import { randomUUID } from 'crypto';
 import { configProvider, type Config, ConfigThermometer } from '../config/index.js';
@@ -7,6 +7,7 @@ import { AlsValues, Host } from '../als/values-host.js';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
 import { Thermometer } from './interfaces.js';
 import { THERMOMETERS_TOKEN } from './constants.js';
+import { CronExpression } from '../cron/expression.js';
 
 @Injectable()
 export class TasksService {
@@ -21,7 +22,7 @@ export class TasksService {
     logger.setContext(TasksService.name);
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.Every15Minutes)
   handleCron(): void {
     this.logger.log({ message: 'iterating over thermometers' });
 
