@@ -1,5 +1,5 @@
+import assert from 'node:assert';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import assert from 'assert';
 import { EnmonIntegrationBaseConfig } from './config.schema.js';
 
 interface ConfigProp {
