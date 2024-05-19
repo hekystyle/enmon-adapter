@@ -9,8 +9,8 @@ export const enmonIntegrationBaseConfigSchema = z.object({
 
 export type EnmonIntegrationBaseConfig = z.infer<typeof enmonIntegrationBaseConfigSchema>;
 
-export const configEnmonSchema = z
-  .object({
-    devEUI: z.string(),
-  })
-  .merge(enmonIntegrationBaseConfigSchema.partial());
+export const configEnmonSchema = enmonIntegrationBaseConfigSchema.partial().extend({
+  devEUI: z.string(),
+});
+
+export type ConfigEnmon = z.infer<typeof configEnmonSchema>;
