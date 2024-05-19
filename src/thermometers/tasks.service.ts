@@ -1,5 +1,5 @@
 import { Inject, Injectable, type OnApplicationBootstrap } from '@nestjs/common';
-import { CronExpression, SchedulerRegistry } from '@nestjs/schedule';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { randomUUID } from 'crypto';
 import { configProvider, type Config } from '../config/index.js';
@@ -7,6 +7,7 @@ import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
 import { ThermometerUNI1xxx } from './ThermometerUNI1xxx.js';
+import { CronExpression } from '../cron/expression.js';
 
 @Injectable()
 export class TasksService implements OnApplicationBootstrap {
@@ -28,7 +29,7 @@ export class TasksService implements OnApplicationBootstrap {
       const jobLogger = this.logger.extend(jobName);
 
       jobLogger.log({ msg: 'creating cron job' });
-      const job = new CronJob(CronExpression.EVERY_MINUTE, () => {
+      const job = new CronJob(CronExpression.Every15Minutes, () => {
         const tickLogger = jobLogger.extend(randomUUID());
         tickLogger.log({ msg: 'tick' });
         const { model } = thermometerConfig;
