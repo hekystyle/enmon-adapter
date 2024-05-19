@@ -1,7 +1,13 @@
 import { ConfigThermometer } from '../config/schemas.js';
 
 export interface Thermometer {
-  model: string;
+  readonly model: string;
 
-  handleTemperature(config: ConfigThermometer): Promise<void>;
+  getTemperatures(config: ConfigThermometer): Promise<number[]>;
+}
+
+export interface TemperaturesUploader {
+  readonly integrationId: string;
+
+  upload(temperatures: number[], config: ConfigThermometer): Promise<void>;
 }

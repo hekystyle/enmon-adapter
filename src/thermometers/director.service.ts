@@ -5,12 +5,12 @@ import { randomUUID } from 'crypto';
 import { configProvider, type Config, ConfigThermometer } from '../config/index.js';
 import { AlsValues, Host } from '../als/values-host.js';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
-import { Thermometer } from './interfaces.js';
-import { THERMOMETERS_TOKEN } from './constants.js';
-import { CronExpression } from '../cron/expression.js';
+import { Thermometer, TemperaturesUploader } from './interfaces.js';
+import { THERMOMETERS_TOKEN, TEMPERATURE_UPLOADERS_TOKEN } from './constants.js';
+import { AppCronExpression } from '../cron/expression.js';
 
 @Injectable()
-export class TasksService {
+export class DirectorService {
   constructor(
     private readonly logger: ContextAwareLogger,
     @Inject(configProvider.provide)
@@ -18,11 +18,13 @@ export class TasksService {
     private readonly als: AsyncLocalStorage<Host<AlsValues>>,
     @Inject(THERMOMETERS_TOKEN)
     private readonly thermometers: Thermometer[],
+    @Inject(TEMPERATURE_UPLOADERS_TOKEN)
+    private readonly uploaders: TemperaturesUploader[],
   ) {
-    logger.setContext(TasksService.name);
+    logger.setContext(DirectorService.name);
   }
 
-  @Cron(CronExpression.Every15Minutes)
+  @Cron(AppCronExpression.EVERY_15_MINUTES)
   handleCron(): void {
     this.logger.log({ message: 'iterating over thermometers' });
 
@@ -55,8 +57,21 @@ export class TasksService {
 
     if (!thermometer) {
       this.logger.error({ message: 'thermometer not found', model });
+      return;
     }
 
-    await thermometer?.handleTemperature(thermometerConfig);
+    const temperatures = await thermometer.getTemperatures(thermometerConfig);
+
+    await this.uploadTemperatures(temperatures, thermometerConfig);
+  }
+
+  private async uploadTemperatures(temperatures: number[], config: ConfigThermometer): Promise<void> {
+    await Promise.all(
+      this.uploaders.map(uploader =>
+        uploader
+          .upload(temperatures, config)
+          .catch((error: unknown) => this.logger.error({ message: 'Temperatures upload filed', config, error })),
+      ),
+    );
   }
 }

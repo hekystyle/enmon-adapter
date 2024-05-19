@@ -7,7 +7,7 @@ import { randomUUID } from 'crypto';
 import { configProvider, type Config, ConfigWattrouter } from '../config/index.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
-import { CronExpression } from '../cron/expression.js';
+import { AppCronExpression } from '../cron/expression.js';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
 import { AlsValues, Host } from '../als/values-host.js';
 
@@ -24,7 +24,7 @@ export class WATTrouterService {
     logger.setContext(WATTrouterService.name);
   }
 
-  @Cron(CronExpression.Every15Minutes)
+  @Cron(AppCronExpression.EVERY_15_MINUTES)
   public handleCron() {
     this.logger.debug({ method: this.handleCron.name });
 

@@ -2,27 +2,18 @@ import axios from 'axios';
 import { load } from 'cheerio';
 import { Injectable } from '@nestjs/common';
 import { type ConfigThermometer } from '../config/index.js';
-import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
+import { Thermometer } from './interfaces.js';
 
 @Injectable()
-export class ThermometerUNI7xxx {
+export class ThermometerUNI7xxx implements Thermometer {
   readonly model = 'UNI7xxx';
 
-  constructor(
-    private readonly logger: ContextAwareLogger,
-    private readonly enmonApiClient: EnmonApiClient,
-  ) {
+  constructor(private readonly logger: ContextAwareLogger) {
     logger.setContext(ThermometerUNI7xxx.name);
   }
 
-  public async handleTemperature(config: ConfigThermometer) {
-    const temperatures = await this.fetchTemperature(config);
-
-    await this.uploadTemperatures(temperatures, config);
-  }
-
-  private async fetchTemperature(config: ConfigThermometer): Promise<number[]> {
+  async getTemperatures(config: ConfigThermometer): Promise<number[]> {
     this.logger.log({ message: 'fetching temperature meter HTML page' });
 
     const {
@@ -74,29 +65,5 @@ export class ThermometerUNI7xxx {
 
       return parsedValue;
     });
-  }
-
-  private async uploadTemperatures(temperatures: number[], config: ConfigThermometer): Promise<void> {
-    const { devEUI } = config.enmon;
-
-    await Promise.all(
-      temperatures.map(async (temperature, index) => {
-        const payload = {
-          devEUI,
-          date: new Date(),
-          value: temperature,
-          meterRegister: `20-1.0.${index}`,
-        } as const;
-
-        this.logger.log({ message: 'uploading temperature ...', payload });
-
-        const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-          config: config.enmon,
-          payload,
-        });
-
-        this.logger.log({ message: 'upload temperature result', payload, status, statusText, data });
-      }),
-    );
   }
 }
