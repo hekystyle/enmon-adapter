@@ -1,16 +1,29 @@
 import { z } from 'zod';
 import { EnmonEnv } from './env.js';
 
-export const enmonIntegrationBaseConfigSchema = z.object({
-  env: z.nativeEnum(EnmonEnv),
-  customerId: z.string(),
-  token: z.string(),
-});
+export const enmonIntegrationConfigSchema = z
+  .object({
+    env: z.nativeEnum(EnmonEnv),
+    customerId: z.string(),
+    dataSourceId: z.string().optional(),
+    /**
+     * @deprecated Use `dataSourceId` instead.
+     */
+    devEUI: z.string(),
+    token: z.string(),
+  })
+  .transform(({ devEUI, ...config }, ctx) => {
+    const dataSourceId = config.dataSourceId ?? devEUI;
+    if (!dataSourceId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: '`dataSourceId` must be provided',
+        path: ['dataSourceId'],
+      });
+      return z.NEVER;
+    }
 
-export type EnmonIntegrationBaseConfig = z.infer<typeof enmonIntegrationBaseConfigSchema>;
+    return { ...config, dataSourceId };
+  });
 
-export const configEnmonSchema = enmonIntegrationBaseConfigSchema.partial().extend({
-  devEUI: z.string(),
-});
-
-export type ConfigEnmon = z.infer<typeof configEnmonSchema>;
+export type EnmonIntegrationConfig = z.infer<typeof enmonIntegrationConfigSchema>;

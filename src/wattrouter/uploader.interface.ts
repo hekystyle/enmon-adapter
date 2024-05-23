@@ -1,8 +1,7 @@
-import { ConfigWattrouter } from '../config/schemas.js';
-import { Values } from './adapter.interfaces.js';
+import { WATTrouterValues } from './adapter.interfaces.js';
 
-export interface WATTrouterUploader {
+export interface WATTrouterUploader<TConfig = unknown> {
   readonly integrationId: string;
 
-  upload(measurement: Values, config: ConfigWattrouter): Promise<void>;
+  upload(measurement: WATTrouterValues, config: TConfig): Promise<void>;
 }

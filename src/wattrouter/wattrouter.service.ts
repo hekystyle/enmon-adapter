@@ -3,11 +3,11 @@ import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { AsyncLocalStorage } from 'async_hooks';
 import { randomUUID } from 'crypto';
-import { configProvider, type Config, ConfigWattrouter } from '../config/index.js';
+import { configProvider, type Config, ConfigWATTrouter } from '../config/index.js';
 import { AppCronExpression } from '../cron/expression.js';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
 import { AlsValues, Host } from '../als/values-host.js';
-import { WATTRouterUploadersHost } from './uploaders.host.js';
+import { WATTrouterUploadersHost } from './uploaders.host.js';
 import { WATTrouterAdaptersHost } from './adapters.host.js';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class WATTrouterService {
     private readonly config: Config,
     private readonly als: AsyncLocalStorage<Host<AlsValues>>,
     private readonly adapters: WATTrouterAdaptersHost,
-    private readonly uploadersHost: WATTRouterUploadersHost,
+    private readonly uploadersHost: WATTrouterUploadersHost,
   ) {
     logger.setContext(WATTrouterService.name);
   }
@@ -27,10 +27,10 @@ export class WATTrouterService {
   public handleCron() {
     this.logger.debug({ method: this.handleCron.name });
 
-    [this.config.wattrouter].forEach(this.processConfig.bind(this));
+    this.config.wattrouters.forEach(this.processConfig.bind(this));
   }
 
-  private processConfig(config: ConfigWattrouter, index: number) {
+  private processConfig(config: ConfigWATTrouter, index: number) {
     this.als
       .run(
         new Host<AlsValues>({
@@ -58,7 +58,7 @@ export class WATTrouterService {
     }
   }
 
-  private async sendValuesToIntegrations(config: ConfigWattrouter) {
+  private async sendValuesToIntegrations(config: ConfigWATTrouter) {
     this.logger.debug(this.sendValuesToIntegrations.name);
 
     const selectedAdapter = this.adapters.ref.find(adapter => adapter.model === config.model);
@@ -72,9 +72,13 @@ export class WATTrouterService {
     const values = await selectedAdapter.getValues(config);
 
     await Promise.all(
-      this.uploadersHost.ref.map(uploader =>
-        uploader.upload(values, config).catch(reason => this.handleRejection(reason)),
-      ),
+      this.uploadersHost.ref
+        .map(uploader =>
+          config.integrations.map(integrationConfig =>
+            uploader.upload(values, integrationConfig).catch(reason => this.handleRejection(reason)),
+          ),
+        )
+        .flat(),
     );
 
     this.logger.log('WATTrouter values uploaded');

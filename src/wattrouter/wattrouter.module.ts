@@ -3,7 +3,7 @@ import { DiscoveryModule } from '@nestjs/core';
 import { WATTrouterService } from './wattrouter.service.js';
 import { wattRouterApiClientProvider } from './mx-api-client.provider.js';
 import { EnmonModule } from '../enmon/enmon.module.js';
-import { WATTRouterUploadersHost } from './uploaders.host.js';
+import { WATTrouterUploadersHost } from './uploaders.host.js';
 import { WATTrouterAdaptersHost } from './adapters.host.js';
 import { WATTrouterMxAdapter } from './mx.adapter.js';
 
@@ -14,7 +14,7 @@ import { WATTrouterMxAdapter } from './mx.adapter.js';
     wattRouterApiClientProvider,
     WATTrouterMxAdapter,
     WATTrouterAdaptersHost,
-    WATTRouterUploadersHost,
+    WATTrouterUploadersHost,
   ],
   exports: [],
 })

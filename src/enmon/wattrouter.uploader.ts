@@ -3,10 +3,10 @@ import { Decimal } from 'decimal.js';
 import { WATTrouterUploader } from '../wattrouter/uploader.interface.js';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
 import { EnmonApiClient } from './ApiClient.js';
-import { Values } from '../wattrouter/adapter.interfaces.js';
-import { ConfigWattrouter } from '../config/schemas.js';
+import { WATTrouterValues } from '../wattrouter/adapter.interfaces.js';
 import { INTEGRATION_ID } from './constants.js';
 import { IsWATTrouterUploader } from '../wattrouter/uploader.decorator.js';
+import { EnmonIntegrationConfig } from './config.schema.js';
 
 @Injectable()
 @IsWATTrouterUploader()
@@ -18,7 +18,7 @@ export class EnmonWATTRouterUploader implements WATTrouterUploader {
     private readonly enmonApiClient: EnmonApiClient,
   ) {}
 
-  public async upload(values: Values, config: ConfigWattrouter) {
+  public async upload(values: WATTrouterValues, config: EnmonIntegrationConfig) {
     const { SAH4, SAL4, SAP4, SAS4, voltageL1 } = values;
     this.logger.log({
       message: 'fetched WATTrouter stats & measurement',
@@ -29,7 +29,7 @@ export class EnmonWATTRouterUploader implements WATTrouterUploader {
       voltageL1,
     });
 
-    const { devEUI } = config.enmon;
+    const { dataSourceId } = config;
 
     const registersCounters = [
       [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
@@ -47,10 +47,10 @@ export class EnmonWATTRouterUploader implements WATTrouterUploader {
     this.logger.log('posting consumption counters to Enmon...');
 
     const result = await this.enmonApiClient.postMeterPlainCounterMulti({
-      config: config.enmon,
+      config,
       payload: registersCounters.map(([meterRegister, counter]) => ({
         date: new Date(),
-        devEUI,
+        devEUI: dataSourceId,
         meterRegister,
         counter,
       })),
@@ -65,10 +65,10 @@ export class EnmonWATTRouterUploader implements WATTrouterUploader {
     this.logger.log({ message: 'posting voltage on phase L1 to Enmon...', payload });
 
     const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-      config: config.enmon,
+      config,
       payload: {
         date: new Date(),
-        devEUI,
+        devEUI: dataSourceId,
         ...payload,
       },
     });

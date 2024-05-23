@@ -4,7 +4,7 @@ import { WATTrouterUploader } from './uploader.interface.js';
 import { WATT_ROUTER_UPLOADER_KEY } from './uploader.decorator.js';
 
 @Injectable()
-export class WATTRouterUploadersHost {
+export class WATTrouterUploadersHost {
   public readonly ref: readonly WATTrouterUploader[];
 
   constructor(discovery: DiscoveryService, reflector: Reflector) {
@@ -18,9 +18,9 @@ export class WATTRouterUploadersHost {
       .map(provider => provider.instance as WATTrouterUploader);
 
     if (services.length === 0) {
-      Logger.warn('No uploaders found', WATTRouterUploadersHost.name);
+      Logger.warn('No uploaders found', WATTrouterUploadersHost.name);
     } else {
-      Logger.log(`Found ${services.length} uploaders`, WATTRouterUploadersHost.name);
+      Logger.log(`Found ${services.length} uploaders`, WATTrouterUploadersHost.name);
     }
 
     this.ref = services;

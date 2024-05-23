@@ -1,9 +1,9 @@
 import assert from 'node:assert';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-import { EnmonIntegrationBaseConfig } from './config.schema.js';
+import { EnmonIntegrationConfig } from './config.schema.js';
 
 interface ConfigProp {
-  config: Partial<EnmonIntegrationBaseConfig> | undefined;
+  config: Partial<EnmonIntegrationConfig> | undefined;
 }
 
 type PlainDataPoint = {
@@ -33,7 +33,7 @@ export interface PostMeterPlainValueArgs extends ConfigProp {
 }
 
 export class EnmonApiClient {
-  constructor(public readonly config: EnmonIntegrationBaseConfig | undefined) {}
+  constructor(public readonly config: EnmonIntegrationConfig | undefined) {}
 
   async postMeterPlainCounterMulti(args: PostMeterCounterArgs): Promise<PostMeterPlainCounterMultiResult> {
     const { payload, config } = args;
@@ -42,7 +42,7 @@ export class EnmonApiClient {
 
     assert(
       selectedCustomerId,
-      `${'customerId' satisfies keyof EnmonIntegrationBaseConfig} must be set globally or passed as a parameter`,
+      `${'customerId' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
     );
 
     const result = await this.http(config).post<PostMeterPlainCounterMultiResult>(
@@ -62,7 +62,7 @@ export class EnmonApiClient {
 
     assert(
       selectedCustomerId,
-      `${'customerId' satisfies keyof EnmonIntegrationBaseConfig} must be set globally or passed as a parameter`,
+      `${'customerId' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
     );
 
     return await this.http(config).post<void>(`meter/plain/${selectedCustomerId}/value`, payload, {
@@ -70,17 +70,17 @@ export class EnmonApiClient {
     });
   }
 
-  private http(config: Partial<EnmonIntegrationBaseConfig> | undefined): AxiosInstance {
+  private http(config: Partial<EnmonIntegrationConfig> | undefined): AxiosInstance {
     const selectedEnv = this.config?.env ?? config?.env;
     const selectedToken = this.config?.token ?? config?.token;
 
     assert(
       selectedEnv,
-      `${'env' satisfies keyof EnmonIntegrationBaseConfig} must be set globally or passed as a parameter`,
+      `${'env' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
     );
     assert(
       selectedToken,
-      `${'token' satisfies keyof EnmonIntegrationBaseConfig} must be set globally or passed as a parameter`,
+      `${'token' satisfies keyof EnmonIntegrationConfig} must be set globally or passed as a parameter`,
     );
 
     return axios.create({

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ContextAwareLogger } from '../log/context-aware.logger.js';
 import { WATTrouterMxApiClient } from './mx-api-client.js';
-import { Values, WATTrouterAdapter } from './adapter.interfaces.js';
+import { WATTrouterValues, WATTrouterAdapter } from './adapter.interfaces.js';
 import { IsWATTrouterAdapter } from './adapter.decorator.js';
 import { WATTRouterModel } from './model.enum.js';
 
@@ -17,7 +17,7 @@ export class WATTrouterMxAdapter implements WATTrouterAdapter {
     logger.setContext(WATTrouterMxAdapter.name);
   }
 
-  public async getValues(): Promise<Values> {
+  public async getValues(): Promise<WATTrouterValues> {
     this.logger.debug({ method: this.getValues.name });
 
     this.logger.log('fetching wattrouter stats & measurements...');
