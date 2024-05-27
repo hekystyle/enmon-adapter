@@ -58,13 +58,15 @@ export class WATTrouterService {
       registersCounters,
     });
 
+    const readAt = new Date();
+
     try {
       const result = await this.enmonApiClient.postMeterPlainCounterMulti({
         env,
         customerId,
         token,
         payload: registersCounters.map(([meterRegister, counter]) => ({
-          date: new Date(),
+          date: readAt,
           devEUI,
           meterRegister,
           counter,
