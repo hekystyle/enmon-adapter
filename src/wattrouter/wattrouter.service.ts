@@ -100,7 +100,7 @@ export class WATTrouterService {
         customerId,
         token,
         payload: {
-          date: new Date(),
+          date: readAt,
           devEUI,
           ...payload,
         },
