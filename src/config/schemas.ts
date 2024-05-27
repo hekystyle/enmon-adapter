@@ -40,4 +40,5 @@ export const configSchema = z.object({
   wattrouter: configWattrouterSchema,
 });
 
+export type InputConfig = z.input<typeof configSchema>;
 export type Config = z.infer<typeof configSchema>;
