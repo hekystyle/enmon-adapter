@@ -43,8 +43,6 @@ export class WATTrouterService {
       voltageL1: measurements.VAC,
     });
 
-    const { env, customerId, token, devEUI } = this.config.wattrouter.enmon;
-
     const registersCounters = [
       [`1-1.8.0`, Decimal.sub(SAP4, SAS4).toNumber()], // consumption of own production
       [`1-1.8.2`, SAH4],
@@ -60,65 +58,71 @@ export class WATTrouterService {
 
     const readAt = new Date();
 
-    try {
-      const result = await this.enmonApiClient.postMeterPlainCounterMulti({
-        env,
-        customerId,
-        token,
-        payload: registersCounters.map(([meterRegister, counter]) => ({
-          date: readAt,
-          devEUI,
-          meterRegister,
-          counter,
-        })),
-      });
-      this.logger.log({ msg: 'post meter plain counter multiple result', result });
-    } catch (e) {
-      if (axios.isAxiosError<unknown>(e)) {
-        const { statusText, status } = e.response ?? {};
-        this.logger.error({
-          msg: 'failed to post multiple meter counters',
-          status,
-          statusText,
-          data: e.response?.data,
-        });
-      } else {
-        throw e;
-      }
-    }
+    await Promise.all(
+      this.config.wattrouter.targets.map(async target => {
+        const { env, customerId, token, devEUI } = target;
 
-    const payload = {
-      meterRegister: `1-32.7.0`, // voltage on phase L1
-      value: measurements.VAC,
-    } as const;
+        try {
+          const result = await this.enmonApiClient.postMeterPlainCounterMulti({
+            env,
+            customerId,
+            token,
+            payload: registersCounters.map(([meterRegister, counter]) => ({
+              date: readAt,
+              devEUI,
+              meterRegister,
+              counter,
+            })),
+          });
+          this.logger.log({ msg: 'post meter plain counter multiple result', result });
+        } catch (e) {
+          if (axios.isAxiosError<unknown>(e)) {
+            const { statusText, status } = e.response ?? {};
+            this.logger.error({
+              msg: 'failed to post multiple meter counters',
+              status,
+              statusText,
+              data: e.response?.data,
+            });
+          } else {
+            throw e;
+          }
+        }
 
-    this.logger.log({ msg: 'voltage on phase L1', payload });
+        const payload = {
+          meterRegister: `1-32.7.0`, // voltage on phase L1
+          value: measurements.VAC,
+        } as const;
 
-    try {
-      const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-        env,
-        customerId,
-        token,
-        payload: {
-          date: readAt,
-          devEUI,
-          ...payload,
-        },
-      });
-      this.logger.log({ msg: 'post meter plain value result', status, statusText, data });
-    } catch (e) {
-      if (axios.isAxiosError<unknown>(e)) {
-        const { statusText, status } = e.response ?? {};
-        this.logger.error({
-          msg: 'failed to post meter value',
-          status,
-          statusText,
-          data: e.response?.data,
-        });
-      } else {
-        throw e;
-      }
-    }
+        this.logger.log({ msg: 'voltage on phase L1', payload });
+
+        try {
+          const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
+            env,
+            customerId,
+            token,
+            payload: {
+              date: readAt,
+              devEUI,
+              ...payload,
+            },
+          });
+          this.logger.log({ msg: 'post meter plain value result', status, statusText, data });
+        } catch (e) {
+          if (axios.isAxiosError<unknown>(e)) {
+            const { statusText, status } = e.response ?? {};
+            this.logger.error({
+              msg: 'failed to post meter value',
+              status,
+              statusText,
+              data: e.response?.data,
+            });
+          } else {
+            throw e;
+          }
+        }
+      }),
+    );
   }
 
   private async getAllTimeStats() {
