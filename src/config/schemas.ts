@@ -19,14 +19,26 @@ const configThermometerSchema = z.object({
 
 export type ConfigThermometer = z.infer<typeof configThermometerSchema>;
 
-const configWattrouterSchema = z.object({
-  baseURL: z.string().url(),
-  enmon: configEnmonSchema,
-});
+const configWattrouterSchema = z
+  .object({
+    baseURL: z.string().url(),
+    /**
+     * @deprecated Use `targets` instead.
+     */
+    enmon: configEnmonSchema.optional(),
+    targets: z.array(configEnmonSchema).optional(),
+  })
+  .transform(({ enmon, targets, ...data }) => {
+    return {
+      ...data,
+      targets: targets ?? (enmon ? [enmon] : []),
+    };
+  });
 
 export const configSchema = z.object({
   thermometers: z.array(configThermometerSchema),
   wattrouter: configWattrouterSchema,
 });
 
+export type InputConfig = z.input<typeof configSchema>;
 export type Config = z.infer<typeof configSchema>;

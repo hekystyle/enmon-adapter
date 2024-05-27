@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker';
 import { expect, it } from 'vitest';
 import { ZodError } from 'zod';
-import { type Config } from './schemas.js';
+import type { Config, InputConfig } from './schemas.js';
 import { EnmonEnv } from '../enmon/ApiClient.js';
 import { parseConfig } from './parse.js';
 import { getError } from '../../tests/utils/getError.js';
 
-const VALID_CONFIG = {
+const VALID_CONFIG_INPUT = {
   thermometers: [
     {
       model: 'UNI1xxx',
@@ -38,12 +38,20 @@ const VALID_CONFIG = {
       token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U',
     },
   },
+} satisfies InputConfig;
+
+const VALID_CONFIG_OUTPUT = {
+  ...VALID_CONFIG_INPUT,
+  wattrouter: {
+    baseURL: VALID_CONFIG_INPUT.wattrouter.baseURL,
+    targets: [VALID_CONFIG_INPUT.wattrouter.enmon],
+  },
 } satisfies Config;
 
-it.each([[VALID_CONFIG]])('should validate example config', async configObj => {
-  const promise = parseConfig(configObj);
+it.each([[VALID_CONFIG_INPUT, VALID_CONFIG_OUTPUT]])('should validate example config', async (input, output) => {
+  const promise = parseConfig(input);
 
-  await expect(promise).resolves.toStrictEqual(configObj);
+  await expect(promise).resolves.toStrictEqual(output);
 });
 
 it.each([
