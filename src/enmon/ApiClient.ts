@@ -75,7 +75,7 @@ export class EnmonApiClient {
 
   private http({ env }: { env?: EnmonEnv | undefined }): AxiosInstance {
     return axios.create({
-      baseURL: `https://${this.env ?? env}.enmon.tech`,
+      baseURL: `https://${env ?? this.env}.enmon.tech`,
     });
   }
 }
