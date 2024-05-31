@@ -73,7 +73,7 @@ jobs:
       - run: tar -cv .yarn/ dist/ .yarnrc.yml package.json yarn.lock | gzip -v -9 > dist-${{ github.sha }}.tar.gz
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist-${{ github.sha }}
           path: dist-${{ github.sha }}.tar.gz
@@ -146,7 +146,7 @@ jobs:
       SHA: ${{ github.sha }}
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist-${{ github.sha }}
 
