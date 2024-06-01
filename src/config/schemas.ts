@@ -35,9 +35,11 @@ const configWattrouterSchema = z
     };
   });
 
+export type ConfigWattRouter = z.infer<typeof configWattrouterSchema>;
+
 export const configSchema = z.object({
   thermometers: z.array(configThermometerSchema),
-  wattrouter: configWattrouterSchema,
+  wattrouter: configWattrouterSchema.nullish(),
 });
 
 export type InputConfig = z.input<typeof configSchema>;

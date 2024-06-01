@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { Decimal } from 'decimal.js';
-import { configProvider, type Config } from '../config/index.js';
+import { ConfigWattRouter, configProvider, type Config } from '../config/index.js';
 import { Logger } from '../logger.js';
 import { EnmonApiClient } from '../enmon/ApiClient.js';
 import { WATTrouterMxApiClient } from './MxApiClient.js';
@@ -24,15 +24,21 @@ export class WATTrouterService {
   @Cron(CronExpression.Every15Minutes)
   public triggerWattRouterValuesHandling() {
     this.logger.log(this.triggerWattRouterValuesHandling.name);
-    this.handleWattRouterValues().catch(reason => this.logger.error(reason));
+
+    if (!this.config.wattrouter) {
+      this.logger.warn('no wattrouter config');
+      return;
+    }
+
+    this.handleWattRouterValues(this.config.wattrouter).catch(reason => this.logger.error(reason));
   }
 
-  private async handleWattRouterValues() {
+  private async handleWattRouterValues(config: ConfigWattRouter) {
     this.logger.log(this.handleWattRouterValues.name);
 
-    const allTimeStats = await this.getAllTimeStats();
+    const allTimeStats = await this.getAllTimeStats(config);
     if (!allTimeStats) return;
-    const measurements = await this.wattRouterApiClient.getMeasurement();
+    const measurements = await this.wattRouterApiClient.getMeasurement(config.baseURL);
     const { SAH4, SAL4, SAP4, SAS4 } = allTimeStats;
     this.logger.log({
       msg: 'fetched wattrouter stats',
@@ -59,7 +65,7 @@ export class WATTrouterService {
     const readAt = new Date();
 
     await Promise.all(
-      this.config.wattrouter.targets.map(async target => {
+      config.targets.map(async target => {
         const { env, customerId, token, devEUI } = target;
 
         try {
@@ -125,9 +131,9 @@ export class WATTrouterService {
     );
   }
 
-  private async getAllTimeStats() {
+  private async getAllTimeStats(config: ConfigWattRouter) {
     try {
-      return await this.wattRouterApiClient.getAllTimeStats();
+      return await this.wattRouterApiClient.getAllTimeStats(config.baseURL);
     } catch (e) {
       if (axios.isAxiosError<unknown>(e)) {
         const { statusText, status } = e.response ?? {};

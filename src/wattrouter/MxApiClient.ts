@@ -1,20 +1,15 @@
-import axios, { type AxiosInstance } from 'axios';
+import { type AxiosInstance } from 'axios';
 import { parseStringPromise } from 'xml2js';
 import { parseAllTimeStats } from './utils/parseAllTimeStats.js';
 import { parseMeasurement } from './utils/parseMeasurement.js';
 import type { AllTimeStats, Measurement } from './schemas.js';
 
 export class WATTrouterMxApiClient {
-  private http: AxiosInstance;
+  constructor(private http: AxiosInstance) {}
 
-  constructor(baseURL: string) {
-    this.http = axios.create({
-      baseURL,
-    });
-  }
-
-  async getAllTimeStats(): Promise<AllTimeStats> {
+  async getAllTimeStats(dataSourceUrl: URL['origin']): Promise<AllTimeStats> {
     const response = await this.http.get<string>('stat_alltime.xml', {
+      baseURL: dataSourceUrl,
       responseType: 'text',
       headers: {
         Accept: 'text/xml',
@@ -24,8 +19,9 @@ export class WATTrouterMxApiClient {
     return await parseAllTimeStats(plain);
   }
 
-  async getMeasurement(): Promise<Measurement> {
+  async getMeasurement(dataSourceUrl: URL['origin']): Promise<Measurement> {
     const response = await this.http.get<string>('meas.xml', {
+      baseURL: dataSourceUrl,
       responseType: 'text',
       headers: {
         Accept: 'text/xml',
