@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import { EnmonEnv } from '../enmon/ApiClient.js';
 
-export const THERMOMETER_MODELS = ['UNI7xxx', 'UNI1xxx'] as const;
-export type ThermometerModel = (typeof THERMOMETER_MODELS)[number];
+export enum ThermometerModel {
+  UNI7xxx = 'UNI7xxx',
+  UNI1xxx = 'UNI1xxx',
+}
 
-const configEnmonSchema = z.object({
+export const configEnmonSchema = z.object({
   env: z.nativeEnum(EnmonEnv),
   customerId: z.string(),
   devEUI: z.string(),
@@ -12,7 +14,7 @@ const configEnmonSchema = z.object({
 });
 
 const configThermometerSchema = z.object({
-  model: z.enum(THERMOMETER_MODELS),
+  model: z.nativeEnum(ThermometerModel),
   dataSourceUrl: z.string().url(),
   enmon: configEnmonSchema,
 });

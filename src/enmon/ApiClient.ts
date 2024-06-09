@@ -69,7 +69,6 @@ export class EnmonApiClient {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      validateStatus: () => true,
     });
   }
 

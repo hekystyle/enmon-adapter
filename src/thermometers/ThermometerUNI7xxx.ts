@@ -1,32 +1,25 @@
 import axios from 'axios';
 import { load } from 'cheerio';
-import { type ConfigThermometer } from '../config/index.js';
+import { Injectable } from '@nestjs/common';
 import { Logger } from '../logger.js';
-import { EnmonApiClient } from '../enmon/ApiClient.js';
+import { Thermometer } from './thermometer.decorator.js';
+import { ThermometerModel } from '../config/schemas.js';
 
+@Injectable()
+@Thermometer(ThermometerModel.UNI7xxx)
 export class ThermometerUNI7xxx {
-  constructor(
-    private readonly logger: Logger,
-    private readonly config: ConfigThermometer,
-    private readonly enmonApiClient: EnmonApiClient,
-  ) {
+  constructor(private readonly logger: Logger) {
     this.logger = logger.extend(ThermometerUNI7xxx.name);
   }
 
-  public async handleTemperature() {
-    const temperatures = await this.fetchTemperature();
-
-    await this.uploadTemperatures(temperatures);
-  }
-
-  private async fetchTemperature(): Promise<number[]> {
+  async fetchTemperatures(dataSourceUrl: string): Promise<number[]> {
     this.logger.log({ msg: 'fetching temperature meter HTML page' });
 
     const {
       status,
       statusText,
       data: html,
-    } = await axios.get<string>(this.config.dataSourceUrl, {
+    } = await axios.get<string>(dataSourceUrl, {
       validateStatus: () => true,
     });
 
@@ -71,31 +64,5 @@ export class ThermometerUNI7xxx {
 
       return parsedValue;
     });
-  }
-
-  private async uploadTemperatures(temperatures: number[]): Promise<void> {
-    const { env, customerId, devEUI, token } = this.config.enmon;
-
-    await Promise.all(
-      temperatures.map(async (temperature, index) => {
-        const payload = {
-          devEUI,
-          date: new Date(),
-          value: temperature,
-          meterRegister: `20-1.0.${index}`,
-        } as const;
-
-        this.logger.log({ msg: 'uploading temperature ...', payload });
-
-        const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
-          env,
-          customerId,
-          token,
-          payload,
-        });
-
-        this.logger.log({ msg: 'upload temperature result', payload, status, statusText, data });
-      }),
-    );
   }
 }

@@ -2,7 +2,7 @@ import type { LoggerService, LogLevel } from '@nestjs/common';
 import type { Debugger } from 'debug';
 
 export class Logger implements LoggerService {
-  private levels: readonly LogLevel[] = ['log', 'error', 'warn'];
+  private levels: readonly LogLevel[] = ['log', 'error', 'warn', 'debug', 'verbose'];
 
   constructor(public readonly instance: Debugger) {}
 
