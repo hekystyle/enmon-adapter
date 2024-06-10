@@ -21,9 +21,11 @@
     "import/prefer-default-export": "off",
     "n/no-missing-import": "off",
     "@typescript-eslint/return-await": ["error", "always"],
-    "@typescript-eslint/member-ordering": ["error"],
+    "@typescript-eslint/member-ordering": "error",
     "@typescript-eslint/no-empty-function": ["error", { "allow": ["private-constructors"] }],
-    "@typescript-eslint/array-type": ["error", { "default": "array-simple", "readonly": "array-simple" }]
+    "@typescript-eslint/array-type": ["error", { "default": "array-simple", "readonly": "array-simple" }],
+    // disabling recommended by https://typescript-eslint.io/rules/no-redeclare/
+    "@typescript-eslint/no-redeclare": "off"
   },
   "overrides": [
     {
