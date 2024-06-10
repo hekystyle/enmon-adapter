@@ -11,15 +11,6 @@ exports[`should reject invalid config 0 1`] = `
     ],
     "received": "undefined",
   },
-  {
-    "code": "invalid_type",
-    "expected": "object",
-    "message": "Required",
-    "path": [
-      "wattrouter",
-    ],
-    "received": "undefined",
-  },
 ]
 `;
 

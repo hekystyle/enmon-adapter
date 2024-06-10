@@ -1,12 +1,15 @@
 import { Process, Processor } from '@nestjs/bull';
 import type { Job } from 'bull';
+import { Inject, Injectable } from '@nestjs/common';
 import { EnmonApiClient } from './ApiClient.js';
 import { READINGS_QUEUE_NAME, UploadJobData } from './readings.queue.js';
 import { Logger } from '../logger.js';
 
 @Processor(READINGS_QUEUE_NAME)
+@Injectable()
 export class ReadingProcessor {
   constructor(
+    @Inject(Logger)
     private logger: Logger,
     private enmonApiClient: EnmonApiClient,
   ) {
