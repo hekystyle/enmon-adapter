@@ -4,7 +4,7 @@ import { AsyncLocalStorage } from 'async_hooks';
 import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME } from './temperatures.queue.js';
 import type { Config, ConfigThermometer } from '../config/schemas.js';
 import { InjectConfig } from '../config/inject-config.decorator.js';
-import { READINGS_QUEUE_NAME, type ReadingsQueue } from '../enmon/readings.queue.js';
+import { READINGS_QUEUE_NAME, UPLOAD_JOB_NAME, type ReadingsQueue } from '../enmon/readings.queue.js';
 import { ThermometersHost } from './thermometers.host.js';
 import { Host } from '../als/host.js';
 
@@ -55,6 +55,7 @@ export class TemperaturesProcessor {
 
     this.logger.log({ msg: `pushing ${readings.length} readings to queue...` });
     const jobs = readings.map(reading => ({
+      name: UPLOAD_JOB_NAME,
       data: {
         reading,
         config: config.enmon,
