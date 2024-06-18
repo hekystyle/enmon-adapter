@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { BullModule, InjectQueue } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bull';
 import { enmonApiClientProvider } from './enmonApiClient.provider.js';
-import { READINGS_QUEUE_NAME, type ReadingsQueue } from './readings.queue.js';
+import { READINGS_QUEUE_NAME } from './readings.queue.js';
 import { ReadingProcessor } from './reading.processor.js';
 
 @Module({
@@ -24,19 +24,4 @@ import { ReadingProcessor } from './reading.processor.js';
   providers: [enmonApiClientProvider, ReadingProcessor],
   exports: [enmonApiClientProvider, BullModule],
 })
-export class EnmonModule {
-  constructor(
-    @InjectQueue(READINGS_QUEUE_NAME)
-    private queue: ReadingsQueue,
-  ) {}
-
-  async onApplicationBootstrap() {
-    const completedJobs = await this.queue.getCompleted();
-    const failedJobs = await this.queue.getFailed();
-
-    completedJobs.concat(failedJobs).forEach(job => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      job.remove();
-    });
-  }
-}
+export class EnmonModule {}
