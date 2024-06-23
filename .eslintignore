@@ -1,7 +1,0 @@
-.github
-.vscode
-.yarn
-coverage
-k8s
-dist
-node_modules
