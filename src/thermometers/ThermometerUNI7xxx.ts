@@ -56,7 +56,7 @@ export class ThermometerUNI7xxx {
     });
 
     return serializedValues.map(serializedValue => {
-      if (!serializedValue) throw new Error(`failed to parse temperature value: ${serializedValue as string}`);
+      if (!serializedValue) throw new Error(`failed to parse temperature value: ${serializedValue}`);
 
       const parsedValue = parseFloat(serializedValue);
 
