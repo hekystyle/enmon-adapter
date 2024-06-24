@@ -48,7 +48,7 @@
     "@nestjs/testing": "10.2.8",
     "@tsconfig/node20": "20.1.4",
     "@tsconfig/strictest": "2.0.3",
-    "@types/config": "3.3.3",
+    "@types/config": "3.3.4",
     "@types/cron": "2.0.1",
     "@types/debug": "4.1.12",
     "@types/node": "20.14.8",
