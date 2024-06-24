@@ -4,5 +4,12 @@
   "labels": ["dependencies"],
   "major": {
     "dependencyDashboardApproval": false
-  }
+  },
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true,
+      "requiredStatusChecks": null
+    }
+  ]
 }
