@@ -2,8 +2,9 @@ import globals from 'globals';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import eslint from '@eslint/js';
+import tslint from 'typescript-eslint';
 import { FlatCompat } from '@eslint/eslintrc';
-import prettier from 'eslint-plugin-prettier/recommended'
+import prettier from 'eslint-plugin-prettier/recommended';
 import n from 'eslint-plugin-n';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,12 +31,10 @@ export default [
   },
   eslint.configs.recommended,
   n.configs['flat/recommended'],
-  ...compat.extends(
-    'airbnb-base',
-    'plugin:@typescript-eslint/recommended-type-checked',
-    'plugin:@typescript-eslint/stylistic-type-checked',
-    'airbnb-typescript/base',
-  ),
+  ...compat.extends('airbnb-base'),
+  ...tslint.configs.recommendedTypeChecked,
+  ...tslint.configs.stylisticTypeChecked,
+  ...compat.extends('airbnb-typescript/base'),
   prettier,
   {
     languageOptions: {
