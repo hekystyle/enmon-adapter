@@ -984,13 +984,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cron@npm:2.0.1":
-  version: 2.0.1
-  resolution: "@types/cron@npm:2.0.1"
+"@types/cron@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@types/cron@npm:2.4.0"
   dependencies:
-    "@types/luxon": "npm:*"
-    "@types/node": "npm:*"
-  checksum: 10c0/7365e21a91be9724dea8298ca9ac3d2769e7207149a66f7d9652033a5d9cb4dc23c2bd2491748c1475572068dd24506101e40c69764991da980d2de3bdaf438a
+    cron: "npm:*"
+  checksum: 10c0/a0deb757122deb6b1395ef328e93d98c8ceb5e9fc37dfce0c1afa13122a1f0e070364cef691f08ffd0e2e817e7b6b8c3160832afa91410302b2c6f8304bca262
   languageName: node
   linkType: hard
 
@@ -1065,17 +1064,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:*":
-  version: 3.0.1
-  resolution: "@types/luxon@npm:3.0.1"
-  checksum: 10c0/435ac43f000748c608e3c8ccdea916ff11cfe61371323602200708abcc94b2101010ddb7251ba6c0a26b3ce32a21c6b4397e24aadeec44863a7ce7c10224e6e4
-  languageName: node
-  linkType: hard
-
 "@types/luxon@npm:~3.3.0":
   version: 3.3.2
   resolution: "@types/luxon@npm:3.3.2"
   checksum: 10c0/6ffa50e6c16bfcc48cd8ba9bc5fb4a8b7582a768809f640b99ce20b1b31d6df301f0610d1f79476366322b163c7c9221c283998b1e9d787659ce742a0dc4b6db
+  languageName: node
+  linkType: hard
+
+"@types/luxon@npm:~3.4.0":
+  version: 3.4.2
+  resolution: "@types/luxon@npm:3.4.2"
+  checksum: 10c0/d835467de3daf7e17ba78b50bb5a14efd94272439ca067990d71332a54b311544459c69623eddd243b511b28d70194c9591a9ee8cf9c038962c965f991affd7e
   languageName: node
   linkType: hard
 
@@ -2548,6 +2547,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cron@npm:*":
+  version: 3.1.7
+  resolution: "cron@npm:3.1.7"
+  dependencies:
+    "@types/luxon": "npm:~3.4.0"
+    luxon: "npm:~3.4.0"
+  checksum: 10c0/c009c79714ae2916233c8cd2700cdda17c9e20d0e8e32eeb6c0d63b8e89bb7c38dbf9f0423f0f6da52d3f054f735aabb988cbe5b25bb55d9c6ca48ed4cfaaaec
+  languageName: node
+  linkType: hard
+
 "cron@npm:3.1.6":
   version: 3.1.6
   resolution: "cron@npm:3.1.6"
@@ -2933,7 +2942,7 @@ __metadata:
     "@tsconfig/node20": "npm:20.1.4"
     "@tsconfig/strictest": "npm:2.0.5"
     "@types/config": "npm:3.3.4"
-    "@types/cron": "npm:2.0.1"
+    "@types/cron": "npm:2.4.0"
     "@types/debug": "npm:4.1.12"
     "@types/node": "npm:20.14.8"
     "@types/supertest": "npm:2.0.16"
