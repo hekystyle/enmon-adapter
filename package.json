@@ -51,7 +51,7 @@
     "@types/config": "3.3.3",
     "@types/cron": "2.0.1",
     "@types/debug": "4.1.12",
-    "@types/node": "20.11.16",
+    "@types/node": "20.14.8",
     "@types/supertest": "2.0.16",
     "@types/xml2js": "0.4.12",
     "@typescript-eslint/eslint-plugin": "6.21.0",
