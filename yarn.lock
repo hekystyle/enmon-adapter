@@ -900,10 +900,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/strictest@npm:2.0.3":
-  version: 2.0.3
-  resolution: "@tsconfig/strictest@npm:2.0.3"
-  checksum: 10c0/a26be4aed831c59b6b362608f34c6f0b2427dc08031176d825e46079090b9e48aa5ff71647b762a9a7009cb898af9b6cd24a195d268e9486fffa93de99de08c6
+"@tsconfig/strictest@npm:2.0.5":
+  version: 2.0.5
+  resolution: "@tsconfig/strictest@npm:2.0.5"
+  checksum: 10c0/cfc86da2d57f7b4b0827701b132c37a4974284e5c40649656c0e474866dfd8a69f57c6718230d8a8139967e2a95438586b8224c13ab0ff9d3a43eda771c50cc4
   languageName: node
   linkType: hard
 
@@ -2835,7 +2835,7 @@ __metadata:
     "@nestjs/schematics": "npm:10.0.3"
     "@nestjs/testing": "npm:10.2.8"
     "@tsconfig/node20": "npm:20.1.4"
-    "@tsconfig/strictest": "npm:2.0.3"
+    "@tsconfig/strictest": "npm:2.0.5"
     "@types/config": "npm:3.3.4"
     "@types/cron": "npm:2.0.1"
     "@types/debug": "npm:4.1.12"
