@@ -2515,7 +2515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cron@npm:*":
+"cron@npm:*, cron@npm:3.1.7":
   version: 3.1.7
   resolution: "cron@npm:3.1.7"
   dependencies:
@@ -2932,7 +2932,7 @@ __metadata:
     bull: "npm:4.12.9"
     cheerio: "npm:1.0.0-rc.12"
     config: "npm:3.3.11"
-    cron: "npm:3.1.6"
+    cron: "npm:3.1.7"
     debug: "npm:4.3.5"
     decimal.js: "npm:10.4.3"
     dotenv: "npm:16.4.5"
