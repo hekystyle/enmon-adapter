@@ -730,16 +730,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/schedule@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@nestjs/schedule@npm:4.0.1"
+"@nestjs/schedule@npm:4.0.2":
+  version: 4.0.2
+  resolution: "@nestjs/schedule@npm:4.0.2"
   dependencies:
-    cron: "npm:3.1.6"
+    cron: "npm:3.1.7"
     uuid: "npm:9.0.1"
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     "@nestjs/core": ^8.0.0 || ^9.0.0 || ^10.0.0
-  checksum: 10c0/dc5c3e3b9528111470223f39de9ece20102e272af39332b436d7eb20a026a29ac00e8cb06facecc7d579456dc325f275c929e8f5801102bcfbaf80f593f9a5e6
+  checksum: 10c0/80af3715f881038abe027418c7e18f99d8ce9abe53373c74ca46e5990b3404896f4b723a86dd7e62e62d8fe2a41db8449e6846b91f38e70a7c35e58b9317bfb3
   languageName: node
   linkType: hard
 
@@ -2515,7 +2515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cron@npm:*":
+"cron@npm:*, cron@npm:3.1.7":
   version: 3.1.7
   resolution: "cron@npm:3.1.7"
   dependencies:
@@ -2904,7 +2904,7 @@ __metadata:
     "@nestjs/cli": "npm:10.3.2"
     "@nestjs/common": "npm:10.3.9"
     "@nestjs/core": "npm:10.3.9"
-    "@nestjs/schedule": "npm:4.0.1"
+    "@nestjs/schedule": "npm:4.0.2"
     "@nestjs/schematics": "npm:10.1.1"
     "@nestjs/testing": "npm:10.3.9"
     "@tsconfig/node20": "npm:20.1.4"
