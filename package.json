@@ -33,7 +33,7 @@
     "cron": "3.1.6",
     "debug": "4.3.4",
     "decimal.js": "10.4.3",
-    "dotenv": "16.3.1",
+    "dotenv": "16.4.5",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1",
     "xml2js": "0.6.2",
