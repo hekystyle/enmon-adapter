@@ -1,6 +1,6 @@
 import { Queue } from 'bull';
 import { z } from 'zod';
-import { configEnmonSchema } from '../config/schemas.js';
+import { configEnmonSchema } from './config.schema.js';
 
 export const Reading = z.object({
   register: z.string(),
@@ -20,3 +20,5 @@ export type UploadJobData = z.infer<typeof UploadJobData>;
 export const READINGS_QUEUE_NAME = 'readings';
 
 export type ReadingsQueue = Queue<UploadJobData>;
+
+export const UPLOAD_JOB_NAME = 'upload';
