@@ -1,17 +1,28 @@
 {
-  thermometer: {
-    enmon: {
-      customerId: "",
-      devEUI: "",
-      token: "",
+  thermometers: [
+    {
+      model: '',
+      dataSourceUrl: '',
+      enmon: {
+        env: 'app',
+        customerId: '',
+        devEUI: '',
+        token: '',
+      },
     },
-  },
-  wattrouter: {
-    baseURL: "",
-    enmon: {
-      customerId: "",
-      devEUI: "",
-      token: "",
+  ],
+  wattrouters: [
+    {
+      model: 'Mx',
+      baseURL: '',
+      targets: [
+        {
+          env: 'app',
+          customerId: '',
+          devEUI: '',
+          token: '',
+        },
+      ],
     },
-  },
+  ],
 }

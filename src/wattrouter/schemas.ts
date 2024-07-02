@@ -56,7 +56,7 @@ export const allTimeStatsSchema = z.object({
 export type AllTimeStats = z.infer<typeof allTimeStatsSchema>;
 
 export const allTimeStatsShapeSchema = z.object({
-  // eslint-disable-next-line camelcase
+  // eslint-disable-next-line camelcase -- can't change the name of the key
   stat_alltime: allTimeStatsSchema,
 });
 

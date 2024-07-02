@@ -28,7 +28,7 @@ import { AlsModule } from './als/als.module.js';
         },
       },
     }),
-    ConfigModule,
+    ConfigModule.forRoot(),
     EnmonModule,
     LogModule,
     ScheduleModule.forRoot(),

@@ -1,17 +1,11 @@
 import { z } from 'zod';
-import { EnmonEnv } from '../enmon/ApiClient.js';
+import { configWattRouterSchema } from '../wattrouter/config.schema.js';
+import { configEnmonSchema } from '../enmon/config.schema.js';
 
 export enum ThermometerModel {
   UNI7xxx = 'UNI7xxx',
   UNI1xxx = 'UNI1xxx',
 }
-
-export const configEnmonSchema = z.object({
-  env: z.nativeEnum(EnmonEnv),
-  customerId: z.string(),
-  devEUI: z.string(),
-  token: z.string(),
-});
 
 const configThermometerSchema = z.object({
   model: z.nativeEnum(ThermometerModel),
@@ -21,28 +15,18 @@ const configThermometerSchema = z.object({
 
 export type ConfigThermometer = z.infer<typeof configThermometerSchema>;
 
-const configWattrouterSchema = z
+export const configSchema = z
   .object({
-    baseURL: z.string().url(),
-    /**
-     * @deprecated Use `targets` instead.
-     */
-    enmon: configEnmonSchema.optional(),
-    targets: z.array(configEnmonSchema).optional(),
+    thermometers: z.array(configThermometerSchema).nullish(),
+    wattrouter: configWattRouterSchema.nullish(),
+    wattrouters: z.array(configWattRouterSchema).nullish(),
   })
-  .transform(({ enmon, targets, ...data }) => {
+  .transform(({ thermometers, wattrouters, wattrouter }) => {
     return {
-      ...data,
-      targets: targets ?? (enmon ? [enmon] : []),
+      thermometers: thermometers ?? [],
+      wattrouters: wattrouters ?? (wattrouter ? [wattrouter] : []),
     };
   });
 
-export type ConfigWattRouter = z.infer<typeof configWattrouterSchema>;
-
-export const configSchema = z.object({
-  thermometers: z.array(configThermometerSchema),
-  wattrouter: configWattrouterSchema.nullish(),
-});
-
 export type InputConfig = z.input<typeof configSchema>;
-export type Config = z.infer<typeof configSchema>;
+export type Config = z.output<typeof configSchema>;

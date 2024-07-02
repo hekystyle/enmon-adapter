@@ -4,20 +4,6 @@ exports[`should reject invalid config 0 1`] = `
 [
   {
     "code": "invalid_type",
-    "expected": "array",
-    "message": "Required",
-    "path": [
-      "thermometers",
-    ],
-    "received": "undefined",
-  },
-]
-`;
-
-exports[`should reject invalid config 1 1`] = `
-[
-  {
-    "code": "invalid_type",
     "expected": "'UNI7xxx' | 'UNI1xxx'",
     "message": "Required",
     "path": [
@@ -62,7 +48,7 @@ exports[`should reject invalid config 1 1`] = `
 ]
 `;
 
-exports[`should reject invalid config 2 1`] = `
+exports[`should reject invalid config 1 1`] = `
 [
   {
     "code": "invalid_enum_value",
@@ -192,7 +178,7 @@ exports[`should reject invalid config 2 1`] = `
 ]
 `;
 
-exports[`should reject invalid config 3 1`] = `
+exports[`should reject invalid config 2 1`] = `
 [
   {
     "code": "invalid_enum_value",

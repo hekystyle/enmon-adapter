@@ -2,19 +2,18 @@ import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
 import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME } from './temperatures.queue.js';
-import type { Config, ConfigThermometer } from '../config/schemas.js';
-import { InjectConfig } from '../config/inject-config.decorator.js';
-import { READINGS_QUEUE_NAME, type ReadingsQueue } from '../enmon/readings.queue.js';
+import type { ConfigThermometer } from '../config/schemas.js';
+import { READINGS_QUEUE_NAME, UPLOAD_JOB_NAME, type ReadingsQueue } from '../enmon/readings.queue.js';
 import { ThermometersHost } from './thermometers.host.js';
-import { Host } from '../als/host.js';
+import { ConfigHost } from '../config/host.js';
+import { Host } from '../common/host.js';
 
 @Processor(TEMPERATURES_QUEUE_NAME)
 export class TemperaturesProcessor {
   private readonly logger = new Logger(TemperaturesProcessor.name);
 
   constructor(
-    @InjectConfig()
-    private readonly config: Config,
+    private readonly configHost: ConfigHost,
     private readonly als: AsyncLocalStorage<Host<{ configIndex: number }>>,
     private readonly thermometers: ThermometersHost,
     @InjectQueue(READINGS_QUEUE_NAME)
@@ -25,7 +24,7 @@ export class TemperaturesProcessor {
   async handleFetchJob() {
     this.logger.log('Handling temperatures fetch job...');
     await Promise.all(
-      this.config.thermometers.map((thermometer, index) =>
+      this.configHost.ref.thermometers.map((thermometer, index) =>
         this.als.run(new Host({ configIndex: index }), () =>
           this.processThermometerConfig(thermometer).catch(reason => this.handleConfigProcessingError(reason)),
         ),
@@ -55,6 +54,7 @@ export class TemperaturesProcessor {
 
     this.logger.log({ msg: `pushing ${readings.length} readings to queue...` });
     const jobs = readings.map(reading => ({
+      name: UPLOAD_JOB_NAME,
       data: {
         reading,
         config: config.enmon,

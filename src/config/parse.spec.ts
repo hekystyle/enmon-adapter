@@ -1,15 +1,16 @@
 import { faker } from '@faker-js/faker';
 import { expect, it } from 'vitest';
 import { ZodError } from 'zod';
-import type { Config, InputConfig } from './schemas.js';
+import { ThermometerModel, type Config, type InputConfig } from './schemas.js';
 import { EnmonEnv } from '../enmon/ApiClient.js';
 import { parseConfig } from './parse.js';
 import { getError } from '../../tests/utils/getError.js';
+import { WATTrouterModel } from '../wattrouter/model.js';
 
 const VALID_CONFIG_INPUT = {
   thermometers: [
     {
-      model: 'UNI1xxx',
+      model: ThermometerModel.UNI1xxx,
       dataSourceUrl: 'http://10.0.0.0',
       enmon: {
         customerId: faker.database.mongodbObjectId(),
@@ -19,7 +20,7 @@ const VALID_CONFIG_INPUT = {
       },
     },
     {
-      model: 'UNI7xxx',
+      model: ThermometerModel.UNI7xxx,
       dataSourceUrl: `http://10.0.0.0`,
       enmon: {
         customerId: faker.database.mongodbObjectId(),
@@ -41,11 +42,14 @@ const VALID_CONFIG_INPUT = {
 } satisfies InputConfig;
 
 const VALID_CONFIG_OUTPUT = {
-  ...VALID_CONFIG_INPUT,
-  wattrouter: {
-    baseURL: VALID_CONFIG_INPUT.wattrouter.baseURL,
-    targets: [VALID_CONFIG_INPUT.wattrouter.enmon],
-  },
+  thermometers: VALID_CONFIG_INPUT.thermometers,
+  wattrouters: [
+    {
+      model: WATTrouterModel.Mx,
+      baseURL: VALID_CONFIG_INPUT.wattrouter.baseURL,
+      targets: [VALID_CONFIG_INPUT.wattrouter.enmon],
+    },
+  ],
 } satisfies Config;
 
 it.each([[VALID_CONFIG_INPUT, VALID_CONFIG_OUTPUT]])('should validate example config', async (input, output) => {
@@ -55,7 +59,6 @@ it.each([[VALID_CONFIG_INPUT, VALID_CONFIG_OUTPUT]])('should validate example co
 });
 
 it.each([
-  [{}],
   [
     {
       thermometer: {},
