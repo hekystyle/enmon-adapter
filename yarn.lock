@@ -759,16 +759,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/schedule@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@nestjs/schedule@npm:4.0.1"
+"@nestjs/schedule@npm:4.1.0":
+  version: 4.1.0
+  resolution: "@nestjs/schedule@npm:4.1.0"
   dependencies:
-    cron: "npm:3.1.6"
-    uuid: "npm:9.0.1"
+    cron: "npm:3.1.7"
+    uuid: "npm:10.0.0"
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     "@nestjs/core": ^8.0.0 || ^9.0.0 || ^10.0.0
-  checksum: 10c0/dc5c3e3b9528111470223f39de9ece20102e272af39332b436d7eb20a026a29ac00e8cb06facecc7d579456dc325f275c929e8f5801102bcfbaf80f593f9a5e6
+  checksum: 10c0/ac9dced5c1f3cff7740ba4e05e8f7d66fd5ed6e22de7aa071415c40245d217d49d4195f925eff65260a7d531588e4dc19a5c90370a454c1ebef50a4cb0c5fa13
   languageName: node
   linkType: hard
 
@@ -1147,13 +1147,6 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 10c0/6bf5337bc447b706bb5b4431d37686aa2ea6d07cfd6f79cc31de80170d6ff9b1c7384a9c0ccbc45b3f512bae9e9f75c2e12109806a15331dc94e8a8db6dbb4ac
-  languageName: node
-  linkType: hard
-
-"@types/luxon@npm:~3.3.0":
-  version: 3.3.2
-  resolution: "@types/luxon@npm:3.3.2"
-  checksum: 10c0/6ffa50e6c16bfcc48cd8ba9bc5fb4a8b7582a768809f640b99ce20b1b31d6df301f0610d1f79476366322b163c7c9221c283998b1e9d787659ce742a0dc4b6db
   languageName: node
   linkType: hard
 
@@ -2664,16 +2657,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cron@npm:3.1.6":
-  version: 3.1.6
-  resolution: "cron@npm:3.1.6"
-  dependencies:
-    "@types/luxon": "npm:~3.3.0"
-    luxon: "npm:~3.4.0"
-  checksum: 10c0/f8328ce1052531bc14372acbfbddb38db33b30b29ac878d574b317779160b2947c9315c81dccb8a33724418cd86440a92269055037c96a2e917c867d57274009
-  languageName: node
-  linkType: hard
-
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
@@ -3045,7 +3028,7 @@ __metadata:
     "@nestjs/cli": "npm:10.4.0"
     "@nestjs/common": "npm:10.3.10"
     "@nestjs/core": "npm:10.3.10"
-    "@nestjs/schedule": "npm:4.0.1"
+    "@nestjs/schedule": "npm:4.1.0"
     "@nestjs/schematics": "npm:10.1.2"
     "@nestjs/testing": "npm:10.3.10"
     "@tsconfig/node20": "npm:20.1.4"
@@ -7823,12 +7806,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:9.0.1":
-  version: 9.0.1
-  resolution: "uuid@npm:9.0.1"
+"uuid@npm:10.0.0":
+  version: 10.0.0
+  resolution: "uuid@npm:10.0.0"
   bin:
     uuid: dist/bin/uuid
-  checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
+  checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
   languageName: node
   linkType: hard
 
