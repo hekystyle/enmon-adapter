@@ -27,7 +27,7 @@
     "@nestjs/core": "10.3.10",
     "@nestjs/schedule": "4.0.1",
     "axios": "1.7.2",
-    "bull": "4.12.9",
+    "bull": "4.15.1",
     "cheerio": "1.0.0-rc.12",
     "config": "3.3.11",
     "cron": "3.1.7",

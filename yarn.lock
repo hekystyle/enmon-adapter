@@ -2190,9 +2190,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bull@npm:4.12.9":
-  version: 4.12.9
-  resolution: "bull@npm:4.12.9"
+"bull@npm:4.15.1":
+  version: 4.15.1
+  resolution: "bull@npm:4.15.1"
   dependencies:
     cron-parser: "npm:^4.2.1"
     get-port: "npm:^5.1.1"
@@ -2201,7 +2201,7 @@ __metadata:
     msgpackr: "npm:^1.10.1"
     semver: "npm:^7.5.2"
     uuid: "npm:^8.3.0"
-  checksum: 10c0/e4b7bf6fb5969ce0a9b75a42dbea391c6c4ca545a9b641491d9f81a253149bde712c57aee8ee1d7d1eaafb9228a49d9a33234ac82ae30c2464b6306d0c0f4150
+  checksum: 10c0/086ecb2a48a8457cdc5c6be185fbd9113f424d134223ed873477a4256ea498db4c125aed18ca729633a10178f599cdd9a10c2d63bebb581bce6359cf58a780a9
   languageName: node
   linkType: hard
 
@@ -3058,7 +3058,7 @@ __metadata:
     "@types/xml2js": "npm:0.4.12"
     "@vitest/coverage-v8": "npm:1.6.0"
     axios: "npm:1.7.2"
-    bull: "npm:4.12.9"
+    bull: "npm:4.15.1"
     cheerio: "npm:1.0.0-rc.12"
     config: "npm:3.3.11"
     cron: "npm:3.1.7"
