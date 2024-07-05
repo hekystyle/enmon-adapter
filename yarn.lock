@@ -672,9 +672,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/cli@npm:10.4.1":
-  version: 10.4.1
-  resolution: "@nestjs/cli@npm:10.4.1"
+"@nestjs/cli@npm:10.4.2":
+  version: 10.4.2
+  resolution: "@nestjs/cli@npm:10.4.2"
   dependencies:
     "@angular-devkit/core": "npm:17.3.8"
     "@angular-devkit/schematics": "npm:17.3.8"
@@ -689,11 +689,10 @@ __metadata:
     inquirer: "npm:8.2.6"
     node-emoji: "npm:1.11.0"
     ora: "npm:5.4.1"
-    source-map-support: "npm:0.5.21"
     tree-kill: "npm:1.2.2"
     tsconfig-paths: "npm:4.2.0"
     tsconfig-paths-webpack-plugin: "npm:4.1.0"
-    typescript: "npm:5.5.3"
+    typescript: "npm:5.3.3"
     webpack: "npm:5.92.1"
     webpack-node-externals: "npm:3.0.0"
   peerDependencies:
@@ -706,7 +705,7 @@ __metadata:
       optional: true
   bin:
     nest: bin/nest.js
-  checksum: 10c0/2132dab48c76a9558f736b7b4e17ca9b20ad0b706f98b7780d1067fda69f34b3ae5ffaf778f7c92b07cb09f92d7dee4ed67b93e4ba5d703fc1ebe5603f9d17c8
+  checksum: 10c0/d023084090ba41cef410e7f32938a4dc9d2c21324d38935894065dfbfbb93690330d2686d541e7574466798cdf1e35d2f2f635bd9ae7e81b119abfdced6a27a4
   languageName: node
   linkType: hard
 
@@ -3042,7 +3041,7 @@ __metadata:
     "@eslint/js": "npm:9.6.0"
     "@faker-js/faker": "npm:8.4.1"
     "@nestjs/bull": "npm:10.1.1"
-    "@nestjs/cli": "npm:10.4.1"
+    "@nestjs/cli": "npm:10.4.2"
     "@nestjs/common": "npm:10.3.10"
     "@nestjs/core": "npm:10.3.10"
     "@nestjs/schedule": "npm:4.0.1"
@@ -7686,6 +7685,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:5.3.3":
+  version: 5.3.3
+  resolution: "typescript@npm:5.3.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/e33cef99d82573624fc0f854a2980322714986bc35b9cb4d1ce736ed182aeab78e2cb32b385efa493b2a976ef52c53e20d6c6918312353a91850e2b76f1ea44f
+  languageName: node
+  linkType: hard
+
 "typescript@npm:5.5.3":
   version: 5.5.3
   resolution: "typescript@npm:5.5.3"
@@ -7693,6 +7702,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/f52c71ccbc7080b034b9d3b72051d563601a4815bf3e39ded188e6ce60813f75dbedf11ad15dd4d32a12996a9ed8c7155b46c93a9b9c9bad1049766fe614bbdd
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>":
+  version: 5.3.3
+  resolution: "typescript@patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/1d0a5f4ce496c42caa9a30e659c467c5686eae15d54b027ee7866744952547f1be1262f2d40de911618c242b510029d51d43ff605dba8fb740ec85ca2d3f9500
   languageName: node
   linkType: hard
 
