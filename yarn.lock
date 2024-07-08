@@ -2573,12 +2573,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"config@npm:3.3.11":
-  version: 3.3.11
-  resolution: "config@npm:3.3.11"
+"config@npm:3.3.12":
+  version: 3.3.12
+  resolution: "config@npm:3.3.12"
   dependencies:
     json5: "npm:^2.2.3"
-  checksum: 10c0/c0e1e855aa3e15c764e469f4da0e84df64fe182e135c3fa820f875950b5eed6d8357b6ec5587cb71130655d4a63d07d95b48d96659f09abf0d9c87b768649c92
+  checksum: 10c0/496b3ef740754527cbc59d11df234f5be5b5f44511d14ca7fa6117fda0959ccd4cc6d8da2d94cb0dfcdf77d9d7aaaa34558d6dcce0a7860a3a8cf8a54c77b237
   languageName: node
   linkType: hard
 
@@ -3054,7 +3054,7 @@ __metadata:
     axios: "npm:1.7.2"
     bull: "npm:4.12.9"
     cheerio: "npm:1.0.0-rc.12"
-    config: "npm:3.3.11"
+    config: "npm:3.3.12"
     cron: "npm:3.1.7"
     debug: "npm:4.3.5"
     decimal.js: "npm:10.4.3"
