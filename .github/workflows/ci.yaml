@@ -16,21 +16,25 @@ concurrency:
 jobs:
   install:
     runs-on: ubuntu-22.04
+    outputs:
+      pkgman: "pnpm"
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20.11.x
-          cache: "yarn"
+          cache: "pnpm"
 
       - name: Restore node_modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: pnpm-v1-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - run: yarn install --immutable
+      - run: pnpm install --frozen-lockfile
 
   lint:
     needs: [install]
@@ -38,18 +42,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20.11.x
-          cache: "yarn"
+          cache: ${{ needs.install.outputs.pkgman }}
 
       - name: Restore node_modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: ${{ needs.install.outputs.pkgman }}-v1-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - run: yarn run lint
+      - run: ${{ needs.install.outputs.pkgman }} run lint
 
   build:
     needs: [install]
@@ -57,20 +63,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20.11.x
-          cache: "yarn"
+          cache: ${{ needs.install.outputs.pkgman }}
 
       - name: Restore node_modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: ${{ needs.install.outputs.pkgman }}-v1-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - run: yarn build
+      - run: ${{ needs.install.outputs.pkgman }} build
 
-      - run: tar -cv .yarn/ dist/ .yarnrc.yml package.json yarn.lock | gzip -v -9 > dist-${{ github.sha }}.tar.gz
+      - run: tar -cv dist/ package.json pnpm-lock.yaml | gzip -v -9 > dist-${{ github.sha }}.tar.gz
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -89,7 +97,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: pnpm-v1-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -119,23 +127,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20.11.x
-          cache: "yarn"
+          cache: ${{ needs.install.outputs.pkgman }}
 
       - name: Restore node_modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          key: ${{ needs.install.outputs.pkgman }}-v1-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - run: yarn run test
-
-      - uses: codecov/codecov-action@v4
-        with:
-          fail_ci_if_error: false
-          verbose: true
+      - run: ${{ needs.install.outputs.pkgman }} run test
 
   deploy:
     needs: [install, lint, build, test]
@@ -164,7 +169,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           envs: SHA
-          command_timeout: 20m
+          command_timeout: 5m
           script_stop: true
           script: |
             cd /opt/enmon-middleman
@@ -182,7 +187,7 @@ jobs:
             rm -f dist-$SHA.tar.gz
 
             echo "Installing dependencies"
-            yarn workspaces focus --all --production
+            pnpm i -P --frozen-lockfile
 
             echo "Restarting service"
             sudo systemctl restart enmon-middleman
