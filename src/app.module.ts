@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 import { BullModule } from '@nestjs/bull';
 import { ConfigModule } from './config/config.module.js';
 import { EnmonModule } from './enmon/enmon.module.js';
@@ -31,7 +30,6 @@ import { AlsModule } from './als/als.module.js';
     ConfigModule.forRoot(),
     EnmonModule,
     LogModule,
-    ScheduleModule.forRoot(),
     ThermometersModule,
     WATTrouterModule,
   ],
