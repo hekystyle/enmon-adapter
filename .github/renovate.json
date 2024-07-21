@@ -1,10 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:js-app"],
   "labels": ["dependencies"],
-  "major": {
-    "dependencyDashboardApproval": false
-  },
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
