@@ -6,6 +6,7 @@ import tslint from 'typescript-eslint';
 import { FlatCompat } from '@eslint/eslintrc';
 import prettier from 'eslint-plugin-prettier/recommended';
 import n from 'eslint-plugin-n';
+import vitest from 'eslint-plugin-vitest';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,10 +75,10 @@ export default [
       '@typescript-eslint/no-redeclare': 'off',
     },
   },
-  ...compat.extends('plugin:vitest/recommended').map(config => ({
-    ...config,
+  {
+    ...vitest.configs.recommended,
     files: ['**/*.spec.ts', '**/*.test.ts', '**/vitest.config.ts'],
-  })),
+  },
   {
     files: ['**/*.spec.ts', '**/*.test.ts', '**/vitest.config.ts'],
 
