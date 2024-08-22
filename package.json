@@ -22,7 +22,7 @@
     "test": "vitest --coverage"
   },
   "dependencies": {
-    "@nestjs/bull": "10.1.1",
+    "@nestjs/bull": "10.2.1",
     "@nestjs/common": "10.3.10",
     "@nestjs/core": "10.3.10",
     "axios": "1.7.4",
