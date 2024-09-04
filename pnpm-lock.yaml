@@ -79,8 +79,8 @@ importers:
         specifier: 2.0.5
         version: 2.0.5
       '@types/config':
-        specifier: 3.3.4
-        version: 3.3.4
+        specifier: 3.3.5
+        version: 3.3.5
       '@types/debug':
         specifier: 4.1.12
         version: 4.1.12
@@ -659,8 +659,8 @@ packages:
   '@tsconfig/strictest@2.0.5':
     resolution: {integrity: sha512-ec4tjL2Rr0pkZ5hww65c+EEPYwxOi4Ryv+0MtjeaSQRJyq322Q27eOQiFbuNgw2hpL4hB1/W/HBGk3VKS43osg==}
 
-  '@types/config@3.3.4':
-    resolution: {integrity: sha512-qFiTLnWy+TdPSMIXFHP+87lFXFRM4SXjRS+CSB66+56TrpLNw003y1sh7DGaaC1NGesxgKoT5FDy6dyA1Xju/g==}
+  '@types/config@3.3.5':
+    resolution: {integrity: sha512-itq2HtXQBrNUKwMNZnb9mBRE3T99VYCdl1gjST9rq+9kFaB1iMMGuDeZnP88qid73DnpAMKH9ZolqDpS1Lz7+w==}
 
   '@types/cookiejar@2.1.5':
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
@@ -3362,7 +3362,7 @@ snapshots:
 
   '@tsconfig/strictest@2.0.5': {}
 
-  '@types/config@3.3.4': {}
+  '@types/config@3.3.5': {}
 
   '@types/cookiejar@2.1.5': {}
 
