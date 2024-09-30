@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   install:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       pkgman: "pnpm"
     steps:
@@ -38,7 +38,7 @@ jobs:
 
   lint:
     needs: [install]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -59,7 +59,7 @@ jobs:
 
   build:
     needs: [install]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -89,7 +89,7 @@ jobs:
   build_docker:
     if: ${{ false }}
     needs: [install]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -123,7 +123,7 @@ jobs:
 
   test:
     needs: [install]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -144,7 +144,7 @@ jobs:
 
   deploy:
     needs: [install, lint, build, test]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: ${{ github.event_name == 'push' && ( github.ref_name == 'deploy' || github.ref_name == 'master' ) }}
     environment: production
     env:
