@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { WinstonModule } from 'nest-winston';
+import winston from 'winston';
 import { EnmonModule } from './enmon/enmon.module.js';
 import { ThermometersModule } from './thermometers/thermometers.module.js';
 import { WATTrouterModule } from './wattrouter/wattrouter.module.js';
-import { LogModule } from './log/log.module.js';
 import { AlsModule } from './als/als.module.js';
 import configuration from './config/configuration.js';
+import { Config } from './config/schemas.js';
 
 @Module({
   imports: [
@@ -33,7 +35,15 @@ import configuration from './config/configuration.js';
       load: [configuration],
     }),
     EnmonModule,
-    LogModule,
+    WinstonModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Config, true>) => ({
+        transports: new winston.transports.Console(),
+        format: config.getOrThrow('DEV', { infer: true })
+          ? winston.format.prettyPrint({ colorize: true })
+          : winston.format.json(),
+      }),
+    }),
     ThermometersModule,
     WATTrouterModule,
   ],

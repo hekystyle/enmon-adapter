@@ -2,12 +2,12 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { Logger as NativeLogger } from '@nestjs/common';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module.js';
-import { Logger } from './logger.js';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
-  app.useLogger(app.get(Logger));
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   await app.init();
   NativeLogger.log('Application initialized', bootstrap.name);
 }

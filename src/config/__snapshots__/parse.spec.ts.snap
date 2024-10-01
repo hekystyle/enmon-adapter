@@ -4,6 +4,15 @@ exports[`should reject invalid config 0 1`] = `
 [
   {
     "code": "invalid_type",
+    "expected": "boolean",
+    "message": "Required",
+    "path": [
+      "DEV",
+    ],
+    "received": "undefined",
+  },
+  {
+    "code": "invalid_type",
     "expected": "'UNI7xxx' | 'UNI1xxx'",
     "message": "Required",
     "path": [
@@ -50,6 +59,15 @@ exports[`should reject invalid config 0 1`] = `
 
 exports[`should reject invalid config 1 1`] = `
 [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "message": "Required",
+    "path": [
+      "DEV",
+    ],
+    "received": "undefined",
+  },
   {
     "code": "invalid_enum_value",
     "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'",
@@ -180,6 +198,15 @@ exports[`should reject invalid config 1 1`] = `
 
 exports[`should reject invalid config 2 1`] = `
 [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "message": "Required",
+    "path": [
+      "DEV",
+    ],
+    "received": "undefined",
+  },
   {
     "code": "invalid_enum_value",
     "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'",

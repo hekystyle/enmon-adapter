@@ -27,7 +27,7 @@ export class WATTrouterValuesProcessor {
   async handleFetchJob(job: Job<unknown>) {
     this.logger.log(`handling fetch job...`);
 
-    const configs = this.config.get('wattrouters', { infer: true });
+    const configs = this.config.getOrThrow('wattrouters', { infer: true });
 
     if (configs.length === 0) {
       this.logger.warn('no wattrouters configured');
@@ -42,12 +42,12 @@ export class WATTrouterValuesProcessor {
           ),
         ),
       );
-      this.logger.log({ msg: `job processed` });
+      this.logger.log(`job processed`);
     });
   }
 
   private async processConfig(config: ConfigWattRouter) {
-    this.logger.log({ msg: `processing config...` });
+    this.logger.log(`processing config...`);
 
     const defaultModel = WATTrouterModel.Mx;
 
@@ -62,7 +62,7 @@ export class WATTrouterValuesProcessor {
       return;
     }
 
-    this.logger.log({ msg: `fetching values from ${config.baseURL}...` });
+    this.logger.log(`fetching values from ${config.baseURL}...`);
 
     const { SAH4, SAL4, SAP4, SAS4, VAC } = await adapter.fetchValues(config.baseURL);
 
@@ -84,11 +84,11 @@ export class WATTrouterValuesProcessor {
       ),
     );
 
-    this.logger.log({ msg: 'config processed' });
+    this.logger.log('config processed');
   }
 
   private async processTarget(target: ConfigWattRouter['targets'][number], readings: readonly Reading[]) {
-    this.logger.log({ msg: `mapping ${readings.length} readings to jobs...` });
+    this.logger.log(`mapping ${readings.length} readings to jobs...`);
 
     const jobs = readings.map(reading => ({
       name: UPLOAD_JOB_NAME,
@@ -98,18 +98,18 @@ export class WATTrouterValuesProcessor {
       },
     }));
 
-    this.logger.log({ msg: `pushing ${jobs.length} jobs to queue...` });
+    this.logger.log(`pushing ${jobs.length} jobs to queue...`);
 
     await this.readingsQueue.addBulk(jobs);
 
-    this.logger.log({ msg: 'jobs pushed to queue' });
+    this.logger.log('jobs pushed to queue');
   }
 
   private handleTargetProcessingError(error: unknown) {
-    this.logger.error('error occurred while processing a target', error);
+    this.logger.error(error);
   }
 
   private handleConfigProcessingError(error: unknown) {
-    this.logger.error('error occurred while processing a config', error);
+    this.logger.error(error);
   }
 }

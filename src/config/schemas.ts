@@ -17,14 +17,16 @@ export type ConfigThermometer = z.infer<typeof configThermometerSchema>;
 
 export const configSchema = z
   .object({
+    DEV: z.boolean(),
     thermometers: z.array(configThermometerSchema).nullish(),
     wattrouter: configWattRouterSchema.nullish(),
     wattrouters: z.array(configWattRouterSchema).nullish(),
   })
-  .transform(({ thermometers, wattrouters, wattrouter }) => {
+  .transform(({ thermometers, wattrouters, wattrouter, ...rest }) => {
     return {
       thermometers: thermometers ?? [],
       wattrouters: wattrouters ?? (wattrouter ? [wattrouter] : []),
+      ...rest,
     };
   });
 

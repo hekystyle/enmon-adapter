@@ -8,6 +8,7 @@ import { getError } from '../../tests/utils/getError.js';
 import { WATTrouterModel } from '../wattrouter/model.js';
 
 const VALID_CONFIG_INPUT = {
+  DEV: true,
   thermometers: [
     {
       model: ThermometerModel.UNI1xxx,
@@ -42,6 +43,7 @@ const VALID_CONFIG_INPUT = {
 } satisfies InputConfig;
 
 const VALID_CONFIG_OUTPUT = {
+  DEV: VALID_CONFIG_INPUT.DEV,
   thermometers: VALID_CONFIG_INPUT.thermometers,
   wattrouters: [
     {

@@ -32,7 +32,7 @@ export class ThermometersModule implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    if (this.config.get('thermometers', { infer: true }).length === 0) {
+    if (this.config.getOrThrow('thermometers', { infer: true }).length === 0) {
       this.logger.warn('No thermometers configured!');
     }
 

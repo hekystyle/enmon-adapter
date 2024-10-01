@@ -33,7 +33,7 @@ export class WATTrouterModule implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    if (this.config.get('wattrouters', { infer: true }).length === 0) {
+    if (this.config.getOrThrow('wattrouters', { infer: true }).length === 0) {
       this.logger.warn('No thermometers configured!');
     }
 
