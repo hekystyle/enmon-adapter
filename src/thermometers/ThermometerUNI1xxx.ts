@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Injectable } from '@nestjs/common';
-import { Logger } from '../logger.js';
+import { Injectable, Logger } from '@nestjs/common';
 import { parseTemperature } from './utils/parseTemp.js';
 import { ThermometerModel } from '../config/schemas.js';
 import { Thermometer } from './thermometer.decorator.js';
@@ -8,9 +7,7 @@ import { Thermometer } from './thermometer.decorator.js';
 @Injectable()
 @Thermometer(ThermometerModel.UNI1xxx)
 export class ThermometerUNI1xxx {
-  constructor(private readonly logger: Logger) {
-    this.logger = logger.extend(ThermometerUNI1xxx.name);
-  }
+  private readonly logger = new Logger(ThermometerUNI1xxx.name);
 
   async fetchTemperatures(dataSourceUrl: string): Promise<number[]> {
     const {
@@ -22,7 +19,7 @@ export class ThermometerUNI1xxx {
     });
 
     this.logger.log({
-      msg: 'fetch temperature meter HTML page',
+      message: 'fetch temperature meter HTML page',
       status,
       statusText,
       html: status !== 200 ? html : '<hidden>',
@@ -33,7 +30,7 @@ export class ThermometerUNI1xxx {
     const serializedValue = parseTemperature(html);
 
     this.logger.log({
-      msg: 'founded serialized temperature value',
+      message: 'founded serialized temperature value',
       serialized: serializedValue,
     });
 
@@ -41,7 +38,7 @@ export class ThermometerUNI1xxx {
     const temperature = parseFloat(serializedValue);
 
     this.logger.log({
-      msg: 'parsed temperature value',
+      message: 'parsed temperature value',
       parsed: temperature,
     });
 

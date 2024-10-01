@@ -35,7 +35,7 @@ export class TemperaturesProcessor {
   }
 
   private async processThermometerConfig(config: ConfigThermometer) {
-    this.logger.log({ msg: `Processing thermometer config` });
+    this.logger.log(`Processing thermometer config`);
 
     const thermometer = this.thermometers.getByModel(config.model);
 
@@ -54,7 +54,7 @@ export class TemperaturesProcessor {
       readAt: readAt.toISOString(),
     }));
 
-    this.logger.log({ msg: `pushing ${readings.length} readings to queue...` });
+    this.logger.log(`pushing ${readings.length} readings to queue...`);
     const jobs = readings.map(reading => ({
       name: UPLOAD_JOB_NAME,
       data: {
@@ -63,10 +63,10 @@ export class TemperaturesProcessor {
       },
     }));
     await this.readingsQueue.addBulk(jobs);
-    this.logger.log({ msg: 'readings pushed to queue' });
+    this.logger.log('readings pushed to queue');
   }
 
   private handleConfigProcessingError(error: unknown) {
-    this.logger.error('An error occurred while processing a thermometer config', error);
+    this.logger.error(error);
   }
 }
