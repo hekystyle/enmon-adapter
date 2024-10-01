@@ -97,8 +97,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1(vitest@2.1.1(@types/node@20.16.10)(terser@5.31.2))
       '@vitest/eslint-plugin':
-        specifier: 1.0.1
-        version: 1.0.1(eslint@8.57.1)(typescript@5.6.2)(vitest@2.1.1(@types/node@20.16.10)(terser@5.31.2))
+        specifier: 1.1.4
+        version: 1.1.4(eslint@8.57.1)(typescript@5.6.2)(vitest@2.1.1(@types/node@20.16.10)(terser@5.31.2))
       eslint:
         specifier: 8.57.1
         version: 8.57.1
@@ -774,8 +774,8 @@ packages:
       '@vitest/browser':
         optional: true
 
-  '@vitest/eslint-plugin@1.0.1':
-    resolution: {integrity: sha512-albpL56cL9XMwHJWCWZqjDxkuDkBXBF3WpPGOv6q2WA3cipCP41cKEwfSGktoRNGmPN77wuX452O8pM+z+ApNw==}
+  '@vitest/eslint-plugin@1.1.4':
+    resolution: {integrity: sha512-kudjgefmJJ7xQ2WfbUU6pZbm7Ou4gLYRaao/8Ynide3G0QhVKHd978sDyWX4KOH0CCMH9cyrGAkFd55eGzJ48Q==}
     peerDependencies:
       '@typescript-eslint/utils': '>= 8.0'
       eslint: '>= 8.57.0'
@@ -3471,7 +3471,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/eslint-plugin@1.0.1(eslint@8.57.1)(typescript@5.6.2)(vitest@2.1.1(@types/node@20.16.10)(terser@5.31.2))':
+  '@vitest/eslint-plugin@1.1.4(eslint@8.57.1)(typescript@5.6.2)(vitest@2.1.1(@types/node@20.16.10)(terser@5.31.2))':
     dependencies:
       eslint: 8.57.1
     optionalDependencies:
