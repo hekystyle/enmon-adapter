@@ -104,7 +104,7 @@ dist
 .tern-port
 
 # config
-config/local.json5
+config/local.*
 
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 .pnp.*
