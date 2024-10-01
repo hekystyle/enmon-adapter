@@ -1,10 +1,16 @@
 import { Global, Module } from '@nestjs/common';
-import { testConfigProvider } from './config.provider.js';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './configuration.js';
 
 @Global()
 @Module({
-  imports: [],
-  providers: [testConfigProvider],
-  exports: [testConfigProvider],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
+  ],
+  providers: [],
+  exports: [],
 })
 export class TestConfigModule {}

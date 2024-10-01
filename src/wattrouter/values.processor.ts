@@ -2,20 +2,21 @@ import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
 import type { Job, JobId } from 'bull';
+import { ConfigService } from '@nestjs/config';
 import { READINGS_QUEUE_NAME, Reading, UPLOAD_JOB_NAME, type ReadingsQueue } from '../enmon/readings.queue.js';
 import { Host } from '../common/host.js';
 import { FETCH_JOB_NAME, VALUES_QUEUE_NAME } from './values.queue.js';
 import { WATTroutersDiscovery } from './discovery.service.js';
 import { WATTrouterModel } from './model.js';
-import { ConfigHost } from '../config/host.js';
 import { ConfigWattRouter } from './config.schema.js';
+import { Config } from '../config/schemas.js';
 
 @Processor(VALUES_QUEUE_NAME)
 export class WATTrouterValuesProcessor {
   private readonly logger = new Logger(WATTrouterValuesProcessor.name);
 
   constructor(
-    private readonly configHost: ConfigHost,
+    private readonly config: ConfigService<Config, true>,
     private readonly als: AsyncLocalStorage<Host<{ jobId?: JobId; configIndex?: number; targetIndex?: number }>>,
     private readonly adapters: WATTroutersDiscovery,
     @InjectQueue(READINGS_QUEUE_NAME)
@@ -24,7 +25,9 @@ export class WATTrouterValuesProcessor {
 
   @Process(FETCH_JOB_NAME)
   async handleFetchJob(job: Job<unknown>) {
-    const configs = this.configHost.ref.wattrouters;
+    this.logger.log(`handling fetch job...`);
+
+    const configs = this.config.get('wattrouters', { infer: true });
 
     if (configs.length === 0) {
       this.logger.warn('no wattrouters configured');
@@ -32,8 +35,6 @@ export class WATTrouterValuesProcessor {
     }
 
     await this.als.run(new Host({ jobId: job.id }), async () => {
-      this.logger.log({ msg: `handling job...` });
-
       await Promise.all(
         configs.map((config, index) =>
           this.als.run(new Host({ ...this.als.getStore(), configIndex: index }), () =>
