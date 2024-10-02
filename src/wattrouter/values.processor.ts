@@ -1,40 +1,40 @@
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
-import type { Job, JobId } from 'bull';
+import { Define, Queue } from 'agenda-nest';
 import { ConfigService } from '@nestjs/config';
-import { READINGS_QUEUE_NAME, Reading, UPLOAD_JOB_NAME, type ReadingsQueue } from '../enmon/readings.queue.js';
+import { Reading } from '../enmon/upload-reading.schema.js';
 import { Host } from '../common/host.js';
-import { FETCH_JOB_NAME, VALUES_QUEUE_NAME } from './values.queue.js';
 import { WATTroutersDiscovery } from './discovery.service.js';
 import { WATTrouterModel } from './model.js';
 import { ConfigWattRouter } from './config.schema.js';
+import { UploadReadingRepository } from '../enmon/upload-reading.repository.js';
+import { FETCH_JOB_NAME, WATTROUTER_QUEUE_NAME } from './constants.js';
 import { Config } from '../config/schemas.js';
 
-@Processor(VALUES_QUEUE_NAME)
+@Injectable()
+@Queue(WATTROUTER_QUEUE_NAME)
 export class WATTrouterValuesProcessor {
   private readonly logger = new Logger(WATTrouterValuesProcessor.name);
 
   constructor(
     private readonly config: ConfigService<Config, true>,
-    private readonly als: AsyncLocalStorage<Host<{ jobId?: JobId; configIndex?: number; targetIndex?: number }>>,
+    private readonly als: AsyncLocalStorage<Host<{ configIndex?: number; targetIndex?: number }>>,
     private readonly adapters: WATTroutersDiscovery,
-    @InjectQueue(READINGS_QUEUE_NAME)
-    private readonly readingsQueue: ReadingsQueue,
+    private readonly uploadJobQueue: UploadReadingRepository,
   ) {}
 
-  @Process(FETCH_JOB_NAME)
-  async handleFetchJob(job: Job<unknown>) {
-    this.logger.log(`handling fetch job...`);
+  @Define(FETCH_JOB_NAME)
+  async handleFetchJob() {
+    this.logger.log('processing fetch job...');
 
     const configs = this.config.getOrThrow('wattrouters', { infer: true });
 
     if (configs.length === 0) {
-      this.logger.warn('no wattrouters configured');
+      this.logger.warn('no WATTrouters configured!');
       return;
     }
 
-    await this.als.run(new Host({ jobId: job.id }), async () => {
+    await this.als.run(new Host({}), async () => {
       await Promise.all(
         configs.map((config, index) =>
           this.als.run(new Host({ ...this.als.getStore(), configIndex: index }), () =>
@@ -42,8 +42,9 @@ export class WATTrouterValuesProcessor {
           ),
         ),
       );
-      this.logger.log(`job processed`);
     });
+
+    this.logger.log(`job completed`);
   }
 
   private async processConfig(config: ConfigWattRouter) {
@@ -62,11 +63,11 @@ export class WATTrouterValuesProcessor {
       return;
     }
 
-    this.logger.log(`fetching values from ${config.baseURL}...`);
+    this.logger.log(`fetching values from ${config.baseURL} ...`);
 
-    const { SAH4, SAL4, SAP4, SAS4, VAC } = await adapter.fetchValues(config.baseURL);
+    const { SAH4, SAL4, SAP4, SAS4, VAC } = await adapter.getValues(config.baseURL);
 
-    const readAt = new Date().toISOString();
+    const readAt = new Date();
 
     const readings: Reading[] = [
       { readAt, register: `1-1.8.2`, value: SAH4 },
@@ -91,18 +92,19 @@ export class WATTrouterValuesProcessor {
     this.logger.log(`mapping ${readings.length} readings to jobs...`);
 
     const jobs = readings.map(reading => ({
-      name: UPLOAD_JOB_NAME,
-      data: {
-        reading,
-        config: target,
-      },
+      reading,
+      config: target,
     }));
 
     this.logger.log(`pushing ${jobs.length} jobs to queue...`);
 
-    await this.readingsQueue.addBulk(jobs);
+    await this.uploadJobQueue.addBulk(jobs);
 
     this.logger.log('jobs pushed to queue');
+
+    await this.uploadJobQueue.scheduleInstantProcessing();
+
+    this.logger.log('target processed');
   }
 
   private handleTargetProcessingError(error: unknown) {

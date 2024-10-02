@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { BullModule } from '@nestjs/bull';
+import { MongooseModule } from '@nestjs/mongoose';
+import { AgendaModule } from 'agenda-nest';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import winston from 'winston';
@@ -12,27 +13,26 @@ import { Config } from './config/schemas.js';
 
 @Module({
   imports: [
+    AgendaModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Config, true>) => ({
+        processEvery: '15 seconds',
+        db: {
+          address: config.get('db.uri', { infer: true }),
+        },
+      }),
+    }),
     AlsModule.forRoot(),
-    BullModule.forRoot({
-      prefix: 'enmon-adapter',
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
-      defaultJobOptions: {
-        removeOnComplete: {
-          // 30 days
-          age: 1000 * 60 * 60 * 24 * 30,
-        },
-        removeOnFail: {
-          // 30 days
-          age: 1000 * 60 * 60 * 24 * 30,
-        },
-      },
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Config, true>) => ({
+        uri: config.get('db.uri', { infer: true }),
+      }),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+      cache: false,
     }),
     EnmonModule,
     WinstonModule.forRootAsync({

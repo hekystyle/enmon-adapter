@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { Logger as NativeLogger } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';

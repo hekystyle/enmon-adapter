@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { load } from 'cheerio';
 import { Injectable, Logger } from '@nestjs/common';
-import { Thermometer } from './thermometer.decorator.js';
-import { ThermometerModel } from '../config/schemas.js';
+import { Adapter } from './adapter.decorator.js';
+import { ThermometerModel } from './model.enum.js';
+import { IAdapter } from './adapter.interface.js';
 
 @Injectable()
-@Thermometer(ThermometerModel.UNI7xxx)
-export class ThermometerUNI7xxx {
+@Adapter(ThermometerModel.UNI7xxx)
+export class ThermometerUNI7xxx implements IAdapter {
   private readonly logger = new Logger(ThermometerUNI7xxx.name);
 
-  async fetchTemperatures(dataSourceUrl: string): Promise<number[]> {
+  async getTemperatures(dataSourceUrl: string): Promise<number[]> {
     this.logger.log('fetching temperature meter HTML page');
 
     const {

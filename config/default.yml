@@ -1,0 +1,2 @@
+db:
+  uri: "mongodb://db/enmon-adapter"

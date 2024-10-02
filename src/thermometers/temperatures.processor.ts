@@ -1,41 +1,50 @@
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
+import { Define, Queue } from 'agenda-nest';
 import { ConfigService } from '@nestjs/config';
-import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME } from './temperatures.queue.js';
-import type { Config, ConfigThermometer } from '../config/schemas.js';
-import { READINGS_QUEUE_NAME, UPLOAD_JOB_NAME, type ReadingsQueue } from '../enmon/readings.queue.js';
-import { ThermometersHost } from './thermometers.host.js';
+import type { Config } from '../config/schemas.js';
+import { ThermometersDiscovery } from './discovery.service.js';
 import { Host } from '../common/host.js';
+import { UploadReadingRepository } from '../enmon/upload-reading.repository.js';
+import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME } from './constants.js';
+import { ConfigThermometer } from './config.schema.js';
 
-@Processor(TEMPERATURES_QUEUE_NAME)
+@Injectable()
+@Queue(TEMPERATURES_QUEUE_NAME)
 export class TemperaturesProcessor {
   private readonly logger = new Logger(TemperaturesProcessor.name);
 
   constructor(
     private readonly config: ConfigService<Config, true>,
     private readonly als: AsyncLocalStorage<Host<{ configIndex: number }>>,
-    private readonly thermometers: ThermometersHost,
-    @InjectQueue(READINGS_QUEUE_NAME)
-    private readonly readingsQueue: ReadingsQueue,
+    private readonly thermometers: ThermometersDiscovery,
+    private readonly uploadDataRepository: UploadReadingRepository,
   ) {}
 
-  @Process(FETCH_JOB_NAME)
+  @Define(FETCH_JOB_NAME)
   async handleFetchJob() {
-    this.logger.log('Handling temperatures fetch job...');
+    this.logger.log('processing fetch job...');
+
+    const thermometers = this.config.get('thermometers', { infer: true });
+
+    if (thermometers.length === 0) {
+      this.logger.warn('no thermometers configured!');
+      return;
+    }
+
     await Promise.all(
-      this.config
-        .get('thermometers', { infer: true })
-        .map((thermometer, index) =>
-          this.als.run(new Host({ configIndex: index }), () =>
-            this.processThermometerConfig(thermometer).catch(reason => this.handleConfigProcessingError(reason)),
-          ),
+      thermometers.map((thermometer, index) =>
+        this.als.run(new Host({ configIndex: index }), () =>
+          this.processThermometerConfig(thermometer).catch(reason => this.handleConfigProcessingError(reason)),
         ),
+      ),
     );
+
+    this.logger.log('fetch job completed');
   }
 
   private async processThermometerConfig(config: ConfigThermometer) {
-    this.logger.log(`Processing thermometer config`);
+    this.logger.log(`processing thermometer config...`);
 
     const thermometer = this.thermometers.getByModel(config.model);
 
@@ -44,26 +53,29 @@ export class TemperaturesProcessor {
       return;
     }
 
-    const temperatures = await thermometer.fetchTemperatures(config.dataSourceUrl);
+    const temperatures = await thermometer.getTemperatures(config.dataSourceUrl);
 
     const readAt = new Date();
 
     const readings = temperatures.map((temp, index) => ({
       register: `20-1.0.${index}`,
       value: temp,
-      readAt: readAt.toISOString(),
+      readAt,
     }));
 
     this.logger.log(`pushing ${readings.length} readings to queue...`);
     const jobs = readings.map(reading => ({
-      name: UPLOAD_JOB_NAME,
-      data: {
-        reading,
-        config: config.enmon,
-      },
+      reading,
+      config: config.enmon,
     }));
-    await this.readingsQueue.addBulk(jobs);
+
+    await this.uploadDataRepository.addBulk(jobs);
+
     this.logger.log('readings pushed to queue');
+
+    await this.uploadDataRepository.scheduleInstantProcessing();
+
+    this.logger.log('thermometer config processed');
   }
 
   private handleConfigProcessingError(error: unknown) {

@@ -1,24 +1,33 @@
-FROM node:lts-alpine as base
+FROM node:lts-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-COPY . /workspace
 WORKDIR /workspace
 
-FROM base as prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm install --frozen-lockfile --prod
-
-FROM base as build
+FROM base AS deps
+COPY package.json pnpm-lock.yaml ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
+
+FROM deps AS build
+WORKDIR /workspace
+COPY src src
+COPY tsconfig.build.json tsconfig.json ./
 RUN pnpm run build
 
-FROM node:lts-alpine as runtime
+FROM deps AS pruned
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm --filter enmon-adapter --prod deploy pruned
+
+FROM node:lts-alpine AS runtime
+LABEL org.opencontainers.image.source=https://github.com/hekystyle/enmon-adapter
 WORKDIR /app
-COPY --from=build /workspace/dist /workspace/package.json ./
-COPY --from=prod-deps /workspace/node_modules ./node_modules
 
-ENV DEBUG=app
+ENV NODE_ENV=production
+ENV DEBUG=app*
 
-CMD [ "node", "index.js" ]
+COPY --from=build /workspace/dist .
+COPY --from=pruned /workspace/pruned .
+COPY config/default.yml config/default.yml
+
+CMD ["node", "main.js"]

@@ -1,34 +1,28 @@
-import { Inject, Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
-import { BullModule, InjectQueue } from '@nestjs/bull';
+import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
+import { AgendaModule, InjectQueue } from 'agenda-nest';
+import { Agenda, Job } from 'agenda';
 import { ConfigService } from '@nestjs/config';
 import { EnmonModule } from '../enmon/enmon.module.js';
-import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME, type TemperaturesQueue } from './temperatures.queue.js';
-import { ThermometersHost } from './thermometers.host.js';
+import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME } from './constants.js';
+import { ThermometersDiscovery } from './discovery.service.js';
 import { TemperaturesProcessor } from './temperatures.processor.js';
 import { ThermometerUNI1xxx } from './ThermometerUNI1xxx.js';
 import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
 import { Config } from '../config/schemas.js';
 
 @Module({
-  imports: [
-    DiscoveryModule,
-    EnmonModule,
-    BullModule.registerQueue({
-      name: TEMPERATURES_QUEUE_NAME,
-    }),
-  ],
-  providers: [ThermometersHost, TemperaturesProcessor, ThermometerUNI1xxx, ThermometerUNI7xxx],
+  imports: [AgendaModule.registerQueue(TEMPERATURES_QUEUE_NAME), DiscoveryModule, EnmonModule],
+  providers: [ThermometersDiscovery, TemperaturesProcessor, ThermometerUNI1xxx, ThermometerUNI7xxx],
   exports: [],
 })
 export class ThermometersModule implements OnApplicationBootstrap {
   private readonly logger = new Logger(ThermometersModule.name);
 
   constructor(
-    @Inject(ConfigService)
     private readonly config: ConfigService<Config, true>,
     @InjectQueue(TEMPERATURES_QUEUE_NAME)
-    private readonly temperaturesQueue: TemperaturesQueue,
+    private queue: Agenda,
   ) {}
 
   async onApplicationBootstrap() {
@@ -36,15 +30,9 @@ export class ThermometersModule implements OnApplicationBootstrap {
       this.logger.warn('No thermometers configured!');
     }
 
-    this.logger.log('Adding repeatable fetch job to temperatures queue...');
-    await this.temperaturesQueue.add(FETCH_JOB_NAME, undefined, {
-      repeat: {
-        every:
-          process.env['NODE_ENV'] === 'development'
-            ? 1 * 60 * 1000 // 1 minute
-            : 15 * 60 * 1000, // 15 minutes
-      },
-    });
-    this.logger.log('Added repeatable fetch job to temperatures queue');
+    const interval = this.config.get('DEV', { infer: true }) ? '1 minute' : '15 minutes';
+    this.logger.log(`Scheduling ${FETCH_JOB_NAME} job every ${interval}...`);
+    const job = (await this.queue.every(interval, FETCH_JOB_NAME)) as Job;
+    this.logger.log(`Scheduled, next run at: ${job.attrs.nextRunAt?.toISOString()}`);
   }
 }

@@ -1,23 +1,13 @@
 import { z } from 'zod';
 import { configWattRouterSchema } from '../wattrouter/config.schema.js';
-import { configEnmonSchema } from '../enmon/config.schema.js';
-
-export enum ThermometerModel {
-  UNI7xxx = 'UNI7xxx',
-  UNI1xxx = 'UNI1xxx',
-}
-
-const configThermometerSchema = z.object({
-  model: z.nativeEnum(ThermometerModel),
-  dataSourceUrl: z.string().url(),
-  enmon: configEnmonSchema,
-});
-
-export type ConfigThermometer = z.infer<typeof configThermometerSchema>;
+import { configThermometerSchema } from '../thermometers/config.schema.js';
 
 export const configSchema = z
   .object({
     DEV: z.boolean(),
+    db: z.object({
+      uri: z.string().url(),
+    }),
     thermometers: z.array(configThermometerSchema).nullish(),
     wattrouter: configWattRouterSchema.nullish(),
     wattrouters: z.array(configWattRouterSchema).nullish(),

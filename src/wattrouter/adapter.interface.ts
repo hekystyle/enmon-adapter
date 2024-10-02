@@ -1,14 +1,17 @@
 import { ConfigWattRouter } from './config.schema.js';
-import { AllTimeStats, Measurement } from './schemas.js';
+import { AllTimeStats } from './all-time-stats.schema.js';
+import { Measurement } from './measurement.schema.js';
 
 export type WATTrouterValues = AllTimeStats & Measurement;
 
-export interface WATTrouter {
-  fetchValues(baseUrl: ConfigWattRouter['baseURL']): Promise<WATTrouterValues>;
+// NOTE: I prefix prevents naming collision with decorator
+/** WATTrouter adapter interface. */
+export interface IAdapter {
+  getValues(baseUrl: ConfigWattRouter['baseURL']): Promise<WATTrouterValues>;
 }
 
-export const isWATTrouter = (adapter: unknown): adapter is WATTrouter =>
+export const isIAdapter = (adapter: unknown): adapter is IAdapter =>
   typeof adapter === 'object' &&
   adapter !== null &&
-  'fetchValues' in adapter &&
-  typeof adapter.fetchValues === 'function';
+  ('getValues' satisfies keyof IAdapter) in adapter &&
+  typeof adapter.getValues === 'function';
