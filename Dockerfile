@@ -24,7 +24,6 @@ LABEL org.opencontainers.image.source=https://github.com/hekystyle/enmon-adapter
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV DEBUG=app*
 
 COPY --from=build /workspace/dist .
 COPY --from=pruned /workspace/pruned .
