@@ -1,0 +1,17 @@
+thermometers:
+  - model: ''
+    dataSourceUrl: ''
+    enmon:
+      env: 'app'
+      customerId: ''
+      devEUI: ''
+      token: ''
+
+wattrouters:
+  - model: 'Mx'
+    baseURL: ''
+    targets:
+      - env: 'app'
+        customerId: ''
+        devEUI: ''
+        token: ''
