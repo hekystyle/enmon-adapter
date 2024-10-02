@@ -104,7 +104,9 @@ dist
 .tern-port
 
 # config
-config/local.*
+config/**
+!config/default.*
+!config/example.local.*
 
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 .pnp.*
