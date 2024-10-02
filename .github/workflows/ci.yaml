@@ -86,8 +86,7 @@ jobs:
           name: dist-${{ github.sha }}
           path: dist-${{ github.sha }}.tar.gz
 
-  build_docker:
-    if: ${{ false }}
+  docker_image:
     needs: [install]
     runs-on: ubuntu-24.04
     steps:
@@ -106,20 +105,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: false
+          platforms: linux/amd64,linux/arm64
+          push: true
           load: true
-          tags: ghcr.io/${{ github.repository }}
+          tags: ghcr.io/${{ github.repository }}:${{github.sha}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Export Docker image
-        run: docker image save -o image.tar ghcr.io/${{ github.repository }}
-
-      - name: Cache docker image
-        uses: actions/cache@v4
-        with:
-          path: image.tar
-          key: image-${{ github.sha }}
 
   test:
     needs: [install]
