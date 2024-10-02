@@ -1,3 +1,6 @@
+db:
+  uri: "mongodb://localhost/enmon-adapter"
+
 thermometers:
   - model: ""
     dataSourceUrl: ""

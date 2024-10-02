@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EnmonEnv } from './ApiClient.js';
+import { EnmonEnv } from './env.enum.js';
 
 export const configEnmonSchema = z.object({
   env: z.nativeEnum(EnmonEnv),
@@ -7,3 +7,5 @@ export const configEnmonSchema = z.object({
   devEUI: z.string(),
   token: z.string(),
 });
+
+export type ConfigEnmon = z.output<typeof configEnmonSchema>;

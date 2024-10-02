@@ -1,0 +1,27 @@
+
+name: enmon-adapter
+
+services:
+  adapter:
+    image: ghcr.io/hekystyle/enmon-adapter:${ADAPTER_VERSION:?}
+    depends_on:
+      - db
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+    restart: on-failure:5
+    secrets:
+      - source: config
+        target: /app/config/local.yml
+
+  db:
+    image: mongo:7.0.14-jammy
+    restart: on-failure:5
+    volumes:
+      - db_data:/data/db
+
+volumes:
+  db_data:
+
+secrets:
+  config:
+    file: ./config.yml

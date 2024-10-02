@@ -1,9 +1,5 @@
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
-
-export enum EnmonEnv {
-  App = 'app',
-  Dev = 'dev',
-}
+import { EnmonEnv } from './env.enum.js';
 
 type PlainDataPoint = {
   devEUI: string;
@@ -38,7 +34,7 @@ export interface PostMeterPlainValueArgs {
 }
 
 export class EnmonApiClient {
-  constructor(public readonly env: EnmonEnv) {}
+  constructor(public readonly env = EnmonEnv.App) {}
 
   async postMeterPlainCounterMulti({
     env,
@@ -53,7 +49,7 @@ export class EnmonApiClient {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        validateStatus: status => (status >= 200 && status < 300) || status === 412,
+        validateStatus: status => status >= 200 && status < 300,
       },
     );
     return result.data;

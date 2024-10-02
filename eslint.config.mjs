@@ -52,6 +52,12 @@ export default [
     },
 
     rules: {
+      'no-underscore-dangle': [
+        'error',
+        {
+          allow: ['_id']
+        }
+      ],
       'import/prefer-default-export': 'off',
       'n/no-missing-import': 'off',
       '@typescript-eslint/return-await': ['error', 'always'],

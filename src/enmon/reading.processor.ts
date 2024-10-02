@@ -1,38 +1,72 @@
-import { Process, Processor } from '@nestjs/bull';
-import type { Job } from 'bull';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { Injectable, Logger } from '@nestjs/common';
+import { Define, Queue } from 'agenda-nest';
+import { AxiosError } from 'axios';
 import { EnmonApiClient } from './ApiClient.js';
-import { READINGS_QUEUE_NAME, UPLOAD_JOB_NAME, UploadJobData } from './readings.queue.js';
+import { UploadReading } from './upload-reading.schema.js';
+import { UploadReadingRepository } from './upload-reading.repository.js';
+import { READINGS_QUEUE_NAME, UPLOAD_JOB_NAME } from './constants.js';
 
-@Processor(READINGS_QUEUE_NAME)
 @Injectable()
+@Queue(READINGS_QUEUE_NAME)
 export class ReadingProcessor {
   private readonly logger = new Logger(ReadingProcessor.name);
 
-  constructor(private enmonApiClient: EnmonApiClient) {}
+  constructor(
+    private enmonApiClient: EnmonApiClient,
+    private uploadDataRepository: UploadReadingRepository,
+    private als: AsyncLocalStorage<{ readingId: unknown }>,
+  ) {}
 
-  @Process(UPLOAD_JOB_NAME)
-  async handleUploadJob(job: Job<unknown>) {
-    this.logger.debug({ message: 'processing job...', name: job.name, id: job.id });
-    const { reading, config } = UploadJobData.parse(job.data);
+  @Define(UPLOAD_JOB_NAME)
+  async handleUploadJob() {
+    this.logger.log('processing job...');
+
+    const cursor = this.uploadDataRepository.getSorterCursor();
+
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const data of cursor) {
+      await this.als.run({ readingId: data._id }, async () => {
+        this.logger.log('uploading reading...');
+        await this.uploadReading(data).catch(reason => this.handleUploadReadingError(reason));
+
+        // eslint-disable-next-line no-underscore-dangle
+        this.logger.log('deleting uploaded reading...');
+        await data.deleteOne();
+      });
+    }
+
+    this.logger.log('all readings uploaded');
+  }
+
+  private async uploadReading({ config, reading }: UploadReading) {
     const { env, customerId, devEUI, token } = config;
 
     const payload = {
       devEUI,
-      date: new Date(reading.readAt),
+      date: reading.readAt,
       value: reading.value,
       meterRegister: reading.register,
     } as const;
 
     this.logger.log({ message: 'uploading reading ...', payload });
 
-    const { status, statusText, data } = await this.enmonApiClient.postMeterPlainValue({
+    const { status, statusText } = await this.enmonApiClient.postMeterPlainValue({
       env,
       customerId,
       token,
       payload,
     });
 
-    this.logger.log({ message: 'upload reading result', payload, status, statusText, data });
+    this.logger.log({ message: 'reading uploaded', status, statusText });
+  }
+
+  private handleUploadReadingError(e: unknown) {
+    if (e instanceof AxiosError) {
+      const { status, statusText } = e.response ?? {};
+      this.logger.log({ message: 'upload reading failed', status, statusText, data: e.response?.data as unknown });
+    } else {
+      throw e;
+    }
   }
 }

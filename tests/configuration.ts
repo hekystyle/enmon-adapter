@@ -1,10 +1,15 @@
 import { faker } from '@faker-js/faker';
-import { EnmonEnv } from '../src/enmon/ApiClient.js';
-import { Config, ThermometerModel } from '../src/config/schemas.js';
+import { Config } from '../src/config/schemas.js';
 import { WATTrouterModel } from '../src/wattrouter/model.js';
+import { ThermometerModel } from '../src/thermometers/model.enum.js';
+import { EnmonEnv } from '../src/enmon/env.enum.js';
 
 export default (): Config =>
   ({
+    DEV: true,
+    db: {
+      uri: 'mongodb://db/dbname',
+    },
     thermometers: [
       {
         model: ThermometerModel.UNI7xxx,
