@@ -8,6 +8,9 @@ export const configSchema = z
     db: z.object({
       uri: z.string().url(),
     }),
+    enmon: z.object({
+      contactEmail: z.string().email().optional(),
+    }),
     thermometers: z.array(configThermometerSchema).nullish(),
     wattrouter: configWattRouterSchema.nullish(),
     wattrouters: z.array(configWattRouterSchema).nullish(),

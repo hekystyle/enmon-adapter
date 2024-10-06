@@ -10,6 +10,9 @@ export default (): Config =>
     db: {
       uri: 'mongodb://db/dbname',
     },
+    enmon: {
+      contactEmail: 'test@test.tst',
+    },
     thermometers: [
       {
         model: ThermometerModel.UNI7xxx,

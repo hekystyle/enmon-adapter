@@ -18,7 +18,7 @@ import { Config } from './config/schemas.js';
       useFactory: (config: ConfigService<Config, true>) => ({
         processEvery: '15 seconds',
         db: {
-          address: config.get('db.uri', { infer: true }),
+          address: config.getOrThrow('db.uri', { infer: true }),
         },
       }),
     }),
@@ -26,7 +26,7 @@ import { Config } from './config/schemas.js';
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService<Config, true>) => ({
-        uri: config.get('db.uri', { infer: true }),
+        uri: config.getOrThrow('db.uri', { infer: true }),
       }),
     }),
     ConfigModule.forRoot({
@@ -34,7 +34,12 @@ import { Config } from './config/schemas.js';
       load: [configuration],
       cache: false,
     }),
-    EnmonModule,
+    EnmonModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Config, true>) => ({
+        contactEmail: config.getOrThrow('enmon.contactEmail', { infer: true }),
+      }),
+    }),
     WinstonModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService<Config, true>) => ({

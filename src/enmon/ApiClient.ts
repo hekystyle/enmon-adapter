@@ -34,7 +34,7 @@ export interface PostMeterPlainValueArgs {
 }
 
 export class EnmonApiClient {
-  constructor(public readonly env = EnmonEnv.App) {}
+  constructor(public readonly contactEmail?: string | undefined) {}
 
   async postMeterPlainCounterMulti({
     env,
@@ -70,7 +70,10 @@ export class EnmonApiClient {
 
   private http({ env }: { env?: EnmonEnv | undefined }): AxiosInstance {
     return axios.create({
-      baseURL: `https://${env ?? this.env}.enmon.tech`,
+      baseURL: `https://${env ?? EnmonEnv.App}.enmon.tech`,
+      headers: {
+        'User-Agent': `enmon-adapter (${this.contactEmail ?? '<email not provided>'})`,
+      },
     });
   }
 }
