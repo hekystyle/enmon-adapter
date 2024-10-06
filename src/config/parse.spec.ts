@@ -13,6 +13,9 @@ const VALID_CONFIG_INPUT = {
   db: {
     uri: 'mongodb://host/dbname',
   },
+  enmon: {
+    contactEmail: faker.internet.email(),
+  },
   thermometers: [
     {
       model: ThermometerModel.UNI1xxx,
@@ -49,6 +52,7 @@ const VALID_CONFIG_INPUT = {
 const VALID_CONFIG_OUTPUT = {
   DEV: VALID_CONFIG_INPUT.DEV,
   db: VALID_CONFIG_INPUT.db,
+  enmon: VALID_CONFIG_INPUT.enmon,
   thermometers: VALID_CONFIG_INPUT.thermometers,
   wattrouters: [
     {
@@ -85,6 +89,9 @@ it.each([
     {
       db: {
         uri: 'invalid URL',
+      },
+      enmon: {
+        contactEmail: 'invalid email',
       },
       thermometer: {
         dataSourceUrl: 'invalid URL',

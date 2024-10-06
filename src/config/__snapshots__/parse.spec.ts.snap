@@ -22,6 +22,15 @@ exports[`should reject invalid config 0 1`] = `
   },
   {
     "code": "invalid_type",
+    "expected": "object",
+    "message": "Required",
+    "path": [
+      "enmon",
+    ],
+    "received": "undefined",
+  },
+  {
+    "code": "invalid_type",
     "expected": "'UNI7xxx' | 'UNI1xxx'",
     "message": "Required",
     "path": [
@@ -84,6 +93,15 @@ exports[`should reject invalid config 1 1`] = `
     "path": [
       "db",
       "uri",
+    ],
+    "received": "undefined",
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "message": "Required",
+    "path": [
+      "enmon",
     ],
     "received": "undefined",
   },
@@ -234,6 +252,15 @@ exports[`should reject invalid config 2 1`] = `
       "uri",
     ],
     "validation": "url",
+  },
+  {
+    "code": "invalid_string",
+    "message": "Invalid email",
+    "path": [
+      "enmon",
+      "contactEmail",
+    ],
+    "validation": "email",
   },
   {
     "code": "invalid_enum_value",
