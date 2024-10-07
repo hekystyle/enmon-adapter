@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
 import { Define, Queue } from 'agenda-nest';
 import { ConfigService } from '@nestjs/config';
@@ -15,9 +15,13 @@ export class TemperaturesProcessor {
   private readonly logger = new Logger(TemperaturesProcessor.name);
 
   constructor(
+    @Inject(ConfigService)
     private readonly config: ConfigService<Config, true>,
+    @Inject(AsyncLocalStorage)
     private readonly als: AsyncLocalStorage<Host<{ configIndex: number }>>,
+    @Inject(ThermometersDiscovery)
     private readonly thermometers: ThermometersDiscovery,
+    @Inject(UploadReadingRepository)
     private readonly uploadDataRepository: UploadReadingRepository,
   ) {}
 

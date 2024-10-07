@@ -1,4 +1,4 @@
-import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Inject, Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
 import { AgendaModule, InjectQueue } from 'agenda-nest';
 import { Agenda, Job } from 'agenda';
@@ -20,6 +20,7 @@ export class WATTrouterModule implements OnApplicationBootstrap {
   private readonly logger = new Logger(WATTrouterModule.name);
 
   constructor(
+    @Inject(ConfigService)
     private config: ConfigService<Config, true>,
     @InjectQueue(WATTROUTER_QUEUE_NAME)
     private queue: Agenda,

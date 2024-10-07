@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
 import { Define, Queue } from 'agenda-nest';
 import { ConfigService } from '@nestjs/config';
@@ -17,9 +17,13 @@ export class WATTrouterValuesProcessor {
   private readonly logger = new Logger(WATTrouterValuesProcessor.name);
 
   constructor(
+    @Inject(ConfigService)
     private readonly config: ConfigService<Config, true>,
+    @Inject(AsyncLocalStorage)
     private readonly als: AsyncLocalStorage<Host<{ configIndex?: number; targetIndex?: number }>>,
+    @Inject(WATTroutersDiscovery)
     private readonly adapters: WATTroutersDiscovery,
+    @Inject(UploadReadingRepository)
     private readonly uploadJobQueue: UploadReadingRepository,
   ) {}
 

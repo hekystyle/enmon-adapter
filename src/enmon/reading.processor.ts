@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Define, Queue } from 'agenda-nest';
 import { AxiosError } from 'axios';
 import { EnmonApiClient } from './ApiClient.js';
@@ -13,8 +13,11 @@ export class ReadingProcessor {
   private readonly logger = new Logger(ReadingProcessor.name);
 
   constructor(
+    @Inject(EnmonApiClient)
     private enmonApiClient: EnmonApiClient,
+    @Inject(UploadReadingRepository)
     private uploadDataRepository: UploadReadingRepository,
+    @Inject(AsyncLocalStorage)
     private als: AsyncLocalStorage<{ readingId: unknown }>,
   ) {}
 
