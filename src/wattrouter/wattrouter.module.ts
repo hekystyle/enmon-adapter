@@ -5,7 +5,7 @@ import { Agenda, Job } from 'agenda';
 import { ConfigService } from '@nestjs/config';
 import { mxApiClientProvider } from './mx-api-client.provider.js';
 import { EnmonModule } from '../enmon/enmon.module.js';
-import { WATTrouterMx } from './mx.adapter.js';
+import { MxAdapter } from './mx.adapter.js';
 import { WATTroutersDiscovery } from './discovery.service.js';
 import { WATTrouterValuesProcessor } from './values.processor.js';
 import { FETCH_JOB_NAME, WATTROUTER_QUEUE_NAME } from './constants.js';
@@ -13,7 +13,7 @@ import { Config } from '../config/schemas.js';
 
 @Module({
   imports: [AgendaModule.registerQueue(WATTROUTER_QUEUE_NAME), DiscoveryModule, EnmonModule],
-  providers: [WATTroutersDiscovery, WATTrouterMx, WATTrouterValuesProcessor, mxApiClientProvider],
+  providers: [WATTroutersDiscovery, MxAdapter, WATTrouterValuesProcessor, mxApiClientProvider],
   exports: [],
 })
 export class WATTrouterModule implements OnApplicationBootstrap {

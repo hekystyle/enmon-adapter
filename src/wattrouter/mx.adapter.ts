@@ -7,8 +7,8 @@ import { IAdapter, WATTrouterValues } from './adapter.interface.js';
 
 @Injectable()
 @Adapter(WATTrouterModel.Mx)
-export class WATTrouterMx implements IAdapter {
-  private readonly logger = new Logger(WATTrouterMx.name);
+export class MxAdapter implements IAdapter {
+  private readonly logger = new Logger(MxAdapter.name);
 
   constructor(
     @Inject(WATTrouterMxApiClient)
