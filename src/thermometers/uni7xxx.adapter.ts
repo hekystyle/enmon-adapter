@@ -7,8 +7,8 @@ import { IAdapter } from './adapter.interface.js';
 
 @Injectable()
 @Adapter(ThermometerModel.UNI7xxx)
-export class ThermometerUNI7xxx implements IAdapter {
-  private readonly logger = new Logger(ThermometerUNI7xxx.name);
+export class UNI7xxxAdapter implements IAdapter {
+  private readonly logger = new Logger(UNI7xxxAdapter.name);
 
   async getTemperatures(dataSourceUrl: string): Promise<number[]> {
     this.logger.log('fetching temperature meter HTML page');

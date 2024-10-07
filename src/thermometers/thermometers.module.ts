@@ -1,4 +1,4 @@
-import { Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Inject, Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryModule } from '@nestjs/core';
 import { AgendaModule, InjectQueue } from 'agenda-nest';
 import { Agenda, Job } from 'agenda';
@@ -7,19 +7,20 @@ import { EnmonModule } from '../enmon/enmon.module.js';
 import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME } from './constants.js';
 import { ThermometersDiscovery } from './discovery.service.js';
 import { TemperaturesProcessor } from './temperatures.processor.js';
-import { ThermometerUNI1xxx } from './ThermometerUNI1xxx.js';
-import { ThermometerUNI7xxx } from './ThermometerUNI7xxx.js';
+import { UNI1xxxAdapter } from './uni1xxx.adapter.js';
+import { UNI7xxxAdapter } from './uni7xxx.adapter.js';
 import { Config } from '../config/schemas.js';
 
 @Module({
   imports: [AgendaModule.registerQueue(TEMPERATURES_QUEUE_NAME), DiscoveryModule, EnmonModule],
-  providers: [ThermometersDiscovery, TemperaturesProcessor, ThermometerUNI1xxx, ThermometerUNI7xxx],
+  providers: [ThermometersDiscovery, TemperaturesProcessor, UNI1xxxAdapter, UNI7xxxAdapter],
   exports: [],
 })
 export class ThermometersModule implements OnApplicationBootstrap {
   private readonly logger = new Logger(ThermometersModule.name);
 
   constructor(
+    @Inject(ConfigService)
     private readonly config: ConfigService<Config, true>,
     @InjectQueue(TEMPERATURES_QUEUE_NAME)
     private queue: Agenda,

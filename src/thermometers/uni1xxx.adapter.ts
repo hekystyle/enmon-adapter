@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { parseTemperature } from './utils/parseTemp.js';
+import { load } from 'cheerio/slim';
 import { Adapter } from './adapter.decorator.js';
 import { ThermometerModel } from './model.enum.js';
 import { IAdapter } from './adapter.interface.js';
 
 @Injectable()
 @Adapter(ThermometerModel.UNI1xxx)
-export class ThermometerUNI1xxx implements IAdapter {
-  private readonly logger = new Logger(ThermometerUNI1xxx.name);
+export class UNI1xxxAdapter implements IAdapter {
+  private readonly logger = new Logger(UNI1xxxAdapter.name);
 
   async getTemperatures(dataSourceUrl: string): Promise<number[]> {
     const {
@@ -28,14 +28,22 @@ export class ThermometerUNI1xxx implements IAdapter {
 
     if (status !== 200) return [];
 
-    const serializedValue = parseTemperature(html);
+    const temperature = this.parseTemperature(html);
+
+    return temperature === undefined ? [] : [temperature];
+  }
+
+  parseTemperature(html: string): number | undefined {
+    const $ = load(html);
+    const [serializedValue] = $('#main > form > p:nth-child(3) > span').text().split(' ');
 
     this.logger.log({
-      message: 'founded serialized temperature value',
+      message: 'found serialized temperature value',
       serialized: serializedValue,
     });
 
-    if (!serializedValue) return [];
+    if (!serializedValue) return undefined;
+
     const temperature = parseFloat(serializedValue);
 
     this.logger.log({
@@ -43,6 +51,6 @@ export class ThermometerUNI1xxx implements IAdapter {
       parsed: temperature,
     });
 
-    return Number.isNaN(temperature) ? [] : [temperature];
+    return Number.isNaN(temperature) ? undefined : temperature;
   }
 }

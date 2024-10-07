@@ -66,6 +66,7 @@
     "eslint-plugin-n": "17.10.3",
     "eslint-plugin-prettier": "5.2.1",
     "globals": "15.10.0",
+    "mongodb-memory-server": "10.0.1",
     "prettier": "3.3.3",
     "release-it": "17.7.0",
     "source-map-support": "0.5.21",

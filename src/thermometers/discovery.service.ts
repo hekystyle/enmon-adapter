@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import { IAdapter, isIAdapter } from './adapter.interface.js';
 import { Adapter } from './adapter.decorator.js';
@@ -7,7 +7,10 @@ import { Adapter } from './adapter.decorator.js';
 export class ThermometersDiscovery {
   private map = new Map<string, IAdapter>();
 
-  constructor(private discoveryService: DiscoveryService) {
+  constructor(
+    @Inject(DiscoveryService)
+    private discoveryService: DiscoveryService,
+  ) {
     this.discoveryService.getProviders({ metadataKey: Adapter.KEY }).forEach(wrapper => {
       const model = this.discoveryService.getMetadataByDecorator(Adapter, wrapper);
 

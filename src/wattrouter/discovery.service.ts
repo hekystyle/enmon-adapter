@@ -1,4 +1,4 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import { Adapter } from './adapter.decorator.js';
 import { IAdapter, isIAdapter } from './adapter.interface.js';
@@ -7,7 +7,10 @@ import { IAdapter, isIAdapter } from './adapter.interface.js';
 export class WATTroutersDiscovery implements OnApplicationBootstrap {
   private map = new Map<string, IAdapter>();
 
-  constructor(private discoveryService: DiscoveryService) {}
+  constructor(
+    @Inject(DiscoveryService)
+    private discoveryService: DiscoveryService,
+  ) {}
 
   onApplicationBootstrap() {
     this.discoveryService.getProviders({ metadataKey: Adapter.KEY }).forEach(wrapper => {
