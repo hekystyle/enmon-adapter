@@ -3,7 +3,7 @@ import { INestApplicationContext } from '@nestjs/common';
 import { afterAll, beforeAll, expect, it } from 'vitest';
 import { ConfigModule } from '@nestjs/config';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { AppModule } from '../src/app.module.js';
+import { AppModule, CONFIG_MODULE } from '../src/app.module.js';
 import configuration from './configuration.js';
 
 let app: INestApplicationContext;
@@ -15,7 +15,7 @@ beforeAll(async () => {
   const moduleRef = await Test.createTestingModule({
     imports: [AppModule],
   })
-    .overrideModule(ConfigModule)
+    .overrideModule(CONFIG_MODULE)
     .useModule(
       ConfigModule.forRoot({
         isGlobal: true,

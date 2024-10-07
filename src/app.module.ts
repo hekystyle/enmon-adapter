@@ -11,6 +11,12 @@ import { AlsModule } from './als/als.module.js';
 import configuration from './config/configuration.js';
 import { Config } from './config/schemas.js';
 
+export const CONFIG_MODULE = ConfigModule.forRoot({
+  isGlobal: true,
+  load: [configuration],
+  cache: false,
+});
+
 @Module({
   imports: [
     AgendaModule.forRootAsync({
@@ -29,11 +35,7 @@ import { Config } from './config/schemas.js';
         uri: config.getOrThrow('db.uri', { infer: true }),
       }),
     }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-      cache: false,
-    }),
+    CONFIG_MODULE,
     EnmonModule,
     WinstonModule.forRootAsync({
       inject: [ConfigService],
