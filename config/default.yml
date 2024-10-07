@@ -1,4 +1,4 @@
 db:
   uri: "mongodb://db/enmon-adapter"
 
-enmon:
+enmon: {}

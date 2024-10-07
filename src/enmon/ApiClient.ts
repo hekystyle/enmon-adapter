@@ -34,7 +34,7 @@ export interface PostMeterPlainValueArgs {
 }
 
 export class EnmonApiClient {
-  constructor(public readonly contactEmail?: string | undefined) {}
+  constructor(public readonly contactEmail: string | undefined) {}
 
   async postMeterPlainCounterMulti({
     env,

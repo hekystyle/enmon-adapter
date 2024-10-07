@@ -34,12 +34,7 @@ import { Config } from './config/schemas.js';
       load: [configuration],
       cache: false,
     }),
-    EnmonModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService<Config, true>) => ({
-        contactEmail: config.getOrThrow('enmon.contactEmail', { infer: true }),
-      }),
-    }),
+    EnmonModule,
     WinstonModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService<Config, true>) => ({
