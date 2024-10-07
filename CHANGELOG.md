@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/hekystyle/enmon-adapter/compare/v1.0.0...v1.0.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* **wattrouter:** warning about missing config ([#452](https://github.com/hekystyle/enmon-adapter/issues/452))
+* enable shutdown hooks ([#452](https://github.com/hekystyle/enmon-adapter/issues/452))
+
 # [1.0.0](https://github.com/hekystyle/enmon-adapter/compare/v1.0.0-rc.1...v1.0.0) (2024-10-07)
 
 
