@@ -6,6 +6,7 @@ import { AppModule } from './app.module.js';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
+  app.enableShutdownHooks();
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   await app.init();
   NativeLogger.log('Application initialized', bootstrap.name);
