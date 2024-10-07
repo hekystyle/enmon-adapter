@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.0.0](https://github.com/hekystyle/enmon-adapter/compare/v1.0.0-rc.1...v1.0.0) (2024-10-07)
+
+
+### Features
+
+* **enmon:** contact email ([#448](https://github.com/hekystyle/enmon-adapter/issues/448)) ([6ba9d41](https://github.com/hekystyle/enmon-adapter/commit/6ba9d41f9209c38eae52305259485f6220ee0c18))
+
 # [1.0.0-rc.1](https://github.com/hekystyle/enmon-adapter/compare/v1.0.0-rc.0...v1.0.0-rc.1) (2024-10-02)
 
 
