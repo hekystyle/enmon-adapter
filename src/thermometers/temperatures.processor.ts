@@ -1,5 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { AsyncLocalStorage } from 'async_hooks';
+import { Inject, Injectable } from '@nestjs/common';
 import { Define, Queue } from 'agenda-nest';
 import { ConfigService } from '@nestjs/config';
 import type { Config } from '../config/schemas.js';
@@ -8,22 +7,23 @@ import { Host } from '../common/host.js';
 import { UploadReadingRepository } from '../enmon/upload-reading.repository.js';
 import { FETCH_JOB_NAME, TEMPERATURES_QUEUE_NAME } from './constants.js';
 import { ConfigThermometer } from './config.schema.js';
+import { AppLogger } from '../logging/logger.js';
 
 @Injectable()
 @Queue(TEMPERATURES_QUEUE_NAME)
 export class TemperaturesProcessor {
-  private readonly logger = new Logger(TemperaturesProcessor.name);
-
   constructor(
+    @Inject(AppLogger)
+    private readonly logger: AppLogger,
     @Inject(ConfigService)
     private readonly config: ConfigService<Config, true>,
-    @Inject(AsyncLocalStorage)
-    private readonly als: AsyncLocalStorage<Host<{ configIndex: number }>>,
     @Inject(ThermometersDiscovery)
     private readonly thermometers: ThermometersDiscovery,
     @Inject(UploadReadingRepository)
     private readonly uploadDataRepository: UploadReadingRepository,
-  ) {}
+  ) {
+    logger.setContext(TemperaturesProcessor.name);
+  }
 
   @Define(FETCH_JOB_NAME)
   async handleFetchJob() {
@@ -38,7 +38,7 @@ export class TemperaturesProcessor {
 
     await Promise.all(
       thermometers.map((thermometer, index) =>
-        this.als.run(new Host({ configIndex: index }), () =>
+        this.logger.beginScope(new Host({ configIndex: index }), () =>
           this.processThermometerConfig(thermometer).catch(reason => this.handleConfigProcessingError(reason)),
         ),
       ),

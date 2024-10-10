@@ -1,31 +1,30 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { AsyncLocalStorage } from 'async_hooks';
+import { Inject, Injectable } from '@nestjs/common';
 import { Define, Queue } from 'agenda-nest';
 import { ConfigService } from '@nestjs/config';
 import { Reading } from '../enmon/upload-reading.schema.js';
-import { Host } from '../common/host.js';
 import { WATTroutersDiscovery } from './discovery.service.js';
 import { WATTrouterModel } from './model.js';
 import { ConfigWattRouter } from './config.schema.js';
 import { UploadReadingRepository } from '../enmon/upload-reading.repository.js';
 import { FETCH_JOB_NAME, WATTROUTER_QUEUE_NAME } from './constants.js';
 import { Config } from '../config/schemas.js';
+import { AppLogger } from '../logging/logger.js';
 
 @Injectable()
 @Queue(WATTROUTER_QUEUE_NAME)
 export class WATTrouterValuesProcessor {
-  private readonly logger = new Logger(WATTrouterValuesProcessor.name);
-
   constructor(
+    @Inject(AppLogger)
+    private readonly logger: AppLogger,
     @Inject(ConfigService)
     private readonly config: ConfigService<Config, true>,
-    @Inject(AsyncLocalStorage)
-    private readonly als: AsyncLocalStorage<Host<{ configIndex?: number; targetIndex?: number }>>,
     @Inject(WATTroutersDiscovery)
     private readonly adapters: WATTroutersDiscovery,
     @Inject(UploadReadingRepository)
     private readonly uploadJobQueue: UploadReadingRepository,
-  ) {}
+  ) {
+    logger.setContext(WATTrouterValuesProcessor.name);
+  }
 
   @Define(FETCH_JOB_NAME)
   async handleFetchJob() {
@@ -38,15 +37,13 @@ export class WATTrouterValuesProcessor {
       return;
     }
 
-    await this.als.run(new Host({}), async () => {
-      await Promise.all(
-        configs.map((config, index) =>
-          this.als.run(new Host({ ...this.als.getStore(), configIndex: index }), () =>
-            this.processConfig(config).catch(reason => this.handleConfigProcessingError(reason)),
-          ),
+    await Promise.all(
+      configs.map((config, index) =>
+        this.logger.beginScope({ configIndex: index }, () =>
+          this.processConfig(config).catch(reason => this.handleConfigProcessingError(reason)),
         ),
-      );
-    });
+      ),
+    );
 
     this.logger.log(`job completed`);
   }
@@ -83,7 +80,7 @@ export class WATTrouterValuesProcessor {
 
     await Promise.all(
       config.targets.map((target, targetIndex) =>
-        this.als.run(new Host({ ...this.als.getStore(), targetIndex }), () =>
+        this.logger.beginScope({ targetIndex }, () =>
           this.processTarget(target, readings).catch(reason => this.handleTargetProcessingError(reason)),
         ),
       ),

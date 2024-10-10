@@ -1,25 +1,25 @@
-import { AsyncLocalStorage } from 'node:async_hooks';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Define, Queue } from 'agenda-nest';
 import { AxiosError } from 'axios';
 import { EnmonApiClient } from './ApiClient.js';
 import { UploadReading } from './upload-reading.schema.js';
 import { UploadReadingRepository } from './upload-reading.repository.js';
 import { READINGS_QUEUE_NAME, UPLOAD_JOB_NAME } from './constants.js';
+import { AppLogger } from '../logging/logger.js';
 
 @Injectable()
 @Queue(READINGS_QUEUE_NAME)
 export class ReadingProcessor {
-  private readonly logger = new Logger(ReadingProcessor.name);
-
   constructor(
+    @Inject(AppLogger)
+    private logger: AppLogger,
     @Inject(EnmonApiClient)
     private enmonApiClient: EnmonApiClient,
     @Inject(UploadReadingRepository)
     private uploadDataRepository: UploadReadingRepository,
-    @Inject(AsyncLocalStorage)
-    private als: AsyncLocalStorage<{ readingId: unknown }>,
-  ) {}
+  ) {
+    logger.setContext(ReadingProcessor.name);
+  }
 
   @Define(UPLOAD_JOB_NAME)
   async handleUploadJob() {
@@ -29,7 +29,7 @@ export class ReadingProcessor {
 
     // eslint-disable-next-line no-restricted-syntax
     for await (const data of cursor) {
-      await this.als.run({ readingId: data._id }, async () => {
+      await this.logger.beginScope({ readingId: data._id }, async () => {
         this.logger.log('uploading reading...');
         await this.uploadReading(data).catch(reason => this.handleUploadReadingError(reason));
 

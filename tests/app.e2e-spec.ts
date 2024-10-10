@@ -1,18 +1,17 @@
-import { Test } from '@nestjs/testing';
-import { INestApplicationContext } from '@nestjs/common';
+import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { afterAll, beforeAll, expect, it } from 'vitest';
 import { ConfigModule } from '@nestjs/config';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { AppModule, CONFIG_MODULE } from '../src/app.module.js';
 import configuration from './configuration.js';
 
-let app: INestApplicationContext;
+let builder: TestingModuleBuilder;
 let mongod: MongoMemoryServer;
 
 beforeAll(async () => {
   mongod = await MongoMemoryServer.create();
 
-  const moduleRef = await Test.createTestingModule({
+  builder = Test.createTestingModule({
     imports: [AppModule],
   })
     .overrideModule(CONFIG_MODULE)
@@ -21,13 +20,12 @@ beforeAll(async () => {
         isGlobal: true,
         load: [configuration({ dbUri: mongod.getUri() })],
       }),
-    )
-    .compile();
-
-  app = moduleRef;
+    );
 });
 
-it(`should start & stop successfully`, async () => {
+it(`boot, init & stop successfully`, async () => {
+  const app = await builder.compile();
+
   await expect(app.init()).resolves.toBeDefined();
 
   await expect(app.close()).resolves.toBeUndefined();
