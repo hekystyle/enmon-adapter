@@ -136,8 +136,8 @@ importers:
         specifier: 15.11.0
         version: 15.11.0
       mongodb-memory-server:
-        specifier: 10.1.1
-        version: 10.1.1(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3)
+        specifier: 10.1.2
+        version: 10.1.2(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3)
       prettier:
         specifier: 3.3.3
         version: 3.3.3
@@ -3133,12 +3133,12 @@ packages:
   mongodb-connection-string-url@3.0.1:
     resolution: {integrity: sha512-XqMGwRX0Lgn05TDB4PyG2h2kKO/FfWJyCzYQbIhXUxz7ETt0I/FqHjUeqj37irJ+Dl1ZtU82uYyj14u2XsZKfg==}
 
-  mongodb-memory-server-core@10.1.1:
-    resolution: {integrity: sha512-q9BOUM9gc3kjWFtPMtZDztaqqdC7Ewckd4xFdHzlpZfQ+mCsBpFGDzRZSoMJWaIlg9KK2MsZXkuw4wQ825u17Q==}
+  mongodb-memory-server-core@10.1.2:
+    resolution: {integrity: sha512-5Wpz712CuDCKTn/40UZ+kMZlav4Y2imbpWuJU5wjuZk6s3+Jg8akTIBW9jQiFS8wgymu6iTg99Iw0XcypsLyQA==}
     engines: {node: '>=16.20.1'}
 
-  mongodb-memory-server@10.1.1:
-    resolution: {integrity: sha512-FuLEORKL9uIJzA1/eDPCQ3VGsTdsvrSIiNtdmgjIGG9bCBf3v3Q2wh7OHKg2IwZyK+DwAeAwrdDUQSiN4DgrGA==}
+  mongodb-memory-server@10.1.2:
+    resolution: {integrity: sha512-aDGEWuUVHTiBvaaq03LbpvvSk8IVtepbvp314p1cq7f2xdSpl7igMnYpPfYY5nkks1I5I6OL2ypHjaJj4kBp+g==}
     engines: {node: '>=16.20.1'}
 
   mongodb@4.17.2:
@@ -7992,7 +7992,7 @@ snapshots:
       '@types/whatwg-url': 11.0.5
       whatwg-url: 13.0.0
 
-  mongodb-memory-server-core@10.1.1(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3):
+  mongodb-memory-server-core@10.1.2(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3):
     dependencies:
       async-mutex: 0.5.0
       camelcase: 6.3.0
@@ -8016,9 +8016,9 @@ snapshots:
       - socks
       - supports-color
 
-  mongodb-memory-server@10.1.1(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3):
+  mongodb-memory-server@10.1.2(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3):
     dependencies:
-      mongodb-memory-server-core: 10.1.1(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3)
+      mongodb-memory-server-core: 10.1.2(@aws-sdk/credential-providers@3.662.0(@aws-sdk/client-sso-oidc@3.662.0(@aws-sdk/client-sts@3.662.0)))(socks@2.8.3)
       tslib: 2.7.0
     transitivePeerDependencies:
       - '@aws-sdk/credential-providers'
