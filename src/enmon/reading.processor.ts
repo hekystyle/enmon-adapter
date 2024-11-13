@@ -1,11 +1,11 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Define, Queue } from 'agenda-nest';
-import { AxiosError } from 'axios';
 import { EnmonApiClient } from './ApiClient.js';
 import { UploadReading } from './upload-reading.schema.js';
 import { UploadReadingRepository } from './upload-reading.repository.js';
 import { READINGS_QUEUE_NAME, UPLOAD_JOB_NAME } from './constants.js';
+import { UploadErrorFilter } from './upload-error.filter.js';
 
 @Injectable()
 @Queue(READINGS_QUEUE_NAME)
@@ -19,6 +19,8 @@ export class ReadingProcessor {
     private uploadDataRepository: UploadReadingRepository,
     @Inject(AsyncLocalStorage)
     private als: AsyncLocalStorage<{ readingId: unknown }>,
+    @Inject(UploadErrorFilter)
+    private uploadErrorFilter: UploadErrorFilter,
   ) {}
 
   @Define(UPLOAD_JOB_NAME)
@@ -30,12 +32,17 @@ export class ReadingProcessor {
     // eslint-disable-next-line no-restricted-syntax
     for await (const data of cursor) {
       await this.als.run({ readingId: data._id }, async () => {
-        this.logger.log('uploading reading...');
-        await this.uploadReading(data).catch(reason => this.handleUploadReadingError(reason));
+        this.logger.log({ message: 'uploading reading...', id: data._id });
 
-        // eslint-disable-next-line no-underscore-dangle
-        this.logger.log('deleting uploaded reading...');
-        await data.deleteOne();
+        try {
+          await this.uploadReading(data);
+
+          // eslint-disable-next-line no-underscore-dangle
+          this.logger.log('deleting uploaded reading...');
+          await data.deleteOne();
+        } catch (e) {
+          this.uploadErrorFilter.catch(e);
+        }
       });
     }
 
@@ -62,14 +69,5 @@ export class ReadingProcessor {
     });
 
     this.logger.log({ message: 'reading uploaded', status, statusText });
-  }
-
-  private handleUploadReadingError(e: unknown) {
-    if (e instanceof AxiosError) {
-      const { status, statusText } = e.response ?? {};
-      this.logger.log({ message: 'upload reading failed', status, statusText, data: e.response?.data as unknown });
-    } else {
-      throw e;
-    }
   }
 }

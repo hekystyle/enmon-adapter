@@ -8,6 +8,7 @@ import { UploadReadingRepository } from './upload-reading.repository.js';
 import { EnmonApiClient } from './ApiClient.js';
 import { READINGS_QUEUE_NAME } from './constants.js';
 import { Config } from '../config/schemas.js';
+import { UploadErrorFilter } from './upload-error.filter.js';
 
 export interface ModuleOptions {
   contactEmail?: string | undefined;
@@ -26,6 +27,7 @@ export interface ModuleOptions {
   providers: [
     ReadingProcessor,
     UploadReadingRepository,
+    UploadErrorFilter,
     {
       provide: EnmonApiClient,
       inject: [ConfigService],
