@@ -9,13 +9,13 @@ public class Config
 
     [Required]
     [StringLength(24, MinimumLength = 24)]
-    public string CustomerId { get; set; }
+    public required string CustomerId { get; set; }
 
     [Required]
-    public string DevEUI { get; set; }
+    public required string DevEUI { get; set; }
 
     [Required]
-    public string Token { get; set; }
+    public required string Token { get; set; }
 }
 
 public static class ConfigValidator

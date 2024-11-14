@@ -4,48 +4,48 @@ using MongoDB.Bson;
 
 namespace Enmon;
 
-public class PlainDataPoint
+public record PlainDataPoint
 {
-    public string DevEUI { get; set; }
+    public required string DevEUI { get; set; }
     public DateTime Date { get; set; }
-    public string MeterRegister { get; set; }
+    public required string MeterRegister { get; set; }
     public double? Value { get; set; } // Nullable to represent either value or counter
     public double? Counter { get; set; } // Nullable to represent either value or counter
 }
 
-public class PostMeterCounterArgs
+public record PostMeterCounterArgs
 {
-    public Enmon.Env? Env { get; set; }
-    public List<PlainDataPoint> Payload { get; set; }
-    public string CustomerId { get; set; }
-    public string Token { get; set; }
+    public Env? Env { get; set; }
+    public required List<PlainDataPoint> Payload { get; set; }
+    public required string CustomerId { get; set; }
+    public required string Token { get; set; }
 }
 
-public class ValidationErrorItem
+public record ValidationErrorItem
 {
-    public string Message { get; set; }
-    public List<object> Path { get; set; }
-    public string Type { get; set; }
+    public required string Message { get; set; }
+    public required List<object> Path { get; set; }
+    public required string Type { get; set; }
 }
 
-public class PostMeterPlainCounterMultiResult
+public record PostMeterPlainCounterMultiResult
 {
     public int SuccessCount { get; set; }
     public int ErrorCount { get; set; }
-    public List<PlainDataPointError> ErrorDocs { get; set; }
+    public required List<PlainDataPointError> ErrorDocs { get; set; }
 }
 
-public class PlainDataPointError : PlainDataPoint
+public record PlainDataPointError : PlainDataPoint
 {
-    public object Error { get; set; } // Can be a string or a list of ValidationErrorItem
+    public required object Error { get; set; } // Can be a string or a list of ValidationErrorItem
 }
 
-public class PostMeterPlainValueArgs
+public record PostMeterPlainValueArgs
 {
     public Env? Env { get; set; }
-    public PlainDataPoint Payload { get; set; }
+    public required PlainDataPoint Payload { get; set; }
     public ObjectId CustomerId { get; set; }
-    public string Token { get; set; }
+    public required string Token { get; set; }
 }
 
 public class ApiClient(Env env)
@@ -60,7 +60,7 @@ public class ApiClient(Env env)
 
     public async Task<PostMeterPlainCounterMultiResult> PostMeterPlainCounterMulti(PostMeterCounterArgs args)
     {
-        var baseUrl = $"https://{args.Env?.ToString().ToLower() ?? defaultEnv.ToString().ToLower()}.enmon.tech";
+        var baseUrl = $"https://{args.Env ?? defaultEnv}.enmon.tech";
         httpClient.BaseAddress = new Uri(baseUrl);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", args.Token);
 

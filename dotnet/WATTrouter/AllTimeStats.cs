@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace WATTrouter;
 
+[XmlRoot("stat_alltime")]
 public record AllTimeStats
 {
     /// <summary>
@@ -33,6 +35,14 @@ public record AllTimeStats
     {
         var serializer = new XmlSerializer(typeof(AllTimeStats));
         using var reader = new StringReader(xml);
-        return (AllTimeStats)serializer.Deserialize(reader);
+        try
+        {
+            return (AllTimeStats?)serializer.Deserialize(reader) ?? throw new Exception("Invalid XML input: " + xml);
+        }
+        catch (InvalidOperationException e)
+        {
+            if (e.InnerException is XmlException) throw e.InnerException;
+            throw;
+        }
     }
 }
