@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnmonAdapter", "dotnet\EnmonAdapter.csproj", "{3A81AB2E-6640-420B-80B8-35E1D68B02E8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotnet", "dotnet", "{CBB817FE-DBC9-4BF1-B8E2-E69AAB60CB75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnmonAdapter.Tests", "dotnet\Tests\EnmonAdapter.Tests.csproj", "{D6647CBB-05CC-480E-ABBE-980E5BBDA59A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,11 +19,18 @@ Global
 		{3A81AB2E-6640-420B-80B8-35E1D68B02E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A81AB2E-6640-420B-80B8-35E1D68B02E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A81AB2E-6640-420B-80B8-35E1D68B02E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6647CBB-05CC-480E-ABBE-980E5BBDA59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6647CBB-05CC-480E-ABBE-980E5BBDA59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6647CBB-05CC-480E-ABBE-980E5BBDA59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6647CBB-05CC-480E-ABBE-980E5BBDA59A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5846916B-1951-46AF-8038-263D9C2FA24A}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D6647CBB-05CC-480E-ABBE-980E5BBDA59A} = {CBB817FE-DBC9-4BF1-B8E2-E69AAB60CB75}
 	EndGlobalSection
 EndGlobal
