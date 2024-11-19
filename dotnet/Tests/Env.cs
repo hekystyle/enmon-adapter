@@ -1,60 +1,28 @@
-using Newtonsoft.Json;
-using Xunit;
+using System.Text.Json;
 
 namespace Enmon.Tests
 {
   public class EnvTests
   {
     [Fact]
-    public void Serialize_EnvEnum_ReturnsCorrectString()
+    public void ShouldStringifyCorrectly()
     {
-      var env = Env.App;
-
-      var serialized = JsonConvert.SerializeObject(env);
-
-      Assert.Equal("\"app\"", serialized);
+      Assert.Equal("app", $"{Env.app}");
+      Assert.Equal("dev", $"{Env.dev}");
     }
 
     [Fact]
-    public void Deserialize_EnvEnum_ReturnsCorrectEnum()
+    public void ShouldSerializeToJson()
     {
-      var json = "\"app\"";
-
-      var deserialized = JsonConvert.DeserializeObject<Env>(json);
-
-      Assert.Equal(Env.App, deserialized);
+      Assert.Equal("\"app\"", JsonSerializer.Serialize(Env.app));
+      Assert.Equal("\"dev\"", JsonSerializer.Serialize(Env.dev));
     }
 
-    [Fact]
-    public void Format_EnvEnum_ReturnsCorrectString()
+     [Fact]
+    public void ShouldDeserializeFromJson()
     {
-      Assert.Equal("app", $"{Env.App}");
-    }
-
-    [Fact]
-    public void Serialize_EnvEnumWithSystemTextJson_ReturnsCorrectString()
-    {
-      var env = Env.Dev;
-
-      string serialized = JsonConvert.SerializeObject(env);
-
-      Assert.Equal("\"dev\"", serialized);
-    }
-
-    [Fact]
-    public void Deserialize_EnvEnumWithSystemTextJson_ReturnsCorrectEnum()
-    {
-      var json = "\"dev\"";
-
-      var deserialized = JsonConvert.DeserializeObject<Env>(json);
-
-      Assert.Equal(Env.Dev, deserialized);
-    }
-
-    [Fact]
-    public void Format_EnvDev_ReturnsCorrectString()
-    {
-      Assert.Equal("dev", $"{Env.Dev}");
+      Assert.Equal(Env.app, JsonSerializer.Deserialize<Env>("\"app\""));
+      Assert.Equal(Env.dev, JsonSerializer.Deserialize<Env>("\"dev\""));
     }
   }
 }
