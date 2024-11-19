@@ -5,10 +5,10 @@ namespace Enmon;
 public class Config
 {
   [Required]
-  public Env Env { get; set; }
+  public required Env Env { get; set; }
 
   [Required]
-  [StringLength(24, MinimumLength = 24)]
+  [ObjectId]
   public required string CustomerId { get; set; }
 
   [Required]

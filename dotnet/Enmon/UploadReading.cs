@@ -18,7 +18,7 @@ public class Reading
 
 public class ConfigEnmon
 {
-  public Env Env { get; set; }
+  public required Env Env { get; set; }
   public ObjectId CustomerId { get; set; }
   public required string DevEUI { get; set; }
   public required string Token { get; set; }
