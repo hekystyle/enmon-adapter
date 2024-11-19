@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>Eu.Heky.EnmonAdapter.Tests</RootNamespace>
+    <RootNamespace>HekyLab.EnmonAdapter.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
