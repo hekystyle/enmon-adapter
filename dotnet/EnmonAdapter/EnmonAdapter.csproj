@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>EnmonAdapter</RootNamespace>
+    <RootNamespace>Eu.Heky.EnmonAdapter</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +14,6 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.29.0" />
     <PackageReference Include="MongoDB.Entities" Version="23.1.1" />
-    <Compile Remove="Tests\**" />
   </ItemGroup>
 
 </Project>
