@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 
 namespace WATTrouter;
 
+[XmlRoot("meas")]
 public record Measurement
 {
   /// <summary>
