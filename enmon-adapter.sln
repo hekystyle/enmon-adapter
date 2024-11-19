@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnmonAdapter", "dotnet\EnmonAdapter\EnmonAdapter.csproj", "{3A81AB2E-6640-420B-80B8-35E1D68B02E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnmonAdapter", "dotnet\App\App.csproj", "{3A81AB2E-6640-420B-80B8-35E1D68B02E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnmonAdapter.Tests", "dotnet\EnmonAdapter.Tests\EnmonAdapter.Tests.csproj", "{D6647CBB-05CC-480E-ABBE-980E5BBDA59A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnmonAdapter.Tests", "dotnet\Tests\Tests.csproj", "{D6647CBB-05CC-480E-ABBE-980E5BBDA59A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

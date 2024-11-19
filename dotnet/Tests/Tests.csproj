@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EnmonAdapter\EnmonAdapter.csproj" />
+    <ProjectReference Include="..\App\App.csproj" />
   </ItemGroup>
 
   <ItemGroup>
