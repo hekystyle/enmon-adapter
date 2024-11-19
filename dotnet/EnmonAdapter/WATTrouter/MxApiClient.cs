@@ -1,14 +1,10 @@
 namespace WATTrouter;
 
-public class MxApiClient
+public class MxApiClient(HttpClient httpClient)
 {
-
-  public async Task<AllTimeStats> GetAllTimeStatsAsync(Uri origin)
+  public async Task<AllTimeStats> GetAllTimeStatsAsync()
   {
-    using var httpClient = new HttpClient();
-    httpClient.BaseAddress = origin;
-
-    var response = await httpClient.GetAsync("stat_alltime.xml");
+    var response = await httpClient.GetAsync("/stat_alltime.xml");
 
     response.EnsureSuccessStatusCode();
 
@@ -17,12 +13,9 @@ public class MxApiClient
     return AllTimeStats.Parse(stream);
   }
 
-  public async Task<Measurement> GetMeasurementAsync(Uri origin)
+  public async Task<Measurement> GetMeasurementAsync()
   {
-    using var httpClient = new HttpClient();
-    httpClient.BaseAddress = origin;
-
-    var response = await httpClient.GetAsync("meas.xml");
+    var response = await httpClient.GetAsync("/meas.xml");
 
     response.EnsureSuccessStatusCode();
 
