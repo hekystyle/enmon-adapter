@@ -1,3 +1,4 @@
+using System.Text;
 using System.Xml;
 using WATTrouter;
 
@@ -7,8 +8,8 @@ public class AllTimeStatsTests
   public void Parse_ValidXmlFromFile_ReturnsAllTimeStats()
   {
 
-    var xml = File.ReadAllText(Path.Combine("__fixtures__", "stat_alltime.xml"));
-    var result = AllTimeStats.Parse(xml);
+    var stream = File.OpenRead(Path.Combine("__fixtures__", "stat_alltime.xml"));
+    var result = AllTimeStats.Parse(stream);
 
     Assert.NotNull(result);
     Assert.Equal(1476.53, result.SAS4);
@@ -20,9 +21,9 @@ public class AllTimeStatsTests
   [Fact]
   public void Parse_InvalidXmlFromFile_ThrowsException()
   {
-    var xml = "<root</root>";
+    var stream = new MemoryStream(Encoding.UTF8.GetBytes("<root</root>"));
 
-    var exception = Assert.Throws<XmlException>(() => AllTimeStats.Parse(xml));
+    var exception = Assert.Throws<XmlException>(() => AllTimeStats.Parse(stream));
 
     Assert.Equal("The '<' character, hexadecimal value 0x3C, cannot be included in a name. Line 1, position 6.", exception.Message);
     Assert.Equal(1, exception.LineNumber);
@@ -32,9 +33,9 @@ public class AllTimeStatsTests
   [Fact]
   public void Parse_EmptyXmlFile_ThrowsException()
   {
-    var xml = "";
+    var stream = new MemoryStream(Encoding.UTF8.GetBytes(""));
 
-    var exception = Assert.Throws<XmlException>(() => AllTimeStats.Parse(xml));
+    var exception = Assert.Throws<XmlException>(() => AllTimeStats.Parse(stream));
 
     Assert.Equal("Root element is missing.", exception.Message);
     Assert.Equal(0, exception.LineNumber);

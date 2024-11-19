@@ -31,18 +31,16 @@ public record AllTimeStats
   [Required]
   public double SAP4 { get; set; }
 
-  public static AllTimeStats Parse(string xml)
+  public static AllTimeStats Parse(Stream stream)
   {
     var serializer = new XmlSerializer(typeof(AllTimeStats));
-    using var reader = new StringReader(xml);
     try
     {
-      return (AllTimeStats?)serializer.Deserialize(reader) ?? throw new Exception("Invalid XML input: " + xml);
+      return (AllTimeStats?)serializer.Deserialize(stream) ?? throw new Exception("XML contains no element");
     }
-    catch (InvalidOperationException e)
+    catch (InvalidOperationException e) when (e.InnerException is XmlException)
     {
-      if (e.InnerException is XmlException) throw e.InnerException;
-      throw;
+      throw e.InnerException;
     }
   }
 }

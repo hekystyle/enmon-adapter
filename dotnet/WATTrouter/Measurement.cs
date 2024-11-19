@@ -12,18 +12,16 @@ public record Measurement
   [Required]
   public int VAC { get; init; }
 
-  public static Measurement Parse(string xml)
+  public static Measurement Parse(Stream stream)
   {
     var serializer = new XmlSerializer(typeof(Measurement));
-    using var reader = new StringReader(xml);
     try
     {
-      return (Measurement?)serializer.Deserialize(reader) ?? throw new Exception("Invalid XML input: " + xml);
+      return (Measurement?)serializer.Deserialize(stream) ?? throw new Exception("Provided XML contains no element");
     }
-    catch (InvalidOperationException e)
+    catch (InvalidOperationException e) when (e.InnerException is XmlException)
     {
-      if (e.InnerException is XmlException) throw e.InnerException;
-      throw;
+      throw e.InnerException;
     }
   }
 }
