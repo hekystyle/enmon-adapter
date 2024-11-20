@@ -5,6 +5,8 @@ namespace WATTrouter;
 
 public class MxAdapter(ILogger<MxAdapter> logger, IMxApiClientFactory factory) : IAdapter
 {
+  public string Model => "Mx";
+
   public async Task<Values> GetValues(Uri baseUrl)
   {
     var apiClient = factory.Create(baseUrl);
