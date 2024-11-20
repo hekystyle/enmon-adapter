@@ -3,11 +3,6 @@ using Microsoft.Extensions.Logging;
 
 namespace WATTrouter;
 
-public interface IMxApiClientFactory
-{
-  MxApiClient Create(Uri baseUrl);
-}
-
 public class MxAdapter(ILogger<MxAdapter> logger, IMxApiClientFactory factory) : IAdapter
 {
   public async Task<Values> GetValues(Uri baseUrl)

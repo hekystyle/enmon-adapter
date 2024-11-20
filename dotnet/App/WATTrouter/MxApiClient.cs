@@ -1,5 +1,10 @@
 namespace WATTrouter;
 
+public interface IMxApiClientFactory
+{
+  MxApiClient Create(Uri baseUrl);
+}
+
 public class MxApiClient(HttpClient httpClient)
 {
   public async Task<AllTimeStats> GetAllTimeStatsAsync()
@@ -22,5 +27,15 @@ public class MxApiClient(HttpClient httpClient)
     var stream = await response.Content.ReadAsStreamAsync();
 
     return Measurement.Parse(stream);
+  }
+}
+
+public class MxApiClientFactory(IHttpClientFactory factory): IMxApiClientFactory
+{
+  public MxApiClient Create(Uri baseUrl)
+  {
+    var http = factory.CreateClient();
+    http.BaseAddress = baseUrl;
+    return new MxApiClient(http);
   }
 }
