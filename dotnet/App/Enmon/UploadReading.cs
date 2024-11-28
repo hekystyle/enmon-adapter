@@ -9,7 +9,7 @@ public class UploadReading : Entity
   public required ConfigEnmon Config { get; set; }
 }
 
-public class Reading
+public record Reading
 {
   public required string Register { get; set; }
   public double Value { get; set; }

@@ -10,6 +10,6 @@ public static class ServiceCollectionExtensions
     return services
       .AddTransient<IMxApiClientFactory, MxApiClientFactory>()
       .AddTransient<IAdapter, MxAdapter>()
-      .AddSingleton<AdapterFactory>();
+      .AddSingleton<IAdapterSelector, AdapterSelector>();
   }
 }

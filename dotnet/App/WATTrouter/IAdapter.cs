@@ -1,24 +1,21 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace WATTrouter;
-
-public record Values(AllTimeStats AllTimeStats, Measurement Measurement);
 
 public interface IAdapter
 {
   string Model { get; }
 
-  Task<Values> GetValues(Uri baseUrl);
+  Task<IReadOnlyCollection<Enmon.Reading>> GetReadings(Uri baseUrl);
 }
 
-public class AdapterFactory(IServiceProvider serviceProvider)
+public interface IAdapterSelector
 {
-  public IAdapter GetAdapter(string model)
+  IAdapter? GetAdapter(string model);
+}
+
+public class AdapterSelector(IEnumerable<IAdapter> adapters) : IAdapterSelector
+{
+  public IAdapter? GetAdapter(string model)
   {
-    var adapters = serviceProvider.GetServices<IAdapter>();
-
-    var adapter = adapters.FirstOrDefault(a => a.Model.Equals(model, StringComparison.OrdinalIgnoreCase));
-
-    return adapter ?? throw new ArgumentException($"Adapter for model '{model}' not found.", nameof(model));
+    return adapters.FirstOrDefault(a => a.Model.Equals(model, StringComparison.OrdinalIgnoreCase));
   }
 }
