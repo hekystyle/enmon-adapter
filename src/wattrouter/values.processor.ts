@@ -10,6 +10,7 @@ import { ConfigWattRouter } from './config.schema.js';
 import { UploadReadingRepository } from '../enmon/upload-reading.repository.js';
 import { FETCH_JOB_NAME, WATTROUTER_QUEUE_NAME } from './constants.js';
 import { Config } from '../config/schemas.js';
+import { RegistersMapper } from './registers-mapper.js';
 
 @Injectable()
 @Queue(WATTROUTER_QUEUE_NAME)
@@ -69,9 +70,14 @@ export class WATTrouterValuesProcessor {
 
     this.logger.log(`fetching values from ${config.baseURL} ...`);
 
-    const readings = await adapter.getReadings(config.baseURL);
+    const { readings, unusedMappings } = RegistersMapper.remap(
+      config.mapping,
+      await adapter.getReadings(config.baseURL),
+    );
 
-    // TODO: implement register remapping
+    if (unusedMappings.length) {
+      this.logger.warn(`unused registers mapping`, { unusedMappings });
+    }
 
     await Promise.all(
       config.targets.map((target, targetIndex) =>
