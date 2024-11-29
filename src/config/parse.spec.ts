@@ -8,7 +8,7 @@ import { WATTrouterModel } from '../wattrouter/model.js';
 import { EnmonEnv } from '../enmon/env.enum.js';
 import { ThermometerModel } from '../thermometers/model.enum.js';
 
-const VALID_CONFIG_INPUT_V0_1 = {
+const VALID_CONFIG_INPUT_V1 = {
   DEV: true,
   thermometers: [
     {
@@ -43,21 +43,22 @@ const VALID_CONFIG_INPUT_V0_1 = {
   },
 } satisfies InputConfig;
 
-const VALID_CONFIG_OUTPUT_V0_1 = {
-  DEV: VALID_CONFIG_INPUT_V0_1.DEV,
+const VALID_CONFIG_OUTPUT_V1 = {
+  version: '1',
+  DEV: VALID_CONFIG_INPUT_V1.DEV,
   db: { uri: 'mongodb://db/enmon-adapter' },
   enmon: {},
-  thermometers: VALID_CONFIG_INPUT_V0_1.thermometers,
+  thermometers: VALID_CONFIG_INPUT_V1.thermometers,
   wattrouters: [
     {
       model: WATTrouterModel.Mx,
-      baseURL: VALID_CONFIG_INPUT_V0_1.wattrouter.baseURL,
-      targets: [VALID_CONFIG_INPUT_V0_1.wattrouter.enmon],
+      baseURL: VALID_CONFIG_INPUT_V1.wattrouter.baseURL,
+      targets: [VALID_CONFIG_INPUT_V1.wattrouter.enmon],
     },
   ],
 } satisfies Config;
 
-const VALID_CONFIG_INPUT_V0_2 = {
+const VALID_CONFIG_INPUT_V2 = {
   DEV: true,
   thermometers: [
     {
@@ -83,30 +84,33 @@ const VALID_CONFIG_INPUT_V0_2 = {
   ],
   wattrouter: {
     baseURL: 'http://10.0.0.0',
-    enmon: {
-      customerId: faker.database.mongodbObjectId(),
-      devEUI: 'devEUI',
-      env: EnmonEnv.Dev,
-      token: faker.internet.password(),
-    },
+    targets: [
+      {
+        customerId: faker.database.mongodbObjectId(),
+        devEUI: 'devEUI',
+        env: EnmonEnv.Dev,
+        token: faker.internet.password(),
+      },
+    ],
   },
 } satisfies InputConfig;
 
-const VALID_CONFIG_OUTPUT_V0_2 = {
-  DEV: VALID_CONFIG_INPUT_V0_2.DEV,
+const VALID_CONFIG_OUTPUT_V2 = {
+  version: '2',
+  DEV: VALID_CONFIG_INPUT_V2.DEV,
   db: { uri: 'mongodb://db/enmon-adapter' },
   enmon: {},
-  thermometers: VALID_CONFIG_INPUT_V0_2.thermometers,
+  thermometers: VALID_CONFIG_INPUT_V2.thermometers,
   wattrouters: [
     {
       model: WATTrouterModel.Mx,
-      baseURL: VALID_CONFIG_INPUT_V0_2.wattrouter.baseURL,
-      targets: [VALID_CONFIG_INPUT_V0_2.wattrouter.enmon],
+      baseURL: VALID_CONFIG_INPUT_V2.wattrouter.baseURL,
+      targets: VALID_CONFIG_INPUT_V2.wattrouter.targets,
     },
   ],
 } satisfies Config;
 
-const VALID_CONFIG_INPUT_V1 = {
+const VALID_CONFIG_INPUT_LATEST = {
   DEV: true,
   db: {
     uri: faker.internet.url(),
@@ -152,19 +156,16 @@ const VALID_CONFIG_INPUT_V1 = {
   ],
 } satisfies InputConfig;
 
-const VALID_CONFIG_OUTPUT_V1 = {
-  DEV: VALID_CONFIG_INPUT_V1.DEV,
-  db: VALID_CONFIG_INPUT_V1.db,
-  enmon: VALID_CONFIG_INPUT_V1.enmon,
-  thermometers: VALID_CONFIG_INPUT_V1.thermometers,
-  wattrouters: VALID_CONFIG_INPUT_V1.wattrouters,
+const VALID_CONFIG_OUTPUT_LATEST = {
+  version: 'latest',
+  ...VALID_CONFIG_INPUT_LATEST,
 } satisfies Config;
 
 it.each([
-  ['0.1', VALID_CONFIG_INPUT_V0_1, VALID_CONFIG_OUTPUT_V0_1],
-  ['0.2', VALID_CONFIG_INPUT_V0_2, VALID_CONFIG_OUTPUT_V0_2],
-  ['1', VALID_CONFIG_INPUT_V1, VALID_CONFIG_OUTPUT_V1],
-])('should validate example v%s config', async (_version, input, output) => {
+  ['v1', VALID_CONFIG_INPUT_V1, VALID_CONFIG_OUTPUT_V1],
+  ['v2', VALID_CONFIG_INPUT_V2, VALID_CONFIG_OUTPUT_V2],
+  ['latest', VALID_CONFIG_INPUT_LATEST, VALID_CONFIG_OUTPUT_LATEST],
+])('should validate example %s config', async (_version, input, output) => {
   const promise = parseConfig(input);
 
   await expect(promise).resolves.toStrictEqual(output);

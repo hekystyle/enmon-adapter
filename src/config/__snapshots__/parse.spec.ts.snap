@@ -3,56 +3,201 @@
 exports[`should reject invalid config 0 1`] = `
 [
   {
+    "code": "invalid_union",
+    "message": "Invalid input",
+    "path": [],
+    "unionErrors": [
+      [ZodError: [
+  {
     "code": "invalid_type",
     "expected": "boolean",
-    "message": "Required",
-    "path": [
-      "DEV",
-    ],
     "received": "undefined",
-  },
-  {
-    "code": "invalid_type",
-    "expected": "'UNI7xxx' | 'UNI1xxx'",
-    "message": "Required",
     "path": [
-      "thermometers",
-      0,
-      "model",
+      "DEV"
     ],
-    "received": "undefined",
-  },
-  {
-    "code": "invalid_type",
-    "expected": "string",
-    "message": "Required",
-    "path": [
-      "thermometers",
-      0,
-      "dataSourceUrl",
-    ],
-    "received": "undefined",
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "object",
-    "message": "Required",
+    "received": "undefined",
+    "path": [
+      "db"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "enmon"
+    ],
+    "message": "Required"
+  },
+  {
+    "expected": "'UNI7xxx' | 'UNI1xxx'",
+    "received": "undefined",
+    "code": "invalid_type",
     "path": [
       "thermometers",
       0,
-      "enmon",
+      "model"
     ],
-    "received": "undefined",
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "dataSourceUrl"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon"
+    ],
+    "message": "Required"
+  }
+]],
+      [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
+  },
+  {
+    "expected": "'UNI7xxx' | 'UNI1xxx'",
+    "received": "undefined",
+    "code": "invalid_type",
+    "path": [
+      "thermometers",
+      0,
+      "model"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "dataSourceUrl"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
     "path": [
       "wattrouter",
-      "baseURL",
+      "baseURL"
     ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "array",
     "received": "undefined",
+    "path": [
+      "wattrouter",
+      "targets"
+    ],
+    "message": "Required"
+  }
+]],
+      [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
+  },
+  {
+    "expected": "'UNI7xxx' | 'UNI1xxx'",
+    "received": "undefined",
+    "code": "invalid_type",
+    "path": [
+      "thermometers",
+      0,
+      "model"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "dataSourceUrl"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "wattrouter",
+      "baseURL"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "wattrouter",
+      "enmon"
+    ],
+    "message": "Required"
+  }
+]],
+    ],
   },
 ]
 `;
@@ -60,148 +205,351 @@ exports[`should reject invalid config 0 1`] = `
 exports[`should reject invalid config 1 1`] = `
 [
   {
+    "code": "invalid_union",
+    "message": "Invalid input",
+    "path": [],
+    "unionErrors": [
+      [ZodError: [
+  {
     "code": "invalid_type",
     "expected": "boolean",
-    "message": "Required",
-    "path": [
-      "DEV",
-    ],
     "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
+    "received": "undefined",
     "path": [
       "db",
-      "uri",
+      "uri"
     ],
-    "received": "undefined",
+    "message": "Required"
   },
   {
+    "code": "invalid_type",
+    "expected": "object",
+    "received": "undefined",
+    "path": [
+      "enmon"
+    ],
+    "message": "Required"
+  },
+  {
+    "received": "invalid model",
     "code": "invalid_enum_value",
-    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'",
     "options": [
       "UNI7xxx",
-      "UNI1xxx",
+      "UNI1xxx"
     ],
     "path": [
       "thermometers",
       0,
-      "model",
+      "model"
     ],
+    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'"
+  },
+  {
+    "validation": "url",
+    "code": "invalid_string",
+    "message": "Invalid url",
+    "path": [
+      "thermometers",
+      0,
+      "dataSourceUrl"
+    ]
+  },
+  {
+    "expected": "'app' | 'dev'",
+    "received": "undefined",
+    "code": "invalid_type",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "env"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "customerId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "devEUI"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "token"
+    ],
+    "message": "Required"
+  }
+]],
+      [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
+  },
+  {
     "received": "invalid model",
+    "code": "invalid_enum_value",
+    "options": [
+      "UNI7xxx",
+      "UNI1xxx"
+    ],
+    "path": [
+      "thermometers",
+      0,
+      "model"
+    ],
+    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'"
   },
   {
+    "validation": "url",
     "code": "invalid_string",
     "message": "Invalid url",
     "path": [
       "thermometers",
       0,
-      "dataSourceUrl",
-    ],
-    "validation": "url",
+      "dataSourceUrl"
+    ]
   },
   {
-    "code": "invalid_type",
     "expected": "'app' | 'dev'",
-    "message": "Required",
+    "received": "undefined",
+    "code": "invalid_type",
     "path": [
       "thermometers",
       0,
       "enmon",
-      "env",
+      "env"
     ],
-    "received": "undefined",
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
+    "received": "undefined",
     "path": [
       "thermometers",
       0,
       "enmon",
-      "customerId",
+      "customerId"
     ],
-    "received": "undefined",
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
+    "received": "undefined",
     "path": [
       "thermometers",
       0,
       "enmon",
-      "devEUI",
+      "devEUI"
     ],
-    "received": "undefined",
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
+    "received": "undefined",
     "path": [
       "thermometers",
       0,
       "enmon",
-      "token",
+      "token"
     ],
-    "received": "undefined",
+    "message": "Required"
   },
   {
+    "validation": "url",
     "code": "invalid_string",
     "message": "Invalid url",
     "path": [
       "wattrouter",
-      "baseURL",
+      "baseURL"
+    ]
+  },
+  {
+    "code": "invalid_type",
+    "expected": "array",
+    "received": "undefined",
+    "path": [
+      "wattrouter",
+      "targets"
     ],
+    "message": "Required"
+  }
+]],
+      [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
+  },
+  {
+    "received": "invalid model",
+    "code": "invalid_enum_value",
+    "options": [
+      "UNI7xxx",
+      "UNI1xxx"
+    ],
+    "path": [
+      "thermometers",
+      0,
+      "model"
+    ],
+    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'"
+  },
+  {
     "validation": "url",
+    "code": "invalid_string",
+    "message": "Invalid url",
+    "path": [
+      "thermometers",
+      0,
+      "dataSourceUrl"
+    ]
   },
   {
-    "code": "invalid_type",
     "expected": "'app' | 'dev'",
-    "message": "Required",
-    "path": [
-      "wattrouter",
-      "enmon",
-      "env",
-    ],
     "received": "undefined",
+    "code": "invalid_type",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "env"
+    ],
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
-    "path": [
-      "wattrouter",
-      "enmon",
-      "customerId",
-    ],
     "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "customerId"
+    ],
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
-    "path": [
-      "wattrouter",
-      "enmon",
-      "devEUI",
-    ],
     "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "devEUI"
+    ],
+    "message": "Required"
   },
   {
     "code": "invalid_type",
     "expected": "string",
-    "message": "Required",
+    "received": "undefined",
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "token"
+    ],
+    "message": "Required"
+  },
+  {
+    "validation": "url",
+    "code": "invalid_string",
+    "message": "Invalid url",
+    "path": [
+      "wattrouter",
+      "baseURL"
+    ]
+  },
+  {
+    "expected": "'app' | 'dev'",
+    "received": "undefined",
+    "code": "invalid_type",
     "path": [
       "wattrouter",
       "enmon",
-      "token",
+      "env"
     ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
     "received": "undefined",
+    "path": [
+      "wattrouter",
+      "enmon",
+      "customerId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "wattrouter",
+      "enmon",
+      "devEUI"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "wattrouter",
+      "enmon",
+      "token"
+    ],
+    "message": "Required"
+  }
+]],
+    ],
   },
 ]
 `;
@@ -209,93 +557,221 @@ exports[`should reject invalid config 1 1`] = `
 exports[`should reject invalid config 2 1`] = `
 [
   {
+    "code": "invalid_union",
+    "message": "Invalid input",
+    "path": [],
+    "unionErrors": [
+      [ZodError: [
+  {
     "code": "invalid_type",
     "expected": "boolean",
-    "message": "Required",
-    "path": [
-      "DEV",
-    ],
     "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
   },
   {
+    "validation": "url",
     "code": "invalid_string",
     "message": "Invalid url",
     "path": [
       "db",
-      "uri",
-    ],
-    "validation": "url",
+      "uri"
+    ]
   },
   {
+    "validation": "email",
     "code": "invalid_string",
     "message": "Invalid email",
     "path": [
       "enmon",
-      "contactEmail",
-    ],
-    "validation": "email",
+      "contactEmail"
+    ]
   },
   {
+    "received": "invalid model",
     "code": "invalid_enum_value",
-    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'",
     "options": [
       "UNI7xxx",
-      "UNI1xxx",
+      "UNI1xxx"
     ],
     "path": [
       "thermometers",
       0,
-      "model",
+      "model"
     ],
+    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'"
+  },
+  {
+    "validation": "url",
+    "code": "invalid_string",
+    "message": "Invalid url",
+    "path": [
+      "thermometers",
+      0,
+      "dataSourceUrl"
+    ]
+  },
+  {
+    "received": "invalid EnmonEnv",
+    "code": "invalid_enum_value",
+    "options": [
+      "app",
+      "dev"
+    ],
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "env"
+    ],
+    "message": "Invalid enum value. Expected 'app' | 'dev', received 'invalid EnmonEnv'"
+  }
+]],
+      [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
+  },
+  {
     "received": "invalid model",
+    "code": "invalid_enum_value",
+    "options": [
+      "UNI7xxx",
+      "UNI1xxx"
+    ],
+    "path": [
+      "thermometers",
+      0,
+      "model"
+    ],
+    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'"
   },
   {
+    "validation": "url",
     "code": "invalid_string",
     "message": "Invalid url",
     "path": [
       "thermometers",
       0,
-      "dataSourceUrl",
-    ],
-    "validation": "url",
+      "dataSourceUrl"
+    ]
   },
   {
+    "received": "invalid EnmonEnv",
     "code": "invalid_enum_value",
-    "message": "Invalid enum value. Expected 'app' | 'dev', received 'invalid EnmonEnv'",
     "options": [
       "app",
-      "dev",
+      "dev"
     ],
     "path": [
       "thermometers",
       0,
       "enmon",
-      "env",
+      "env"
     ],
-    "received": "invalid EnmonEnv",
+    "message": "Invalid enum value. Expected 'app' | 'dev', received 'invalid EnmonEnv'"
   },
   {
+    "validation": "url",
     "code": "invalid_string",
     "message": "Invalid url",
     "path": [
       "wattrouter",
-      "baseURL",
-    ],
-    "validation": "url",
+      "baseURL"
+    ]
   },
   {
+    "code": "invalid_type",
+    "expected": "array",
+    "received": "undefined",
+    "path": [
+      "wattrouter",
+      "targets"
+    ],
+    "message": "Required"
+  }
+]],
+      [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "boolean",
+    "received": "undefined",
+    "path": [
+      "DEV"
+    ],
+    "message": "Required"
+  },
+  {
+    "received": "invalid model",
     "code": "invalid_enum_value",
-    "message": "Invalid enum value. Expected 'app' | 'dev', received 'invalid EnmonEnv'",
+    "options": [
+      "UNI7xxx",
+      "UNI1xxx"
+    ],
+    "path": [
+      "thermometers",
+      0,
+      "model"
+    ],
+    "message": "Invalid enum value. Expected 'UNI7xxx' | 'UNI1xxx', received 'invalid model'"
+  },
+  {
+    "validation": "url",
+    "code": "invalid_string",
+    "message": "Invalid url",
+    "path": [
+      "thermometers",
+      0,
+      "dataSourceUrl"
+    ]
+  },
+  {
+    "received": "invalid EnmonEnv",
+    "code": "invalid_enum_value",
     "options": [
       "app",
-      "dev",
+      "dev"
+    ],
+    "path": [
+      "thermometers",
+      0,
+      "enmon",
+      "env"
+    ],
+    "message": "Invalid enum value. Expected 'app' | 'dev', received 'invalid EnmonEnv'"
+  },
+  {
+    "validation": "url",
+    "code": "invalid_string",
+    "message": "Invalid url",
+    "path": [
+      "wattrouter",
+      "baseURL"
+    ]
+  },
+  {
+    "received": "invalid EnmonEnv",
+    "code": "invalid_enum_value",
+    "options": [
+      "app",
+      "dev"
     ],
     "path": [
       "wattrouter",
       "enmon",
-      "env",
+      "env"
     ],
-    "received": "invalid EnmonEnv",
+    "message": "Invalid enum value. Expected 'app' | 'dev', received 'invalid EnmonEnv'"
+  }
+]],
+    ],
   },
 ]
 `;

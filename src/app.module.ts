@@ -10,6 +10,7 @@ import { WATTrouterModule } from './wattrouter/wattrouter.module.js';
 import { AlsModule } from './als/als.module.js';
 import configuration from './config/configuration.js';
 import { Config } from './config/schemas.js';
+import { ConfigChecker } from './config/checker.js';
 
 export const CONFIG_MODULE = ConfigModule.forRoot({
   isGlobal: true,
@@ -49,7 +50,7 @@ export const CONFIG_MODULE = ConfigModule.forRoot({
     ThermometersModule,
     WATTrouterModule,
   ],
-  providers: [],
+  providers: [ConfigChecker],
   exports: [],
 })
 export class AppModule {}
