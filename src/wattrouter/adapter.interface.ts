@@ -1,17 +1,14 @@
+import { Reading } from '../enmon/upload-reading.schema.js';
 import { ConfigWattRouter } from './config.schema.js';
-import { AllTimeStats } from './all-time-stats.schema.js';
-import { Measurement } from './measurement.schema.js';
-
-export type WATTrouterValues = AllTimeStats & Measurement;
 
 // NOTE: I prefix prevents naming collision with decorator
 /** WATTrouter adapter interface. */
 export interface IAdapter {
-  getValues(baseUrl: ConfigWattRouter['baseURL']): Promise<WATTrouterValues>;
+  getReadings(baseUrl: ConfigWattRouter['baseURL']): Promise<readonly Reading[]>;
 }
 
 export const isIAdapter = (adapter: unknown): adapter is IAdapter =>
   typeof adapter === 'object' &&
   adapter !== null &&
-  ('getValues' satisfies keyof IAdapter) in adapter &&
-  typeof adapter.getValues === 'function';
+  ('getReadings' satisfies keyof IAdapter) in adapter &&
+  typeof adapter.getReadings === 'function';
