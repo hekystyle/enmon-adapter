@@ -5,12 +5,20 @@ import { configThermometerSchema } from '../thermometers/config.schema.js';
 export const configSchema = z
   .object({
     DEV: z.boolean(),
-    db: z.object({
-      uri: z.string().url(),
-    }),
-    enmon: z.object({
-      contactEmail: z.string().email().optional(),
-    }),
+    db: z
+      .object({
+        uri: z.string().url(),
+      })
+      .optional()
+      .default({
+        uri: 'mongodb://db/enmon-adapter',
+      }),
+    enmon: z
+      .object({
+        contactEmail: z.string().email().optional(),
+      })
+      .optional()
+      .default({}),
     thermometers: z.array(configThermometerSchema).nullish(),
     wattrouter: configWattRouterSchema.nullish(),
     wattrouters: z.array(configWattRouterSchema).nullish(),
