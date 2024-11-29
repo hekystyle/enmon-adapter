@@ -116,3 +116,7 @@ config/**
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# .NET output
+bin
+obj
