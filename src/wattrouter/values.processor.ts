@@ -69,17 +69,9 @@ export class WATTrouterValuesProcessor {
 
     this.logger.log(`fetching values from ${config.baseURL} ...`);
 
-    const { SAH4, SAL4, SAP4, SAS4, VAC } = await adapter.getValues(config.baseURL);
+    const readings = await adapter.getReadings(config.baseURL);
 
-    const readAt = new Date();
-
-    const readings: Reading[] = [
-      { readAt, register: `1-1.8.2`, value: SAH4 },
-      { readAt, register: `1-1.8.3`, value: SAL4 },
-      { readAt, register: `1-1.8.4`, value: SAP4 },
-      { readAt, register: `1-2.8.0`, value: SAS4 },
-      { readAt, register: `1-32.7.0`, value: VAC },
-    ];
+    // TODO: implement register remapping
 
     await Promise.all(
       config.targets.map((target, targetIndex) =>
