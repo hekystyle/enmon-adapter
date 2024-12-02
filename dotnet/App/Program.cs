@@ -1,19 +1,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Entities;
 using MongoDB.Driver;
 using WATTrouter;
 
-var host = Host.CreateDefaultBuilder(args)
-    .ConfigureAppConfiguration((context, config) =>
-    {
-      config.SetBasePath(context.HostingEnvironment.ContentRootPath)
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-    })
+var builder = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
     {
       var db = context.Configuration.GetSection("Db");
+
+      services.Configure<IReadOnlyCollection<Config>>(context.Configuration.GetSection("Targets"));
 
       services
           .AddSingleton(async () => await DB.InitAsync(
@@ -21,8 +17,9 @@ var host = Host.CreateDefaultBuilder(args)
             MongoClientSettings.FromConnectionString(db["Uri"])
           ))
           .AddWATTrouter();
-    })
-    .Build();
+    });
+
+var host = builder.Build();
 
 var app = host.Services.GetRequiredService<App>();
 app.Run();

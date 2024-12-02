@@ -57,9 +57,9 @@ public class ValuesProcessor(ILogger<ValuesProcessor> logger, IAdapterSelector a
       return;
     }
 
-    logger.LogInformation("fetching values from {Source}", config.BaseURL);
+    logger.LogInformation("fetching values from {Source}", config.Source);
 
-    var readings = await adapter.GetReadings(config.BaseURL);
+    var readings = await adapter.GetReadings(config.Source);
 
     await Task.WhenAll(config.Targets.Select(async (target, targetIndex) =>
     {
