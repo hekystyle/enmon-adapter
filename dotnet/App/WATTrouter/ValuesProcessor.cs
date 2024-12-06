@@ -4,7 +4,12 @@ using Microsoft.Extensions.Options;
 
 namespace WATTrouter;
 
-public class ValuesProcessor(ILogger<ValuesProcessor> logger, IAdapterSelector adapterSelector, IOptions<IReadOnlyCollection<Config>> _configs)
+public class ValuesProcessor(
+  ILogger<ValuesProcessor> logger,
+  IAdapterSelector adapterSelector,
+  IOptions<IReadOnlyCollection<Config>> _configs,
+  IUploadJobQueue uploadJobQueue
+  )
 {
   IReadOnlyCollection<Config> Configs => _configs.Value ?? [];
 
@@ -81,6 +86,22 @@ public class ValuesProcessor(ILogger<ValuesProcessor> logger, IAdapterSelector a
 
   async Task ProcessTarget(Enmon.Config target, IReadOnlyCollection<Reading> readings)
   {
-    // TODO: implement
+    logger.LogInformation("mapping {Count} readings to jobs...", readings.Count);
+
+    var jobs = readings.Select(reading => new UploadReading
+    {
+      Reading = reading,
+      Config = target,
+    });
+
+    logger.LogInformation("pushing {Count} jobs to queue...", jobs.Count());
+
+    await uploadJobQueue.Push(jobs);
+
+    logger.LogInformation("jobs pushed to queue, scheduling immediate processing...");
+
+    await uploadJobQueue.ScheduleInstantProcessing();
+
+    logger.LogInformation("scheduled, target processed");
   }
 }
