@@ -30,7 +30,7 @@ public class MxApiClient(HttpClient httpClient)
   }
 }
 
-public class MxApiClientFactory(IHttpClientFactory factory): IMxApiClientFactory
+public class MxApiClientFactory(IHttpClientFactory factory) : IMxApiClientFactory
 {
   public MxApiClient Create(Uri baseUrl)
   {

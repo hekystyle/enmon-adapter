@@ -18,7 +18,7 @@ namespace Enmon.Tests
       Assert.Equal("\"dev\"", JsonSerializer.Serialize(Env.dev));
     }
 
-     [Fact]
+    [Fact]
     public void ShouldDeserializeFromJson()
     {
       Assert.Equal(Env.app, JsonSerializer.Deserialize<Env>("\"app\""));
