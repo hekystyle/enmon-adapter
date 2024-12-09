@@ -20,10 +20,10 @@ public class Config
 
 public static class ConfigValidator
 {
-  public static bool TryValidate(ConfigEnmon config, out List<ValidationResult> validationResults)
+  public static bool TryValidate(Config config, out List<ValidationResult> validationResults)
   {
     var context = new ValidationContext(config);
-    validationResults = new List<ValidationResult>();
+    validationResults = [];
     return Validator.TryValidateObject(config, context, validationResults, true);
   }
 }

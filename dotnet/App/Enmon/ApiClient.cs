@@ -74,7 +74,7 @@ public class ApiClient(Env env)
     return JsonSerializer.Deserialize<PostMeterPlainCounterMultiResult>(responseData);
   }
 
-  public async Task<HttpResponseMessage> PostMeterPlainValue(PostMeterPlainValueArgs args)
+  public async Task<HttpResponseMessage> PostMeterPlainValue(PostMeterPlainValueArgs args, CancellationToken cancellationToken)
   {
     var baseUrl = $"https://{args.Env?.ToString().ToLower() ?? defaultEnv.ToString().ToLower()}.enmon.tech";
     httpClient.BaseAddress = new Uri(baseUrl);
@@ -83,6 +83,6 @@ public class ApiClient(Env env)
     var jsonPayload = JsonSerializer.Serialize(args.Payload, LowercaseOptions);
     var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
 
-    return await httpClient.PostAsync($"meter/plain/{args.CustomerId}/value", content);
+    return await httpClient.PostAsync($"meter/plain/{args.CustomerId}/value", content, cancellationToken);
   }
 }

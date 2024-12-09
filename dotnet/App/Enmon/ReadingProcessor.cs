@@ -1,5 +1,6 @@
 using Hangfire;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
 using MongoDB.Entities;
 
 namespace Enmon;
@@ -8,29 +9,29 @@ namespace Enmon;
 public class ReadingProcessor(
     ILogger<ReadingProcessor> logger,
     ApiClient enmonApiClient,
-    UploadReadingRepository uploadReadingRepository)
+    IUploadJobQueue uploadJobQueue)
 {
-  private readonly ILogger<ReadingProcessor> logger = logger;
-  private readonly ApiClient enmonApiClient = enmonApiClient;
-  private readonly UploadReadingRepository uploadReadingRepository = uploadReadingRepository;
-
-
   [AutomaticRetry(Attempts = 3)]
-  public async Task HandleUploadJobAsync()
+  public async Task UploadReadingsAsync(CancellationToken cancellationToken)
   {
     logger.LogInformation("Processing upload job...");
 
-    var cursor = await uploadReadingRepository.GetSorterCursorAsync();
+    var cursor = await uploadJobQueue.GetSorterCursorAsync();
 
     while (await cursor.MoveNextAsync())
     {
       foreach (var document in cursor.Current)
       {
+        cancellationToken.ThrowIfCancellationRequested();
         try
         {
-          await UploadReadingAsync(document);
+          await UploadReadingAsync(document, cancellationToken);
           logger.LogInformation("Deleting uploaded reading...");
           await document.DeleteAsync();
+        }
+        catch (OperationCanceledException)
+        {
+          throw;
         }
         catch (Exception ex)
         {
@@ -42,7 +43,7 @@ public class ReadingProcessor(
     logger.LogInformation("All readings uploaded.");
   }
 
-  private async Task UploadReadingAsync(UploadReading data)
+  private async Task UploadReadingAsync(UploadReading data, CancellationToken cancellationToken)
   {
     var config = data.Config;
     var reading = data.Reading;
@@ -55,22 +56,22 @@ public class ReadingProcessor(
       MeterRegister = reading.Register
     };
 
-    logger.LogInformation($"Uploading reading with payload: {payload}");
+    logger.LogInformation("Uploading reading with payload: {Payload}", payload);
 
     try
     {
       var response = await enmonApiClient.PostMeterPlainValue(new PostMeterPlainValueArgs
       {
         Env = config.Env,
-        CustomerId = config.CustomerId,
+        CustomerId = new ObjectId(config.CustomerId),
         Token = config.Token,
         Payload = payload
-      });
-      logger.LogInformation($"Reading uploaded successfully. Status: {response.StatusCode}, StatusText: {response.ReasonPhrase}");
+      }, cancellationToken);
+      logger.LogInformation("Reading uploaded successfully. Status: {StatusCode}, StatusText: {ReasonPhrase}", response.StatusCode, response.ReasonPhrase);
     }
     catch (HttpRequestException ex)
     {
-      logger.LogError($"HTTP Request failed: {ex.Message}");
+      logger.LogError("HTTP Request failed: {Message}", ex.Message);
       throw;
     }
   }
@@ -79,11 +80,11 @@ public class ReadingProcessor(
   {
     if (ex is HttpRequestException httpRequestException)
     {
-      logger.LogError($"Upload reading failed. Status: {httpRequestException.StatusCode}, Message: {httpRequestException.Message}");
+      logger.LogError("Upload reading failed. Status: {StatusCode}, Message: {Message}", httpRequestException.StatusCode, httpRequestException.Message);
     }
     else
     {
-      logger.LogError($"An unexpected error occurred: {ex.Message}");
+      logger.LogError("An unexpected error occurred: {Message}", ex.Message);
       throw ex;
     }
   }

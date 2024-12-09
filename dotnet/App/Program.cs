@@ -1,33 +1,37 @@
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using MongoDB.Entities;
 using MongoDB.Driver;
 using WATTrouter;
+using Hangfire;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
 
-var builder = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((context, services) =>
+var builder = WebApplication.CreateBuilder();
+
+builder.Host.ConfigureServices((context, services) =>
     {
-      var db = context.Configuration.GetSection("Db");
-
       services.Configure<IReadOnlyCollection<Config>>(context.Configuration.GetSection("Targets"));
+
+      services
+        .AddHangfire(hangfire =>
+        {
+          hangfire
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UseSqlServerStorage(context.Configuration.GetConnectionString("Hangfire"));
+        })
+        .AddHangfireServer();
 
       services
           .AddSingleton(async () => await DB.InitAsync(
             "enmon-adapter",
-            MongoClientSettings.FromConnectionString(db["Uri"])
+            MongoClientSettings.FromConnectionString(context.Configuration.GetConnectionString("App"))
           ))
           .AddWATTrouter();
     });
 
-var host = builder.Build();
+var app = builder.Build();
 
-var app = host.Services.GetRequiredService<App>();
+app.MapHangfireDashboard();
+
 app.Run();
-
-public class App
-{
-  public void Run()
-  {
-    Console.WriteLine("Hello, DI Console App!");
-  }
-}
