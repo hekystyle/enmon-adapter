@@ -2,7 +2,7 @@
 using Enmon;
 using Microsoft.Extensions.Logging;
 
-namespace WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public class MxAdapter(ILogger<MxAdapter> logger, IMxApiClientFactory factory) : IAdapter
 {

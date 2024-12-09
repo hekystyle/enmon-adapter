@@ -1,6 +1,6 @@
 using MongoDB.Entities;
 
-namespace Enmon;
+namespace HekyLab.EnmonAdapter.Enmon;
 
 public class UploadReading : Entity
 {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Entities;
 
-namespace Enmon;
+namespace HekyLab.EnmonAdapter.Enmon;
 
 [Queue(Constants.ReadingsQueueName)]
 public class ReadingProcessor(

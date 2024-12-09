@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public static class MxServerBuilder
 {

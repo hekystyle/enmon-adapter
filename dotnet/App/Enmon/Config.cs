@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Enmon;
+namespace HekyLab.EnmonAdapter.Enmon;
 
 public class Config
 {

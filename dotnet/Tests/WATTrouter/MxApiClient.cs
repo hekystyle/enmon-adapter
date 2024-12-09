@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.TestHost;
 
-namespace WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public class MxApiClientTests
 {

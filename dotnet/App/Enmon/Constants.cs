@@ -1,4 +1,4 @@
-namespace Enmon;
+namespace HekyLab.EnmonAdapter.Enmon;
 
 public static class Constants
 {

@@ -2,7 +2,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using MongoDB.Bson;
 
-namespace Enmon;
+namespace HekyLab.EnmonAdapter.Enmon;
 
 public record PlainDataPoint
 {

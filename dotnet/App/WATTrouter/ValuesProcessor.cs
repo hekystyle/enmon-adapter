@@ -2,7 +2,7 @@ using Enmon;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public class ValuesProcessor(
   ILogger<ValuesProcessor> logger,

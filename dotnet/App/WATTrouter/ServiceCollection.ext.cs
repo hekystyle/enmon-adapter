@@ -1,7 +1,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public static class ServiceCollectionExtensions
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public record Config
 {

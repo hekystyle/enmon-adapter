@@ -1,6 +1,6 @@
 using MongoDB.Driver;
 
-namespace Enmon;
+namespace HekyLab.EnmonAdapter.Enmon;
 
 public interface IUploadJobQueue
 {

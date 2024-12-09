@@ -1,7 +1,7 @@
 using MongoDB.Entities;
 using MongoDB.Driver;
 
-namespace Enmon;
+namespace HekyLab.EnmonAdapter.Enmon;
 
 public class UploadReadingRepository()
 {

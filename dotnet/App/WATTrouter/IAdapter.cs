@@ -1,4 +1,4 @@
-namespace WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public interface IAdapter
 {
