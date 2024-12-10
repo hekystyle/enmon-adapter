@@ -1,13 +1,12 @@
 using System.Text;
 using System.Xml;
-using WATTrouter;
+using HekyLab.EnmonAdapter.WATTrouter;
 
 public class AllTimeStatsTests
 {
   [Fact]
   public void Parse_ValidXmlFromFile_ReturnsAllTimeStats()
   {
-
     var stream = File.OpenRead(Path.Combine("__fixtures__", "stat_alltime.xml"));
     var result = AllTimeStats.Parse(stream);
 

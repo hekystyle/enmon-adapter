@@ -1,4 +1,5 @@
 using System.Text.Json;
+using HekyLab.EnmonAdapter.Enmon;
 
 namespace Enmon.Tests
 {
