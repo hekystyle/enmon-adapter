@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace HekyLab.EnmonAdapter.WATTrouter;
 
 [XmlRoot("meas")]
-public record Measurement
+public record Meas
 {
   /// <summary>
   /// Voltage on phase L1
@@ -13,12 +13,12 @@ public record Measurement
   [Required]
   public int VAC { get; init; }
 
-  public static Measurement Parse(Stream stream)
+  public static Meas Parse(Stream stream)
   {
-    var serializer = new XmlSerializer(typeof(Measurement));
+    var serializer = new XmlSerializer(typeof(Meas));
     try
     {
-      return (Measurement?)serializer.Deserialize(stream) ?? throw new Exception("Provided XML contains no element");
+      return (Meas?)serializer.Deserialize(stream) ?? throw new Exception("Provided XML contains no element");
     }
     catch (InvalidOperationException e) when (e.InnerException is XmlException)
     {

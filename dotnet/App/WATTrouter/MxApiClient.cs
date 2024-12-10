@@ -18,7 +18,7 @@ public class MxApiClient(HttpClient httpClient)
     return AllTimeStats.Parse(stream);
   }
 
-  public async Task<Measurement> GetMeasurementAsync()
+  public async Task<Meas> GetMeasurementAsync()
   {
     var response = await httpClient.GetAsync("/meas.xml");
 
@@ -26,7 +26,7 @@ public class MxApiClient(HttpClient httpClient)
 
     var stream = await response.Content.ReadAsStreamAsync();
 
-    return Measurement.Parse(stream);
+    return Meas.Parse(stream);
   }
 }
 

@@ -1,4 +1,4 @@
-using Enmon;
+using HekyLab.EnmonAdapter.Enmon;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -8,7 +8,7 @@ public class ValuesProcessor(
   ILogger<ValuesProcessor> logger,
   IAdapterSelector adapterSelector,
   IOptions<IReadOnlyCollection<Config>> _configs,
-  IUploadJobQueue uploadJobQueue
+  IMeasurementsQueue measurementQueue
   )
 {
   IReadOnlyCollection<Config> Configs => _configs.Value ?? [];
@@ -84,11 +84,11 @@ public class ValuesProcessor(
     logger.LogInformation("config processed");
   }
 
-  async Task ProcessTarget(Enmon.Config target, IReadOnlyCollection<Reading> readings)
+  async Task ProcessTarget(Enmon.Config target, IReadOnlyCollection<Measurement> readings)
   {
     logger.LogInformation("mapping {Count} readings to jobs...", readings.Count);
 
-    var jobs = readings.Select(reading => new UploadReading
+    var jobs = readings.Select(reading => new MeasurementUploadData
     {
       Reading = reading,
       Config = target,
@@ -96,11 +96,11 @@ public class ValuesProcessor(
 
     logger.LogInformation("pushing {Count} jobs to queue...", jobs.Count());
 
-    await uploadJobQueue.Push(jobs);
+    await measurementQueue.Push(jobs);
 
     logger.LogInformation("jobs pushed to queue, scheduling immediate processing...");
 
-    await uploadJobQueue.ScheduleInstantProcessing();
+    await measurementQueue.ScheduleInstantProcessing();
 
     logger.LogInformation("scheduled, target processed");
   }

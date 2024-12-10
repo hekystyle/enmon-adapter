@@ -5,20 +5,20 @@ using MongoDB.Entities;
 
 namespace HekyLab.EnmonAdapter.Enmon;
 
-[Queue(Constants.ReadingsQueueName)]
-public class ReadingProcessor(
-    ILogger<ReadingProcessor> logger,
+[Queue(IMeasurementsQueue.Name)]
+public class MeasurementsQueueProcessor(
+    ILogger<MeasurementsQueueProcessor> logger,
     ApiClient enmonApiClient,
-    IUploadJobQueue uploadJobQueue)
+    IMeasurementsQueue uploadJobQueue)
 {
-  [AutomaticRetry(Attempts = 3)]
+  [AutomaticRetry(Attempts = int.MaxValue)]
   public async Task UploadReadingsAsync(CancellationToken cancellationToken)
   {
     logger.LogInformation("Processing upload job...");
 
-    var cursor = await uploadJobQueue.GetSorterCursorAsync();
+    var cursor = await uploadJobQueue.GetSorterCursorAsync(cancellationToken);
 
-    while (await cursor.MoveNextAsync())
+    while (await cursor.MoveNextAsync(cancellationToken))
     {
       foreach (var document in cursor.Current)
       {
@@ -27,7 +27,7 @@ public class ReadingProcessor(
         {
           await UploadReadingAsync(document, cancellationToken);
           logger.LogInformation("Deleting uploaded reading...");
-          await document.DeleteAsync();
+          await document.DeleteAsync(null, cancellationToken);
         }
         catch (OperationCanceledException)
         {
@@ -43,7 +43,7 @@ public class ReadingProcessor(
     logger.LogInformation("All readings uploaded.");
   }
 
-  private async Task UploadReadingAsync(UploadReading data, CancellationToken cancellationToken)
+  private async Task UploadReadingAsync(MeasurementUploadData data, CancellationToken cancellationToken)
   {
     var config = data.Config;
     var reading = data.Reading;

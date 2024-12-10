@@ -2,13 +2,13 @@ using MongoDB.Entities;
 
 namespace HekyLab.EnmonAdapter.Enmon;
 
-public class UploadReading : Entity
+public class MeasurementUploadData : Entity
 {
-  public required Reading Reading { get; set; }
+  public required Measurement Reading { get; set; }
   public required Config Config { get; set; }
 }
 
-public record Reading
+public record Measurement
 {
   public required string Register { get; set; }
   public double Value { get; set; }
