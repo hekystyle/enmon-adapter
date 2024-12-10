@@ -8,7 +8,7 @@ namespace HekyLab.EnmonAdapter.Enmon;
 [Queue(IMeasurementsQueue.Name)]
 public class MeasurementsQueueProcessor(
     ILogger<MeasurementsQueueProcessor> logger,
-    ApiClient enmonApiClient,
+    IApiClient enmonApiClient,
     IMeasurementsQueue uploadJobQueue)
 {
   [AutomaticRetry(Attempts = int.MaxValue)]
