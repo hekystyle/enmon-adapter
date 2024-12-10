@@ -8,12 +8,12 @@ public class ApiClient(IHttpClientFactory httpClientFactory) : IApiClient
 {
   public const Env DefaultEnv = Env.app;
 
-  private static JsonSerializerOptions LowercaseOptions => new ()
+  private static JsonSerializerOptions LowercaseOptions => new()
   {
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
   };
 
-  private static MediaTypeHeaderValue MediaType => new ("application/json", "utf8");
+  private static MediaTypeHeaderValue MediaType => new("application/json", "utf8");
 
   public async Task<HttpResponseMessage> PostMeterPlainValue(PostMeterPlainValueContext args, CancellationToken cancellationToken)
   {
