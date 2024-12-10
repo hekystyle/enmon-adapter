@@ -58,15 +58,17 @@ public class MeasurementsQueueProcessor(
 
     logger.LogInformation("Uploading reading with payload: {Payload}", payload);
 
+    var ctx = new PostMeterPlainValueContext
+    {
+      Env = config.Env,
+      CustomerId = new ObjectId(config.CustomerId),
+      Token = config.Token,
+      Payload = payload
+    };
+
     try
     {
-      var response = await enmonApiClient.PostMeterPlainValue(new PostMeterPlainValueArgs
-      {
-        Env = config.Env,
-        CustomerId = new ObjectId(config.CustomerId),
-        Token = config.Token,
-        Payload = payload
-      }, cancellationToken);
+      var response = await enmonApiClient.PostMeterPlainValue(ctx, cancellationToken);
       logger.LogInformation("Reading uploaded successfully. Status: {StatusCode}, StatusText: {ReasonPhrase}", response.StatusCode, response.ReasonPhrase);
     }
     catch (HttpRequestException ex)

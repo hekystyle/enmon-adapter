@@ -1,43 +1,33 @@
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace HekyLab.EnmonAdapter.Enmon;
 
-public class ApiClient(Env env) : IApiClient
+public class ApiClient(IHttpClientFactory httpClientFactory) : IApiClient
 {
-  private readonly HttpClient httpClient = new();
-  private readonly Env defaultEnv = env;
+  public const Env DefaultEnv = Env.app;
 
-  private static readonly JsonSerializerOptions LowercaseOptions = new JsonSerializerOptions
+  private static JsonSerializerOptions LowercaseOptions => new ()
   {
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
   };
 
-  public async Task<PostMeterPlainCounterMultiResult> PostMeterPlainCounterMulti(PostMeterCounterArgs args)
+  private static MediaTypeHeaderValue MediaType => new ("application/json", "utf8");
+
+  public async Task<HttpResponseMessage> PostMeterPlainValue(PostMeterPlainValueContext args, CancellationToken cancellationToken)
   {
-    var baseUrl = $"https://{args.Env ?? defaultEnv}.enmon.tech";
-    httpClient.BaseAddress = new Uri(baseUrl);
+    using var httpClient = httpClientFactory.CreateClient();
+
+    httpClient.BaseAddress = new Uri($"https://{args.Env ?? DefaultEnv}.enmon.tech");
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", args.Token);
 
-    var jsonPayload = JsonSerializer.Serialize(args.Payload, LowercaseOptions);
-    var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
+    var content = JsonContent.Create(args.Payload, MediaType, LowercaseOptions);
 
-    var response = await httpClient.PostAsync($"meter/plain/{args.CustomerId}/counter-multi", content);
+    var response = await httpClient.PostAsync($"meter/plain/{args.CustomerId}/value", content, cancellationToken);
+
     response.EnsureSuccessStatusCode();
 
-    var responseData = await response.Content.ReadAsStringAsync();
-    return JsonSerializer.Deserialize<PostMeterPlainCounterMultiResult>(responseData);
-  }
-
-  public async Task<HttpResponseMessage> PostMeterPlainValue(PostMeterPlainValueArgs args, CancellationToken cancellationToken)
-  {
-    var baseUrl = $"https://{args.Env?.ToString().ToLower() ?? defaultEnv.ToString().ToLower()}.enmon.tech";
-    httpClient.BaseAddress = new Uri(baseUrl);
-    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", args.Token);
-
-    var jsonPayload = JsonSerializer.Serialize(args.Payload, LowercaseOptions);
-    var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
-
-    return await httpClient.PostAsync($"meter/plain/{args.CustomerId}/value", content, cancellationToken);
+    return response;
   }
 }
