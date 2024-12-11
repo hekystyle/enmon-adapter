@@ -7,9 +7,9 @@ public interface IMeasurementsQueue
 {
   public const string Name = "measurements";
 
-  Task Push(IEnumerable<MeasurementUploadData> uploadJobs);
+  Task Push(IEnumerable<MeasurementUploadData> uploadJobs, CancellationToken cancellationToken);
 
-  Task ScheduleInstantProcessing();
+  void ScheduleInstantProcessing();
 
   Task<IAsyncCursor<MeasurementUploadData>> GetSorterCursorAsync(CancellationToken cancellationToken);
 }

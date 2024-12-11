@@ -13,7 +13,7 @@ public class ValuesProcessor(
 {
   IReadOnlyCollection<Config> Configs => _configs.Value ?? [];
 
-  public async void HandleFetchJob()
+  public async Task HandleFetchJob(CancellationToken cancellationToken)
   {
     logger.LogInformation("handling fetch job...");
 
@@ -30,7 +30,7 @@ public class ValuesProcessor(
         {
           try
           {
-            await ProcessConfig(config);
+            await ProcessConfig(config, cancellationToken);
           }
           catch (Exception e)
           {
@@ -40,10 +40,14 @@ public class ValuesProcessor(
       })
     );
 
-    logger.LogInformation("job completed");
+    logger.LogInformation("scheduling immediate measurements processing...");
+
+    measurementQueue.ScheduleInstantProcessing();
+
+    logger.LogInformation("scheduler, job handling completed");
   }
 
-  async Task ProcessConfig(Config config)
+  async Task ProcessConfig(Config config, CancellationToken cancellationToken)
   {
     logger.LogInformation("processing config...");
 
@@ -64,7 +68,7 @@ public class ValuesProcessor(
 
     logger.LogInformation("fetching values from {Source}", config.Source);
 
-    var readings = await adapter.GetReadings(config.Source);
+    var readings = await adapter.GetReadings(config.Source, cancellationToken);
 
     await Task.WhenAll(config.Targets.Select(async (target, targetIndex) =>
     {
@@ -72,7 +76,7 @@ public class ValuesProcessor(
       {
         try
         {
-          await ProcessTarget(target, readings);
+          await ProcessTarget(target, readings, cancellationToken);
         }
         catch (Exception e)
         {
@@ -84,7 +88,7 @@ public class ValuesProcessor(
     logger.LogInformation("config processed");
   }
 
-  async Task ProcessTarget(Enmon.Config target, IReadOnlyCollection<Measurement> readings)
+  async Task ProcessTarget(Enmon.Config target, IReadOnlyCollection<Measurement> readings, CancellationToken cancellationToken)
   {
     logger.LogInformation("mapping {Count} readings to jobs...", readings.Count);
 
@@ -96,12 +100,8 @@ public class ValuesProcessor(
 
     logger.LogInformation("pushing {Count} jobs to queue...", jobs.Count());
 
-    await measurementQueue.Push(jobs);
+    await measurementQueue.Push(jobs, cancellationToken);
 
-    logger.LogInformation("jobs pushed to queue, scheduling immediate processing...");
-
-    await measurementQueue.ScheduleInstantProcessing();
-
-    logger.LogInformation("scheduled, target processed");
+    logger.LogInformation("jobs pushed to queue, target processed");
   }
 }

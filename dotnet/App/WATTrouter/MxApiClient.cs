@@ -7,24 +7,24 @@ public interface IMxApiClientFactory
 
 public class MxApiClient(HttpClient httpClient)
 {
-  public async Task<AllTimeStats> GetAllTimeStatsAsync()
+  public async Task<AllTimeStats> GetAllTimeStatsAsync(CancellationToken cancellationToken)
   {
-    var response = await httpClient.GetAsync("/stat_alltime.xml");
+    var response = await httpClient.GetAsync("/stat_alltime.xml", cancellationToken);
 
     response.EnsureSuccessStatusCode();
 
-    var stream = await response.Content.ReadAsStreamAsync();
+    var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
     return AllTimeStats.Parse(stream);
   }
 
-  public async Task<Meas> GetMeasurementAsync()
+  public async Task<Meas> GetMeasurementAsync(CancellationToken cancellationToken)
   {
-    var response = await httpClient.GetAsync("/meas.xml");
+    var response = await httpClient.GetAsync("/meas.xml", cancellationToken);
 
     response.EnsureSuccessStatusCode();
 
-    var stream = await response.Content.ReadAsStreamAsync();
+    var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
     return Meas.Parse(stream);
   }

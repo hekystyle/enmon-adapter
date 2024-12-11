@@ -6,13 +6,13 @@ public class MxAdapter(ILogger<MxAdapter> logger, IMxApiClientFactory factory) :
 {
   public string Model => "Mx";
 
-  public async Task<IReadOnlyCollection<Enmon.Measurement>> GetReadings(Uri baseUrl)
+  public async Task<IReadOnlyCollection<Enmon.Measurement>> GetReadings(Uri baseUrl, CancellationToken cancellationToken)
   {
     var apiClient = factory.Create(baseUrl);
 
     logger.LogInformation("fetching all time stats and measurements...");
-    var allTimeStatsTask = apiClient.GetAllTimeStatsAsync();
-    var measurementTask = apiClient.GetMeasurementAsync();
+    var allTimeStatsTask = apiClient.GetAllTimeStatsAsync(cancellationToken);
+    var measurementTask = apiClient.GetMeasurementAsync(cancellationToken);
 
     await Task.WhenAll(allTimeStatsTask, measurementTask);
     logger.LogInformation("all time stats and measurements fetched successfully");

@@ -4,7 +4,7 @@ public interface IAdapter
 {
   string Model { get; }
 
-  Task<IReadOnlyCollection<Enmon.Measurement>> GetReadings(Uri source);
+  Task<IReadOnlyCollection<Enmon.Measurement>> GetReadings(Uri source, CancellationToken cancellationToken);
 }
 
 public interface IAdapterSelector
