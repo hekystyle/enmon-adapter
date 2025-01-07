@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace HekyLab.EnmonAdapter.WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter.Model;
 
 [XmlRoot("meas")]
 public record Meas

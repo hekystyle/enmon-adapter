@@ -1,6 +1,7 @@
+using HekyLab.EnmonAdapter.WATTrouter;
 using Microsoft.AspNetCore.TestHost;
 
-namespace HekyLab.EnmonAdapter.WATTrouter;
+namespace HekyLab.EnmonAdapter.Tests.WATTrouter;
 
 public class MxApiClientTests
 {
@@ -13,7 +14,7 @@ public class MxApiClientTests
     var apiClient = new MxApiClient(httpClient);
 
     // Act
-    var allTimeStats = await apiClient.GetAllTimeStatsAsync();
+    var allTimeStats = await apiClient.GetAllTimeStatsAsync(CancellationToken.None);
 
     // Assert
     Assert.Equal(1476.53, allTimeStats.SAS4);
@@ -31,7 +32,7 @@ public class MxApiClientTests
     var apiClient = new MxApiClient(httpClient);
 
     // Act
-    var meas = await apiClient.GetMeasurementAsync();
+    var meas = await apiClient.GetMeasurementAsync(CancellationToken.None);
 
     // Assert
     Assert.Equal(241, meas.VAC);

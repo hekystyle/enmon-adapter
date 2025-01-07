@@ -1,10 +1,11 @@
 using Hangfire;
+using HekyLab.EnmonAdapter.Model;
 using MongoDB.Driver;
 using MongoDB.Entities;
 
-namespace HekyLab.EnmonAdapter.Enmon;
+namespace HekyLab.EnmonAdapter.Measurements;
 
-public class UploadReadingRepository() : IMeasurementsQueue
+internal class DefaultQueue() : IQueue
 {
   public async Task Push(IEnumerable<MeasurementUploadData> items, CancellationToken cancellationToken)
   {
@@ -13,11 +14,11 @@ public class UploadReadingRepository() : IMeasurementsQueue
 
   public async Task<IAsyncCursor<MeasurementUploadData>> GetSorterCursorAsync(CancellationToken cancellationToken)
   {
-    return await DB.Find<MeasurementUploadData>().Sort(x => Prop.Path<MeasurementUploadData>(r => r.Reading.ReadAt)).ExecuteCursorAsync(cancellationToken);
+    return await DB.Find<MeasurementUploadData>().Sort(x => Prop.Path<MeasurementUploadData>(r => r.Measurement.ReadAt)).ExecuteCursorAsync(cancellationToken);
   }
 
   public void ScheduleInstantProcessing()
   {
-    BackgroundJob.Enqueue<MeasurementsQueueProcessor>(x => x.UploadReadingsAsync(CancellationToken.None));
+    BackgroundJob.Enqueue<QueueProcessor>(x => x.UploadReadingsAsync(CancellationToken.None));
   }
 }

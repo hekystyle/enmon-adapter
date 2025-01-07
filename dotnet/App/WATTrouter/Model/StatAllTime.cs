@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace HekyLab.EnmonAdapter.WATTrouter;
+namespace HekyLab.EnmonAdapter.WATTrouter.Model;
 
 [XmlRoot("stat_alltime")]
-public record AllTimeStats
+public record StatAllTime
 {
   /// <summary>
   /// Surplus on phase L1+L2+L3 in kWh
@@ -31,12 +31,12 @@ public record AllTimeStats
   [Required]
   public double SAP4 { get; set; }
 
-  public static AllTimeStats Parse(Stream stream)
+  public static StatAllTime Parse(Stream stream)
   {
-    var serializer = new XmlSerializer(typeof(AllTimeStats));
+    var serializer = new XmlSerializer(typeof(StatAllTime));
     try
     {
-      return (AllTimeStats?)serializer.Deserialize(stream) ?? throw new Exception("XML contains no element");
+      return (StatAllTime?)serializer.Deserialize(stream) ?? throw new Exception("XML contains no element");
     }
     catch (InvalidOperationException e) when (e.InnerException is XmlException)
     {

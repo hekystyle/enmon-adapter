@@ -1,14 +1,29 @@
+using HekyLab.EnmonAdapter.Model;
+using HekyLab.EnmonAdapter.Measurements;
 using Microsoft.Extensions.Logging;
 
 namespace HekyLab.EnmonAdapter.WATTrouter;
 
-public class MxAdapter(ILogger<MxAdapter> logger, IMxApiClientFactory factory) : IAdapter
+public class MxAdapter(ILogger<MxAdapter> logger, IHttpClientFactory factory) : ISource
 {
-  public string Model => "Mx";
+  public string Id => "WATTrouter:Mx";
 
-  public async Task<IReadOnlyCollection<Enmon.Measurement>> GetReadings(Uri baseUrl, CancellationToken cancellationToken)
+  public static readonly string[] SupportedSchemes = ["http", "https"];
+
+  public async Task<IReadOnlyCollection<Measurement>> GetMeasurementsAsync(Uri source, CancellationToken cancellationToken)
   {
-    var apiClient = factory.Create(baseUrl);
+    return source.Scheme switch
+    {
+      "http" or "https" => await GetMeasurementsViaHttpAsync(source, cancellationToken),
+      _ => throw new Exception($"Unsupported source scheme: {source.Scheme}"),
+    };
+  }
+
+  private async Task<IReadOnlyCollection<Measurement>> GetMeasurementsViaHttpAsync(Uri baseUrl, CancellationToken cancellationToken)
+  {
+    var httpClient = factory.CreateClient();
+    httpClient.BaseAddress = baseUrl;
+    var apiClient = new MxApiClient(httpClient);
 
     logger.LogInformation("fetching all time stats and measurements...");
     var allTimeStatsTask = apiClient.GetAllTimeStatsAsync(cancellationToken);
@@ -22,11 +37,11 @@ public class MxAdapter(ILogger<MxAdapter> logger, IMxApiClientFactory factory) :
     var readAt = DateTime.Now;
 
     return [
-      new Enmon.Measurement { ReadAt = readAt, Register = "1-1.8.2", Value = allTimeStats.SAH4 },
-      new Enmon.Measurement { ReadAt = readAt, Register = "1-1.8.3", Value = allTimeStats.SAL4 },
-      new Enmon.Measurement { ReadAt = readAt, Register = "1-1.8.4", Value = allTimeStats.SAP4 },
-      new Enmon.Measurement { ReadAt = readAt, Register = "1-2.8.0", Value = allTimeStats.SAS4 },
-      new Enmon.Measurement { ReadAt = readAt, Register = "1-32.7.0", Value = measurement.VAC },
+      new Measurement { ReadAt = readAt, Register = "1-1.8.2", Value = allTimeStats.SAH4 },
+      new Measurement { ReadAt = readAt, Register = "1-1.8.3", Value = allTimeStats.SAL4 },
+      new Measurement { ReadAt = readAt, Register = "1-1.8.4", Value = allTimeStats.SAP4 },
+      new Measurement { ReadAt = readAt, Register = "1-2.8.0", Value = allTimeStats.SAS4 },
+      new Measurement { ReadAt = readAt, Register = "1-32.7.0", Value = measurement.VAC },
     ];
   }
 }

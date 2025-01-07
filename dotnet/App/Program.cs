@@ -4,13 +4,14 @@ using MongoDB.Driver;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
-using HekyLab.EnmonAdapter.WATTrouter;
 using HekyLab.EnmonAdapter.Enmon;
+using HekyLab.EnmonAdapter.Config;
+using HekyLab.EnmonAdapter;
 
 var builder = WebApplication.CreateBuilder();
 
 builder.Services
-  .Configure<IReadOnlyCollection<HekyLab.EnmonAdapter.WATTrouter.Config>>(builder.Configuration.GetSection("Targets"))
+  .Configure<AppSettings>(builder.Configuration.GetSection("App"))
   .AddHangfire(hangfire =>
   {
     hangfire
@@ -20,7 +21,7 @@ builder.Services
   })
   .AddHangfireServer()
   .AddEnmon()
-  .AddWATTrouter();
+  .AddEnmonAdapter();
 
 var app = builder.Build();
 

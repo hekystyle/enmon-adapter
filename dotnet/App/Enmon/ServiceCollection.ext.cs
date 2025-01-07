@@ -9,6 +9,6 @@ public static class ServiceCollectionExtensions
   {
     return services
       .AddHttpClient()
-      .AddSingleton<IApiClient, ApiClient>();
+      .AddSingleton<IApiClient, DefaultApiClient>();
   }
 }

@@ -1,13 +1,10 @@
-namespace HekyLab.EnmonAdapter.WATTrouter;
+using HekyLab.EnmonAdapter.WATTrouter.Model;
 
-public interface IMxApiClientFactory
-{
-  MxApiClient Create(Uri baseUrl);
-}
+namespace HekyLab.EnmonAdapter.WATTrouter;
 
 public class MxApiClient(HttpClient httpClient)
 {
-  public async Task<AllTimeStats> GetAllTimeStatsAsync(CancellationToken cancellationToken)
+  public async Task<StatAllTime> GetAllTimeStatsAsync(CancellationToken cancellationToken)
   {
     var response = await httpClient.GetAsync("/stat_alltime.xml", cancellationToken);
 
@@ -15,7 +12,7 @@ public class MxApiClient(HttpClient httpClient)
 
     var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
-    return AllTimeStats.Parse(stream);
+    return StatAllTime.Parse(stream);
   }
 
   public async Task<Meas> GetMeasurementAsync(CancellationToken cancellationToken)
@@ -27,15 +24,5 @@ public class MxApiClient(HttpClient httpClient)
     var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
     return Meas.Parse(stream);
-  }
-}
-
-public class MxApiClientFactory(IHttpClientFactory factory) : IMxApiClientFactory
-{
-  public MxApiClient Create(Uri baseUrl)
-  {
-    var http = factory.CreateClient();
-    http.BaseAddress = baseUrl;
-    return new MxApiClient(http);
   }
 }

@@ -1,29 +1,29 @@
 using System.Text.Json;
 using HekyLab.EnmonAdapter.Enmon;
 
-namespace Enmon.Tests
+namespace HekyLab.EnmonAdapter.Tests;
+
+public class EnvTests
 {
-  public class EnvTests
+  [Fact]
+  public void ShouldStringifyCorrectly()
   {
-    [Fact]
-    public void ShouldStringifyCorrectly()
-    {
-      Assert.Equal("app", $"{Env.app}");
-      Assert.Equal("dev", $"{Env.dev}");
-    }
+    Assert.Equal("app", $"{Env.app}");
+    Assert.Equal("dev", $"{Env.dev}");
+  }
 
-    [Fact]
-    public void ShouldSerializeToJson()
-    {
-      Assert.Equal("\"app\"", JsonSerializer.Serialize(Env.app));
-      Assert.Equal("\"dev\"", JsonSerializer.Serialize(Env.dev));
-    }
+  [Fact]
+  public void ShouldSerializeToJson()
+  {
+    Assert.Equal("\"app\"", JsonSerializer.Serialize(Env.app));
+    Assert.Equal("\"dev\"", JsonSerializer.Serialize(Env.dev));
+  }
 
-    [Fact]
-    public void ShouldDeserializeFromJson()
-    {
-      Assert.Equal(Env.app, JsonSerializer.Deserialize<Env>("\"app\""));
-      Assert.Equal(Env.dev, JsonSerializer.Deserialize<Env>("\"dev\""));
-    }
+  [Fact]
+  public void ShouldDeserializeFromJson()
+  {
+    Assert.Equal(Env.app, JsonSerializer.Deserialize<Env>("\"app\""));
+    Assert.Equal(Env.dev, JsonSerializer.Deserialize<Env>("\"dev\""));
   }
 }
+

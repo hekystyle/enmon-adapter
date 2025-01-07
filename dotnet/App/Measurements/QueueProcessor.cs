@@ -1,15 +1,18 @@
 using Hangfire;
+using HekyLab.EnmonAdapter.Enmon;
+using HekyLab.EnmonAdapter.Model;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
+using Microsoft.Extensions.Options;
 using MongoDB.Entities;
 
-namespace HekyLab.EnmonAdapter.Enmon;
+namespace HekyLab.EnmonAdapter.Measurements;
 
-[Queue(IMeasurementsQueue.Name)]
-public class MeasurementsQueueProcessor(
-    ILogger<MeasurementsQueueProcessor> logger,
-    IApiClient enmonApiClient,
-    IMeasurementsQueue uploadJobQueue)
+[Queue(IQueue.Name)]
+internal class QueueProcessor(
+    ILogger<QueueProcessor> logger,
+    IOptions<Config.AppSettings> appSettings,
+    IApiClient apiClient,
+    IQueue uploadJobQueue)
 {
   [AutomaticRetry(Attempts = int.MaxValue)]
   public async Task UploadReadingsAsync(CancellationToken cancellationToken)
@@ -45,31 +48,10 @@ public class MeasurementsQueueProcessor(
 
   private async Task UploadReadingAsync(MeasurementUploadData data, CancellationToken cancellationToken)
   {
-    var config = data.Config;
-    var reading = data.Reading;
-
-    var payload = new PlainDataPoint
-    {
-      DevEUI = config.DevEUI,
-      Date = reading.ReadAt,
-      Value = reading.Value,
-      MeterRegister = reading.Register
-    };
-
-    logger.LogInformation("Uploading reading with payload: {Payload}", payload);
-
-    var ctx = new PostMeterPlainValueContext
-    {
-      Env = config.Env,
-      CustomerId = new ObjectId(config.CustomerId),
-      Token = config.Token,
-      Payload = payload
-    };
-
+    var target = appSettings.Value.Targets.FirstOrDefault(t => t.Id == data.TargetId) ?? throw new Exception($"Target not found by ID: {data.TargetId}");
     try
     {
-      var response = await enmonApiClient.PostMeterPlainValue(ctx, cancellationToken);
-      logger.LogInformation("Reading uploaded successfully. Status: {StatusCode}, StatusText: {ReasonPhrase}", response.StatusCode, response.ReasonPhrase);
+      await apiClient.UploadMeasurementAsync(data.Measurement, target, cancellationToken);
     }
     catch (HttpRequestException ex)
     {

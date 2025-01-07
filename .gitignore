@@ -116,3 +116,6 @@ config/**
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Visual Studio
+.vs

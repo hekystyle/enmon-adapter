@@ -1,9 +1,9 @@
-
+using HekyLab.EnmonAdapter.Model;
 using MongoDB.Driver;
 
-namespace HekyLab.EnmonAdapter.Enmon;
+namespace HekyLab.EnmonAdapter.Measurements;
 
-public interface IMeasurementsQueue
+internal interface IQueue
 {
   public const string Name = "measurements";
 

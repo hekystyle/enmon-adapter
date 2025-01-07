@@ -3,9 +3,9 @@ using Hangfire;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace HekyLab.EnmonAdapter.WATTrouter;
+namespace HekyLab.EnmonAdapter.Measurements;
 
-public class FetchJobScheduler(ILogger<FetchJobScheduler> logger, IHostEnvironment hostEnvironment) : IHostedService
+internal class FetchJobScheduler(ILogger<FetchJobScheduler> logger, IHostEnvironment hostEnvironment) : IHostedService
 {
   private const string JobName = "fetch";
 
@@ -20,20 +20,18 @@ public class FetchJobScheduler(ILogger<FetchJobScheduler> logger, IHostEnvironme
     return Task.CompletedTask;
   }
 
-  private  void Schedule()
+  private void Schedule()
   {
     var minute = hostEnvironment.IsProduction() ? 15 : 1;
 
     logger.LogInformation("scheduling {JobName} every {Minute} minute...", JobName, minute);
 
-    RecurringJob.AddOrUpdate<ValuesProcessor>(
+    RecurringJob.AddOrUpdate<MeasurementJobsProcessor>(
       JobName,
       x => x.HandleFetchJob(CancellationToken.None),
-      EveryNthMinute(minute)
+      Cron.EveryNthMinute(minute)
     );
 
     logger.LogInformation("scheduled");
   }
-
-  private static string EveryNthMinute(int minute) => $"*/{minute} * * * *";
 }

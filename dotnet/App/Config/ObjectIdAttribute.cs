@@ -1,7 +1,6 @@
-
 using System.ComponentModel.DataAnnotations;
 
-namespace HekyLab.EnmonAdapter;
+namespace HekyLab.EnmonAdapter.Config;
 
 public class ObjectIdAttribute : RegularExpressionAttribute
 {
