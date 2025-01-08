@@ -9,7 +9,7 @@ public class MxApiClientTests
   public async Task GetAllTimeStatsAsync_ReturnsValidDataObject()
   {
     // Arrange
-    using var server = MxServerBuilder.Create();
+    using var server = ApiServerBuilder.Create();
     var httpClient = server.GetTestClient();
     var apiClient = new MxApiClient(httpClient);
 
@@ -27,7 +27,7 @@ public class MxApiClientTests
   public async Task GetMeasurementAsync_ReturnsValidDataObject()
   {
     // Arrange
-    using var server = MxServerBuilder.Create();
+    using var server = ApiServerBuilder.Create();
     var httpClient = server.GetTestClient();
     var apiClient = new MxApiClient(httpClient);
 

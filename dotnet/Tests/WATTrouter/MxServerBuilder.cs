@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace HekyLab.EnmonAdapter.Tests.WATTrouter;
 
-public static class MxServerBuilder
+public static class ApiServerBuilder
 {
   public static IHost Create()
   {
@@ -24,14 +24,14 @@ public static class MxServerBuilder
 
               context.Response.ContentType = "application/xml";
               using var stream = File.OpenRead(Path.Join("./__fixtures__", context.Request.Path));
-              await stream.CopyToAsync(context.Response.Body);
+              await stream.CopyToAsync(context.Response.Body, context.RequestAborted);
             });
 
             endpoints.MapGet("/meas.xml", async context =>
             {
               context.Response.ContentType = "application/xml";
               using var stream = File.OpenRead(Path.Join("./__fixtures__", context.Request.Path));
-              await stream.CopyToAsync(context.Response.Body);
+              await stream.CopyToAsync(context.Response.Body, context.RequestAborted);
             });
           });
         });

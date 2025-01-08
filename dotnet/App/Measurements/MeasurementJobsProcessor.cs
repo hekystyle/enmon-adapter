@@ -51,11 +51,11 @@ internal class MeasurementJobsProcessor(
   {
     logger.LogInformation("processing config...");
 
-    ISource? adapter = adapterSelector.GetAdapter(source.Id);
+    ISource? adapter = adapterSelector.GetAdapter(source.AdapterId);
 
     if (adapter is null)
     {
-      logger.LogError("adapter not found by ID: {ID}", source.Id);
+      logger.LogError("adapter not found by ID: {ID}", source.AdapterId);
       return;
     }
 

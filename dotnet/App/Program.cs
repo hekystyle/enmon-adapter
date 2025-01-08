@@ -1,17 +1,13 @@
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Entities;
 using MongoDB.Driver;
 using Hangfire;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
-using HekyLab.EnmonAdapter.Enmon;
-using HekyLab.EnmonAdapter.Config;
 using HekyLab.EnmonAdapter;
 
 var builder = WebApplication.CreateBuilder();
 
 builder.Services
-  .Configure<AppSettings>(builder.Configuration.GetSection("App"))
   .AddHangfire(hangfire =>
   {
     hangfire
@@ -20,8 +16,7 @@ builder.Services
       .UseInMemoryStorage();
   })
   .AddHangfireServer()
-  .AddEnmon()
-  .AddEnmonAdapter();
+  .AddEnmonAdapter(builder.Configuration.GetSection("App"));
 
 var app = builder.Build();
 

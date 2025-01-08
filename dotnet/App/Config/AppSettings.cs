@@ -1,5 +1,7 @@
 ﻿using HekyLab.EnmonAdapter.Enmon;
+using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace HekyLab.EnmonAdapter.Config;
 
@@ -14,7 +16,9 @@ internal record Source
   /// <summary>
   /// Used to find measurements source implementation.
   /// </summary>
-  public required string Id { get; set; }
+  public required string AdapterId { get; set; }
+
+  [StringSyntax(StringSyntaxAttribute.Uri)]
   public required string Url { get; set; }
   /// <summary>
   /// IDs of targets where measurements data should be send to.

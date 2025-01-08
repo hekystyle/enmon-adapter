@@ -21,15 +21,16 @@ public record PostMeterPlainValueContext
 {
   public Env? Env { get; init; }
   public required PlainDataPoint Payload { get; init; }
-  public ObjectId CustomerId { get; init; }
+  [ObjectId]
+  public required string CustomerId { get; init; }
   public required string Token { get; init; }
 }
 
-internal class DefaultApiClient(ILogger<DefaultApiClient> logger, IHttpClientFactory httpClientFactory) : IApiClient
+public class DefaultApiClient(ILogger<DefaultApiClient> logger, IHttpClientFactory httpClientFactory) : IApiClient
 {
   private static JsonSerializerOptions LowercaseOptions => new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-  private static MediaTypeHeaderValue MediaType => new("application/json", "utf8");
+  private static MediaTypeHeaderValue MediaType => new("application/json", "utf-8");
 
   public async Task UploadMeasurementAsync(Measurement measurement, Target target, CancellationToken cancellationToken)
   {
@@ -44,7 +45,7 @@ internal class DefaultApiClient(ILogger<DefaultApiClient> logger, IHttpClientFac
     var ctx = new PostMeterPlainValueContext
     {
       Env = target.Env,
-      CustomerId = new ObjectId(target.CustomerId),
+      CustomerId = target.CustomerId,
       Token = target.Token,
       Payload = payload
     };
@@ -54,9 +55,8 @@ internal class DefaultApiClient(ILogger<DefaultApiClient> logger, IHttpClientFac
 
   private async Task<HttpResponseMessage> PostMeterPlainValue(PostMeterPlainValueContext args, CancellationToken cancellationToken)
   {
-    using var httpClient = httpClientFactory.CreateClient();
+    using var httpClient = httpClientFactory.CreateClient(args.Env);
 
-    httpClient.BaseAddress = new Uri($"https://{args.Env}.enmon.tech");
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", args.Token);
 
     var content = JsonContent.Create(args.Payload, MediaType, LowercaseOptions);
