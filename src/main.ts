@@ -5,11 +5,15 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(AppModule);
+  const app = await NestFactory.create(AppModule);
   app.enableShutdownHooks();
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   await app.init();
   NativeLogger.log('Application initialized', bootstrap.name);
+
+  const port = process.env['APP_PORT'] ?? 8000;
+  const hostname = '0.0.0.0';
+  await app.listen(port, hostname, () => NativeLogger.log(`Listening on ${hostname}:${port}`, bootstrap.name));
 }
 
 // eslint-disable-next-line no-console
