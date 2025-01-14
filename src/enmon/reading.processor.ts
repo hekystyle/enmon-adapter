@@ -29,7 +29,6 @@ export class ReadingProcessor {
 
     const cursor = this.uploadDataRepository.getSorterCursor();
 
-    // eslint-disable-next-line no-restricted-syntax
     for await (const data of cursor) {
       await this.als.run({ readingId: data._id }, async () => {
         this.logger.log({ message: 'uploading reading...', id: data._id });
@@ -37,7 +36,6 @@ export class ReadingProcessor {
         try {
           await this.uploadReading(data);
 
-          // eslint-disable-next-line no-underscore-dangle
           this.logger.log('deleting uploaded reading...');
           await data.deleteOne();
         } catch (e) {
