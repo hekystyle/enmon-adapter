@@ -11,7 +11,7 @@ async function bootstrap() {
   await app.init();
   NativeLogger.log('Application initialized', bootstrap.name);
 
-  const port = process.env['APP_PORT'] ?? 8000;
+  const port = process.env['APP_HTTP_PORT'] ?? 80;
   const hostname = '0.0.0.0';
   await app.listen(port, hostname, () => NativeLogger.log(`Listening on ${hostname}:${port}`, bootstrap.name));
 }
