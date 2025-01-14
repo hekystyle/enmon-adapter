@@ -1,23 +1,12 @@
 import globals from 'globals';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import eslint from '@eslint/js';
 import tslint from 'typescript-eslint';
-import { FlatCompat } from '@eslint/eslintrc';
 import prettier from 'eslint-plugin-prettier/recommended';
 import n from 'eslint-plugin-n';
 import vitest from '@vitest/eslint-plugin';
+import importPlugin from 'eslint-plugin-import';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: eslint.configs.recommended,
-  allConfig: eslint.configs.all,
-});
-
-export default [
+export default tslint.config([
   {
     ignores: [
       '**/.github',
@@ -31,11 +20,10 @@ export default [
     ],
   },
   eslint.configs.recommended,
+  importPlugin.flatConfigs.recommended,
   n.configs['flat/recommended'],
-  ...compat.extends('airbnb-base'),
   ...tslint.configs.recommendedTypeChecked,
   ...tslint.configs.stylisticTypeChecked,
-  ...compat.extends('airbnb-typescript/base'),
   prettier,
   {
     languageOptions: {
@@ -43,15 +31,19 @@ export default [
         ...globals.node,
       },
 
-      ecmaVersion: 2021,
+      ecmaVersion: 2024,
       sourceType: 'module',
 
       parserOptions: {
-        project: ['./tsconfig.json'],
+        projectService: {
+          allowDefaultProject: ['*.js'],
+          defaultProject: 'tsconfig.json',
+        },
       },
     },
 
     rules: {
+      'no-console': 'error',
       'no-underscore-dangle': [
         'error',
         {
@@ -59,6 +51,7 @@ export default [
         }
       ],
       'import/prefer-default-export': 'off',
+      'import/no-unresolved': 'off',
       'n/no-missing-import': 'off',
       '@typescript-eslint/return-await': ['error', 'always'],
       '@typescript-eslint/member-ordering': 'error',
@@ -97,4 +90,4 @@ export default [
       ],
     },
   },
-];
+]);
