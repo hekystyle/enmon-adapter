@@ -23,11 +23,11 @@ FROM node:lts-alpine AS runtime
 LABEL org.opencontainers.image.source=https://github.com/hekystyle/enmon-adapter
 WORKDIR /app
 
-ENV NODE_ENV=production
+ENV NODE_ENV=production APP_HTTP_PORT=80
 
 COPY --from=build /workspace/dist .
 COPY --from=pruned /workspace/pruned .
 COPY config/default.yml config/default.yml
 
-HEALTHCHECK CMD curl -f http://127.0.0.1/health || exit 1
+HEALTHCHECK CMD curl --silent --fail http://127.0.0.1:$APP_HTTP_PORT/health || exit 1
 CMD ["node", "main.js"]
