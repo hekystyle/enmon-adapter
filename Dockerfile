@@ -29,5 +29,5 @@ COPY --from=build /workspace/dist .
 COPY --from=pruned /workspace/pruned .
 COPY config/default.yml config/default.yml
 
-HEALTHCHECK CMD curl --silent --fail http://127.0.0.1:$APP_HTTP_PORT/health || exit 1
+HEALTHCHECK CMD sh -c "wget -q --spider --timeout=5 --tries=1 http://127.0.0.1:$APP_HTTP_PORT/health || exit 1"
 CMD ["node", "main.js"]
