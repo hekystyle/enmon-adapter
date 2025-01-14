@@ -10,6 +10,7 @@ import { WATTrouterModule } from './wattrouter/wattrouter.module.js';
 import { AlsModule } from './als/als.module.js';
 import configuration from './config/configuration.js';
 import { Config } from './config/schemas.js';
+import { HealthModule } from './health/health.module.js';
 
 export const CONFIG_MODULE = ConfigModule.forRoot({
   isGlobal: true,
@@ -48,6 +49,7 @@ export const CONFIG_MODULE = ConfigModule.forRoot({
     }),
     ThermometersModule,
     WATTrouterModule,
+    HealthModule,
   ],
   providers: [],
   exports: [],

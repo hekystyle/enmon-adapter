@@ -29,4 +29,5 @@ COPY --from=build /workspace/dist .
 COPY --from=pruned /workspace/pruned .
 COPY config/default.yml config/default.yml
 
+HEALTHCHECK CMD curl -f http://127.0.0.1/health || exit 1
 CMD ["node", "main.js"]
