@@ -59,7 +59,7 @@
     "@types/xml2js": "0.4.14",
     "@vitest/coverage-v8": "2.1.8",
     "@vitest/eslint-plugin": "1.1.25",
-    "eslint": "8.57.1",
+    "eslint": "9.18.0",
     "eslint-config-prettier": "10.0.1",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-n": "17.15.1",
@@ -73,7 +73,7 @@
     "ts-node": "10.9.2",
     "type-fest": "4.32.0",
     "typescript": "5.7.3",
-    "typescript-eslint": "7.18.0",
+    "typescript-eslint": "8.20.0",
     "vitest": "2.1.8"
   },
   "resolutions": {
