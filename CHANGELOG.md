@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.1](https://github.com/hekystyle/enmon-adapter/compare/v1.1.0...v1.1.1) (2025-01-14)
+
+
+### Bug Fixes
+
+* **deps:** update prod dependencies ([#491](https://github.com/hekystyle/enmon-adapter/issues/491)) ([c1cbc9b](https://github.com/hekystyle/enmon-adapter/commit/c1cbc9be1f1f1e14c36409f4222bd71bf5775c78))
+* health check ([#496](https://github.com/hekystyle/enmon-adapter/issues/496)) ([d574ae4](https://github.com/hekystyle/enmon-adapter/commit/d574ae4aa08c4348b9d552706c8ed500e1a832e4))
+
 # [1.1.0](https://github.com/hekystyle/enmon-adapter/compare/v1.0.2...v1.1.0) (2025-01-14)
 
 
