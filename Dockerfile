@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:22.13.0-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
@@ -19,7 +19,7 @@ FROM deps AS pruned
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm --filter enmon-adapter --prod deploy pruned
 
-FROM node:lts-alpine AS runtime
+FROM node:22.13.0-alpine AS runtime
 LABEL org.opencontainers.image.source=https://github.com/hekystyle/enmon-adapter
 WORKDIR /app
 
