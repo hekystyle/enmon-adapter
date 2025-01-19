@@ -1,11 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HekyLab.EnmonAdapter.Core;
+using System.ComponentModel.DataAnnotations;
 
 namespace HekyLab.EnmonAdapter.Model;
 
 public record Measurement
 {
-  [RegularExpression("\\d+-\\d+\\.\\d+\\.\\d+")]
+  [Required, MeterRegister]
   public required string Register { get; set; }
+
+  [Required]
   public double Value { get; set; }
-  public DateTime ReadAt { get; set; }
+
+  [Required]
+  public DateTime MeasuredAt { get; set; }
 }

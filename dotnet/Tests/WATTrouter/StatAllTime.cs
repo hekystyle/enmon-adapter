@@ -1,6 +1,6 @@
+using HekyLab.EnmonAdapter.WATTrouter.Model;
 using System.Text;
 using System.Xml;
-using HekyLab.EnmonAdapter.WATTrouter.Model;
 
 namespace HekyLab.EnmonAdapter.Tests.WATTrouter;
 

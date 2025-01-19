@@ -1,9 +1,8 @@
 using HekyLab.EnmonAdapter.Model;
 
-namespace HekyLab.EnmonAdapter.Measurements;
+namespace HekyLab.EnmonAdapter.Core.Measurements;
 
-public interface ISource
+public interface IMeasurementsSource
 {
-  string Id { get; }
   Task<IReadOnlyCollection<Measurement>> GetMeasurementsAsync(Uri source, CancellationToken cancellationToken);
 }

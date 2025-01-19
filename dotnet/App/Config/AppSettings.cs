@@ -1,45 +1,43 @@
-﻿using HekyLab.EnmonAdapter.Enmon;
-using Microsoft.Extensions.Options;
+﻿using HekyLab.EnmonAdapter.Core;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace HekyLab.EnmonAdapter.Config;
 
 internal record AppSettings
 {
-  public required IEnumerable<Source> Sources { get; init; }
-  public required IEnumerable<Target> Targets { get; init; }
+  public required IEnumerable<Source> Sources { get; init; } = [];
+  public required IEnumerable<Target> Targets { get; init; } = [];
+  public required Dictionary<string, IEnumerable<string>> Relations { get; init; } = [];
 }
 
-internal record Source
+internal record Source : ISourceConfig
 {
+  [Required, MinLength(1)]
+  public required string Id { get; init; }
   /// <summary>
-  /// Used to find measurements source implementation.
+  /// Key under which <see cref="Core.Measurements.IMeasurementsSource"/> implementation is registered in DI container.
   /// </summary>
-  public required string AdapterId { get; set; }
+  [Required, MinLength(1)]
+  public required string ServiceKey { get; init; }
 
-  [StringSyntax(StringSyntaxAttribute.Uri)]
-  public required string Url { get; set; }
-  /// <summary>
-  /// IDs of targets where measurements data should be send to.
-  /// </summary>
-  public required IEnumerable<string> Targets { get; set; }
+  [Required, Url]
+  public required string Url { get; init; }
 }
 
-public record Target
+public record Target : Enmon.ITarget, ITargetConfig
 {
-  public required string Id { get; set; }
+  [Required, MinLength(1)]
+  public required string Id { get; init; }
 
   [Required]
-  public required Env Env { get; set; }
+  public required Enmon.Env Env { get; init; }
 
-  [Required]
-  [ObjectId]
-  public required string CustomerId { get; set; }
+  [Required, ObjectId]
+  public required string CustomerId { get; init; }
 
-  [Required]
-  public required string DevEUI { get; set; }
+  [Required, MinLength(1)]
+  public required string DevEUI { get; init; }
 
-  [Required]
-  public required string Token { get; set; }
+  [Required, MinLength(1)]
+  public required string Token { get; init; }
 }

@@ -1,6 +1,7 @@
 using HekyLab.EnmonAdapter.Config;
+using HekyLab.EnmonAdapter.Core;
+using HekyLab.EnmonAdapter.Core.Measurements;
 using HekyLab.EnmonAdapter.Enmon;
-using HekyLab.EnmonAdapter.Measurements;
 using HekyLab.EnmonAdapter.WATTrouter;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,13 +18,21 @@ public static class ServiceCollectionExtensions
       .ValidateDataAnnotations()
       .ValidateOnStart();
 
-    return services
-      .AddSingleton<IValidateOptions<AppSettings>, AppSettingsValidation>()
-      .AddHttpClient()
-      .AddSingleton<Enmon.IHttpClientFactory, DefaultHttpClientFactory>()
-      .AddSingleton<IApiClient, DefaultApiClient>()
-      .AddHostedService<FetchJobScheduler>()
-      .AddSingleton<ISourceSelector, DefaultSourceSelector>()
-      .AddTransient<ISource, MxAdapter>();
+    services.AddSingleton<IValidateOptions<AppSettings>, AppSettingsValidation>();
+
+    services.AddHttpClient();
+
+    services.AddEnmon();
+
+    services.AddHostedService<FetchJobSchedulerHostedService>();
+
+    services.AddScoped<IMeasurementsQueue, MeasurementsQueue>()
+      .AddScoped<FetchJobProcessor>()
+      .AddScoped<UploadJobProcessor>()
+      .AddSingleton<IConfigRepository, StaticConfigRepository>()
+      .AddSingleton<IMeasurementsSourceFactory, MeasurementsSourceFactory>()
+      .AddKeyedSingleton<IMeasurementsSource, MxAdapter>(typeof(MxAdapter).FullName);
+
+    return services;
   }
 }
